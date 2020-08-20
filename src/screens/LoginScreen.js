@@ -1,13 +1,13 @@
 import { Text, View, StyleSheet, Image, SafeAreaView, TouchableOpacity, StatusBar } from "react-native";
 import React from "react";
 
-const LoginScreen = () => {
-  const GoogleLoginHandler = () => {
-    alert("Stay Away! I'm not ready yet")
+const LoginScreen = ({ navigation }) => {
+  const handleGoogle = () => {
+    navigation.navigate('VoP')
   }
 
-  const FacebookLoginHandler = () => {
-    alert("Also not ready")
+  const handleFacebook = () => {
+    alert("Not ready")
   }
 
   return (
@@ -23,7 +23,7 @@ const LoginScreen = () => {
         </View>
         <View style={styles.buttonArea}>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={[styles.defaultButton, styles.googleLoginButton]} onPress={GoogleLoginHandler}>
+            <TouchableOpacity style={[styles.defaultButton, styles.googleLoginButton]} onPress={handleGoogle}>
               <Image
                 source={{ uri: "https://avatars1.githubusercontent.com/u/7328930?v=4&s=80" }}
                 style={styles.LoginLogo}
@@ -33,7 +33,7 @@ const LoginScreen = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={[styles.defaultButton, styles.facebookLoginButton]} onPress={FacebookLoginHandler}>
+            <TouchableOpacity style={[styles.defaultButton, styles.facebookLoginButton]} onPress={handleFacebook}>
               <Image
                 source={{ uri: "https://logodix.com/logo/1185546.png" }}
                 style={styles.LoginLogo}
