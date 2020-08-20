@@ -1,21 +1,26 @@
 # Setup
 
-## Installation
+## MAC
 
-Install expo CLI
+Make sure you have npm and watchman installed
+
+```bash
+brew install npm watchman
+```
+
+You will need the expo cli package globally
 
 ```bash
 npm install -g expo-cli
 ```
 
-Install watchman
-MAC:
+## Run the app
+
+Install all the dependencies
 
 ```bash
-brew install watchman
+npm install
 ```
-
-## Run the app
 
 Run app with NPM
 
@@ -29,7 +34,7 @@ Use the vscode "Attach to packager" option if you want to debug the app
 
 Make sure you enable "Debug Remote JS" from the expo emulator (under the cmd+D menu)
 
-## Misc
+## Archive
 
 ### How the app was initialized
 
