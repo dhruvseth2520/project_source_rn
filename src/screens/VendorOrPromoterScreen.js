@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
     profileImage: {
         width: 150,
         height: 150,
-        resizeMode: "contain"
+        resizeMode: "contain",
+        borderRadius: 200
     },
     profileInfo: {
         flex: 1,
