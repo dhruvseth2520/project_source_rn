@@ -65,14 +65,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: 'stretch',
-    // backgroundColor: 'white'
   },
   logoArea: {
     flex: 2,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   logoImage: {
-    width: 120,
+    width: 150,
     resizeMode: "contain"
   },
   buttonArea: {
