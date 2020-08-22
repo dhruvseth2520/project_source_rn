@@ -19,7 +19,7 @@ npm install -g expo-cli
 Install all the dependencies
 
 ```bash
-npm install
+expo install
 ```
 
 Run app with NPM
