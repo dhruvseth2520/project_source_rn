@@ -7,7 +7,7 @@ const VendorOrPromoterScreen = ({ navigation }) => {
     }
 
     const handleVendor = () => {
-        alert('Nope')
+        navigation.navigate('VenueRegister');
     }
 
     const handleBack = () => {
