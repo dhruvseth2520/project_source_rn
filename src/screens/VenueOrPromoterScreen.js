@@ -1,12 +1,12 @@
 import { Text, View, StyleSheet, Image, SafeAreaView, TouchableOpacity, StatusBar } from "react-native";
 import React from "react";
 
-const VendorOrPromoterScreen = ({ navigation }) => {
+const VenueOrPromoterScreen = ({ navigation }) => {
     const handlePromoter = () => {
         navigation.navigate('PromoterRegister')
     }
 
-    const handleVendor = () => {
+    const handleVennue = () => {
         navigation.navigate('VenueRegister');
     }
 
@@ -32,7 +32,7 @@ const VendorOrPromoterScreen = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.defaultButton} onPress={handleVendor}>
+                        <TouchableOpacity style={styles.defaultButton} onPress={handleVennue}>
                             <Text style={styles.buttonText}>Vendor</Text>
                         </TouchableOpacity>
                     </View>
@@ -47,7 +47,7 @@ const VendorOrPromoterScreen = ({ navigation }) => {
     );
 };
 
-export default VendorOrPromoterScreen;
+export default VenueOrPromoterScreen;
 
 const styles = StyleSheet.create({
     screen: {
