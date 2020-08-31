@@ -8,7 +8,6 @@ import VenueRegisterScreen from "./src/screens/VenueRegisterScreen";
 
 const Stack = createStackNavigator();
 
-
 export default function App() {
   const isSignedIn = false
 
