@@ -6,7 +6,7 @@ import { TextInput } from 'react-native-gesture-handler';
 const PromoterRegisterScreen = ({ navigation }) => {
 
     const handlerRegister = () => {
-        alert("Working on it")
+        navigation.navigate('PromoterHome')
     }
 
     const [nickname, setNickname] = useState('')
