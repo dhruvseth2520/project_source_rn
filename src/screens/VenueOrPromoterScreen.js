@@ -33,7 +33,7 @@ const VenueOrPromoterScreen = ({ navigation }) => {
                     </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity style={styles.defaultButton} onPress={handleVennue}>
-                            <Text style={styles.buttonText}>Vendor</Text>
+                            <Text style={styles.buttonText}>Venue</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.buttonContainer}>
