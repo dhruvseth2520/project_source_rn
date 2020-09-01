@@ -9,6 +9,7 @@ import PromoterRegisterScreen from "./src/screens/PromoterRegisterScreen";
 import VenueRegisterScreen from "./src/screens/VenueRegisterScreen";
 import PromoterHomeScreen from "./src/screens/PromoterHomeScreen";
 import PromoterEventScreen from "./src/screens/PromoterEventScreen";
+import VenueHomeScreen from "./src/screens/VenueHomeScreen";
 
 const RootStack = createStackNavigator();
 const PromoterTabNav = createBottomTabNavigator();
@@ -25,7 +26,7 @@ export default function App() {
           <RootStack.Screen name="PromoterRegister" component={PromoterRegisterScreen} options={{ title: 'Promoter', headerBackTitle: 'Back' }} />
           <RootStack.Screen name="VenueRegister" component={VenueRegisterScreen} options={{ headerShown: false }} />
           <RootStack.Screen name="PromoterHome" component={PromoterTab} options={{ headerShown: false, gestureEnabled: false }} />
-          <RootStack.Screen name="VenueHome" component={() => null} />
+          <RootStack.Screen name="VenueHome" component={VenueHomeScreen} options={{ headerShown: false /*, gestureEnabled: false */ }} />
         </>
       </RootStack.Navigator>
     </NavigationContainer>
