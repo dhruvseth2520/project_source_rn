@@ -7,10 +7,10 @@ import LoginScreen from "./src/screens/LoginScreen";
 import VenueOrPromoterScreen from "./src/screens/VenueOrPromoterScreen";
 import PromoterRegisterScreen from "./src/screens/PromoterRegisterScreen";
 import VenueRegisterScreen from "./src/screens/VenueRegisterScreen";
-import PromoterHome from "./src/screens/PromoterHome";
+import PromoterHomeScreen from "./src/screens/PromoterHomeScreen";
+import PromoterEventScreen from "./src/screens/PromoterEventScreen";
 
-const Stack = createStackNavigator();
-
+const RootStack = createStackNavigator();
 const PromoterTabNav = createBottomTabNavigator();
 
 export default function App() {
@@ -18,16 +18,16 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <RootStack.Navigator>
         <>
-          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="VoP" component={VenueOrPromoterScreen} options={{ headerShown: false, gestureEnabled: false }} />
-          <Stack.Screen name="PromoterRegister" component={PromoterRegisterScreen} options={{ title: 'Promoter', headerBackTitle: 'Back' }} />
-          <Stack.Screen name="VenueRegister" component={VenueRegisterScreen} options={{ title: 'Venue', headerBackTitle: 'Back' }} />
-          <Stack.Screen name="PromoterHome" component={PromoterTab} options={{ headerShown: false, gestureEnabled: false }} />
-          <Stack.Screen name="VenueHome" component={() => null} />
+          <RootStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+          <RootStack.Screen name="VoP" component={VenueOrPromoterScreen} options={{ headerShown: false, gestureEnabled: false }} />
+          <RootStack.Screen name="PromoterRegister" component={PromoterRegisterScreen} options={{ title: 'Promoter', headerBackTitle: 'Back' }} />
+          <RootStack.Screen name="VenueRegister" component={VenueRegisterScreen} options={{ title: 'Venue', headerBackTitle: 'Back' }} />
+          <RootStack.Screen name="PromoterHome" component={PromoterTab} options={{ headerShown: false, gestureEnabled: false }} />
+          <RootStack.Screen name="VenueHome" component={() => null} />
         </>
-      </Stack.Navigator>
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 }
@@ -35,7 +35,7 @@ export default function App() {
 const PromoterTab = () => {
   return (
     <PromoterTabNav.Navigator>
-      <PromoterTabNav.Screen name="PromoterHomeTab" component={PromoterHome} options={{ title: "Home" }} />
+      <PromoterTabNav.Screen name="PromoterHomeTab" component={PromoterHomeScreen} options={{ title: "Home" }} />
       <PromoterTabNav.Screen name="PromoterProfileTab" component={() => null} options={{ title: "Profile" }}/>
     </PromoterTabNav.Navigator>
   )
