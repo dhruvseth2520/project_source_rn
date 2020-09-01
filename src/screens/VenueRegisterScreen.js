@@ -1,66 +1,115 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TextInput, Button } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
 const VenueRegisterScreen = () => {
+  const [venueName, setVenueName] = useState("");
+  const [venueAddress, setVenueAddress] = useState("");
+  const [contactName, setContactName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+
+  const handleSubmit = () => {
+    const form = {
+      'venueName': venueName,
+      'address': venueAddress,
+      'contactName': contactName,
+      'email': contactEmail,
+      'phone': contactPhone
+    };
+
+
+
+  }
+
+
   return <View style={styles.background}>
-    <Image style={styles.logo} source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSlCX_KCBoFMSJ8ocIWvCaHDwhcN4DEgnkMYg&usqp=CAU'}} />
+    <Text style={styles.title}>Add your info</Text>
+
 
     <View style={styles.form}>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Venue Name</Text>
-        <TextInput style={styles.input} autoCapitalize={false} autoCorrect={false} />
+        <TextInput style={styles.input} value={venueName} onChange={(val) => setVenueName(val)} autoCapitalize="none" />
       </View>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Venue Address</Text>
-        <TextInput style={styles.input} autoCapitalize={false} autoCorrect={false} />
+        <Text style={styles.label}>Branch Address</Text>
+        <Text style={styles.disclaimer}>Street address of this branch</Text>
+        <TextInput style={styles.input} value={venueAddress} onChange={(val) => setVenueAddress(val)} autoCapitalize="none" />
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Primary Contact Name</Text>
-        <TextInput style={styles.input} autoCapitalize={false} autoCorrect={false} />
+        <Text style={styles.disclaimer}>The primary point of contact for your venue, either your General Manager or a Business representative</Text>
+        <TextInput style={styles.input} value={contactName} onChange={(val) => setContactName(val)} autoCapitalize="none" />
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Contact Email</Text>
-        <TextInput style={styles.input} autoCapitalize={false} autoCorrect={false} />
+        <TextInput style={styles.input} value={contactEmail} onChange={(val) => setContactEmail(val)} autoCapitalize="none" />
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Contact Number</Text>
-        <TextInput style={styles.input} autoCapitalize={false} autoCorrect={false} />
-      </View>
-      <View style={styles.inputContainer}>
-        <Button title="Submit"></Button>
+        <TextInput style={styles.input} value={contactPhone} onChange={(val) => setContactPhone(val)} autoCapitalize="none" />
       </View>
 
+
+
+
     </View>
+    <TouchableOpacity style={styles.submitButton} title="Submit" onPress={handleSubmit}>
+      <Text style={{alignSelf: 'center', 'marginTop': 11}}>Submit</Text>
+
+    </TouchableOpacity>
 
   </View>
 }
 
 const styles = StyleSheet.create({
+  title: {
+    fontSize: 24,
+    fontFamily: 'Gill Sans',
+    fontWeight: '400',
+    color: '#424242',
+    marginLeft: 30,
+    marginTop: 50
+  },
+  label: {
+    fontSize: 17,
+    fontFamily: 'Gill Sans',
+    color: '#424242',
+    fontWeight: '400',
+    marginBottom: 5
+  },
+  disclaimer: {
+    marginTop: 6,
+    fontSize: 12,
+    color: '#424242',
+  },
+
   background: {
     backgroundColor: 'white',
     flexDirection: 'column',
     flex: 1
   },
-  label: {
-    marginBottom: 10
-  },
-  logo: {
-    width: 280,
-    height: 120,
-    alignSelf: 'center',
-    marginTop: 50
-  },
   input: {
     backgroundColor: 'white',
-    borderColor: 'black',
-    borderWidth: 0.3,
+    borderColor: 'gray',
+    paddingLeft: 6,
+    borderBottomWidth: 0.3,
     borderRadius: 3,
-    height: 30,
-    width: 280
+    height: 40,
+    width: '90%'
+  },
+  submitButton: {
+    height: 40,
+    width: 140,
+    borderColor: '#4D0C78',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginTop: 50,
+    alignSelf: 'center'
   },
   form: {
-    marginTop: 50,
-    alignSelf: 'center',
+    marginTop: 30,
+    marginLeft: 30
   },
   inputContainer: {
     margin: 8
