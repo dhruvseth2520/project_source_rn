@@ -23,7 +23,7 @@ const VenueRegisterScreen = () => {
         <TextInput style={styles.input} autoCapitalize={false} autoCorrect={false} />
       </View>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Contact Phone Number</Text>
+        <Text style={styles.label}>Contact Number</Text>
         <TextInput style={styles.input} autoCapitalize={false} autoCorrect={false} />
       </View>
       <View style={styles.inputContainer}>
