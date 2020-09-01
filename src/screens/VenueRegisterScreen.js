@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     alignSelf: 'center',
     marginTop: 14,
+    marginLeft: -20,
     color: 'white',
     fontWeight: '500'
   },
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
     color: 'white',
     alignSelf: 'center',
     marginTop: -19,
-    marginLeft: 145
+    marginLeft: 125
   }
 })
 
