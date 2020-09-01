@@ -25,7 +25,7 @@ export default function App() {
           <Stack.Screen name="PromoterRegister" component={PromoterRegisterScreen} options={{ title: 'Promoter', headerBackTitle: 'Back' }} />
           <Stack.Screen name="VenueRegister" component={VenueRegisterScreen} options={{ title: 'Venue', headerBackTitle: 'Back' }} />
           <Stack.Screen name="PromoterHome" component={PromoterTab} options={{ headerShown: false, gestureEnabled: false }} />
-          <Stack.Screen name="VenueHome" component={TempView} />
+          <Stack.Screen name="VenueHome" component={() => null} />
         </>
       </Stack.Navigator>
     </NavigationContainer>
@@ -36,7 +36,7 @@ const PromoterTab = () => {
   return (
     <PromoterTabNav.Navigator>
       <PromoterTabNav.Screen name="PromoterHomeTab" component={PromoterHome} options={{ title: "Home" }} />
-      <PromoterTabNav.Screen name="PromoterProfileTab" component={TempView} options={{ title: "Profile" }}/>
+      <PromoterTabNav.Screen name="PromoterProfileTab" component={() => null} options={{ title: "Profile" }}/>
     </PromoterTabNav.Navigator>
   )
 }
