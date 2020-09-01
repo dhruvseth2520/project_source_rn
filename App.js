@@ -40,5 +40,3 @@ const PromoterTab = () => {
     </PromoterTabNav.Navigator>
   )
 }
-
-const TempView = () => <View><Text>This view is temporary</Text></View>
