@@ -23,7 +23,7 @@ export default function App() {
           <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
           <Stack.Screen name="VoP" component={VenueOrPromoterScreen} options={{ headerShown: false, gestureEnabled: false }} />
           <Stack.Screen name="PromoterRegister" component={PromoterRegisterScreen} options={{ title: 'Promoter', headerBackTitle: 'Back' }} />
-          <Stack.Screen name="VenueRegister" component={VenueRegisterScreen} options={{ title: 'Venue', headerBackTitle: 'Back' }} />
+          <Stack.Screen name="VenueRegister" component={VenueRegisterScreen} options={{ headerShown: false }} />
           <Stack.Screen name="PromoterHome" component={PromoterTab} options={{ headerShown: false }} />
           {/* <Stack.Screen name="VenueHome" component={() => null} /> */}
         </>
