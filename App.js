@@ -20,21 +20,12 @@ export default function App() {
     <NavigationContainer>
       <RootStack.Navigator>
         <>
-<<<<<<< HEAD
-          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="VoP" component={VenueOrPromoterScreen} options={{ headerShown: false, gestureEnabled: false }} />
-          <Stack.Screen name="PromoterRegister" component={PromoterRegisterScreen} options={{ title: 'Promoter', headerBackTitle: 'Back' }} />
-          <Stack.Screen name="VenueRegister" component={VenueRegisterScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="PromoterHome" component={PromoterTab} options={{ headerShown: false }} />
-          {/* <Stack.Screen name="VenueHome" component={() => null} /> */}
-=======
           <RootStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
           <RootStack.Screen name="VoP" component={VenueOrPromoterScreen} options={{ headerShown: false, gestureEnabled: false }} />
           <RootStack.Screen name="PromoterRegister" component={PromoterRegisterScreen} options={{ title: 'Promoter', headerBackTitle: 'Back' }} />
-          <RootStack.Screen name="VenueRegister" component={VenueRegisterScreen} options={{ title: 'Venue', headerBackTitle: 'Back' }} />
+          <RootStack.Screen name="VenueRegister" component={VenueRegisterScreen} options={{ headerShown: false }} />
           <RootStack.Screen name="PromoterHome" component={PromoterTab} options={{ headerShown: false, gestureEnabled: false }} />
           <RootStack.Screen name="VenueHome" component={() => null} />
->>>>>>> 6f37f28224f46a916d4570daa439da5231c480c7
         </>
       </RootStack.Navigator>
     </NavigationContainer>
