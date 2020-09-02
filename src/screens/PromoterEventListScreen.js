@@ -2,7 +2,7 @@ import React from 'react';
 import { View, SafeAreaView, StyleSheet, StatusBar, Image, ScrollView } from 'react-native';
 import EventBanner from '../components/EventBanner'
 
-const PromoterHome = ({ navigation }) => {
+const PromoterEventListScreen = ({ navigation }) => {
     return (
         <View style={styles.screen}>
             <StatusBar barStyle={'dark-content'} />
@@ -18,7 +18,7 @@ const PromoterHome = ({ navigation }) => {
     );
 }
 
-export default PromoterHome;
+export default PromoterEventListScreen;
 
 const styles = StyleSheet.create({
     screen: {
