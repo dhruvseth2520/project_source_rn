@@ -2,17 +2,17 @@ import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-const EventBanner = ({ title, onPress, venueName }) => {
+const EventBanner = ({ title, onPress, venueName, image }) => {
     return (
         <TouchableWithoutFeedback onPress={onPress} style={styles.eventBannerContainer}>
             <View style={styles.eventBannerImageContainer}>
-                <Image style={styles.eventBannerImage} source={{ uri: "https://us.123rf.com/450wm/anton345/anton3451611/anton345161100032/68970620-happy-hour-new-vintage-headline-sign-design-with-a-banner-ribbon-for-text-vector-graphic-.jpg?ver=6" }} />
+                <Image style={styles.eventBannerImage} source={{ uri: image }} />
             </View>
             <View style={styles.eventTitle}>
-                <Text>{title}</Text>
+                <Text style={styles.eventTitleText}>{title}</Text>
             </View>
             <View style={styles.eventVenueName}>
-                <Text>{venueName}</Text>
+                <Text style={styles.eventVenueNameText}>{venueName}</Text>
             </View>
         </TouchableWithoutFeedback>
     );
@@ -24,12 +24,22 @@ export default EventBanner;
 const styles = StyleSheet.create({
     eventBannerContainer: {
         flexGrow: 1,
-        backgroundColor: '#e3e3e3',
-        marginTop: 10,
+        backgroundColor: 'white',
+        marginBottom: 10,
         marginHorizontal: 10,
         borderRadius: 5,
         height: 200,
-        alignSelf: 'stretch'
+        alignSelf: 'stretch',
+        // ios shadow
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 1.41,
+        // android shadow
+        elevation: 2,
     },
     eventBannerImageContainer: {
         flex: 8,
@@ -37,13 +47,20 @@ const styles = StyleSheet.create({
     },
     eventBannerImage: {
         flex: 1,
-        borderRadius: 5,
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
         width: '100%'
     },
     eventTitle: {
         flex: 1,
         marginHorizontal: 5,
-        marginVertical: 5
+        marginVertical: 5,
+    },
+    eventTitleText :{
+        color: "#562093"
+    },
+    eventVenueNameText: {
+        color: "black"
     },
     eventVenueName: {
         flex: 1,
