@@ -22,6 +22,16 @@ const PromoterTabScreens = () => {
                         )
                     }} />
             <PromoterTabNav.Screen
+                name="PromoterInbox"
+                component={TempScreen}
+                options={
+                    {
+                        title: "Inbox",
+                        tabBarIcon: ({ focused, size, color }) => (
+                            <Ionicons name="ios-chatboxes" size={size} color={color} />
+                        )
+                    }} />
+            <PromoterTabNav.Screen
                 name="PromoterProfileTab"
                 component={TempScreen}
                 options={
