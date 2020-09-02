@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet, Image, SafeAreaView, TouchableOpacity, StatusBar } from "react-native";
 import React from "react";
 
-const VenueOrPromoterScreen = ({ navigation }) => {
+const LoginVenueOrPromoterScreen = ({ navigation }) => {
     const handlePromoter = () => {
         navigation.navigate('PromoterRegister')
     }
@@ -47,7 +47,7 @@ const VenueOrPromoterScreen = ({ navigation }) => {
     );
 };
 
-export default VenueOrPromoterScreen;
+export default LoginVenueOrPromoterScreen;
 
 const styles = StyleSheet.create({
     screen: {

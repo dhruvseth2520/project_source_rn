@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCocktail, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { View, Text, Image, StyleSheet, TextInput, Picker, TouchableOpacity, ScrollView } from 'react-native';
 
-const VenueRegisterScreen = ({ navigation }) => {
+const LoginVenueRegisterScreen = ({ navigation }) => {
   const [venueName, setVenueName] = useState("");
   const [category, setCategory] = useState("bar");
   const [venueAddress, setVenueAddress] = useState("");
@@ -180,4 +180,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default VenueRegisterScreen;
+export default LoginVenueRegisterScreen;

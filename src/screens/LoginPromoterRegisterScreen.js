@@ -3,10 +3,10 @@ import { View, StyleSheet, SafeAreaView, Button } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 
 
-const PromoterRegisterScreen = ({ navigation }) => {
+const LoginPromoterRegisterScreen = ({ navigation }) => {
 
     const handlerRegister = () => {
-        navigation.navigate('PromoterHome')
+        navigation.navigate('PromoterTab')
     }
 
     const [nickname, setNickname] = useState('')
@@ -23,7 +23,7 @@ const PromoterRegisterScreen = ({ navigation }) => {
     );
 }
 
-export default PromoterRegisterScreen;
+export default LoginPromoterRegisterScreen;
 
 const styles = StyleSheet.create({
     screen: {

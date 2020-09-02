@@ -1,13 +1,15 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
-import VenuePromotersScreen from "./VenuePromotersScreen";
-import VenueEventsScreen from "./VenueEventsScreen";
+
+import { Ionicons } from '@expo/vector-icons';
+
+import VenuePromotersScreen from "../screens/VenuePromotersScreen";
+import VenueEventsScreen from "../screens/VenueEventsScreen";
 
 const VenueTabNav = createBottomTabNavigator();
 
-const VenueTab = ({ route }) => {
+const VenueTabScreens = ({ route }) => {
   return (
     <VenueTabNav.Navigator tabBarOptions={{
     activeTintColor: '#313131',
@@ -71,4 +73,4 @@ const VenueTab = ({ route }) => {
   )
 }
 
-export default VenueTab;
+export default VenueTabScreens;
