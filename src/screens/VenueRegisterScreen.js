@@ -22,7 +22,9 @@ const VenueRegisterScreen = ({ navigation }) => {
         contactPhone
     };
 
-    navigation.navigate('VenueHome');
+    navigation.navigate('VenueTab', {
+      form: formData
+    });
   }
 
   return (
@@ -54,7 +56,7 @@ const VenueRegisterScreen = ({ navigation }) => {
                     </View>
                     <View style={styles.inputContainer}>
                       <Text style={styles.label}>Branch Address</Text>
-                      <Text style={styles.comment}>Street address of this branch</Text>
+                      <Text style={styles.comment}>Street address of branch</Text>
                       <TextInput style={styles.input} value={venueAddress} onChangeText={(val) => setVenueAddress(val)} autoCapitalize="none" />
                     </View>
                     <View style={styles.inputContainer}>
@@ -73,7 +75,7 @@ const VenueRegisterScreen = ({ navigation }) => {
                   </View>
                   <Text style={styles.disclaimer}>By pressing Continue, you agree to our Terms of Service, Privacy Policy and Payment Policy</Text>
                   <TouchableOpacity style={styles.submitButton} title="Submit" onPress={handleSubmit}>
-                    <Text style={styles.buttonText}>
+                     <Text style={styles.buttonText}>
                        Agree & Continue
                      </Text>
                      <FontAwesomeIcon icon={ faCheck } style={styles.check}/>
@@ -99,7 +101,6 @@ const styles = StyleSheet.create({
     color: '#424242',
     marginLeft: 33,
     marginTop: 20,
-
   },
   cocktailIcon: {
     marginLeft: 8,
@@ -143,6 +144,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingHorizontal: 22,
     marginTop: 30,
+    marginLeft: 5,
     fontSize: 12,
     color: '#424242'
   },
@@ -156,9 +158,9 @@ const styles = StyleSheet.create({
     borderColor: '#30154F',
     backgroundColor: '#30154F',
     borderWidth: 1,
-    borderRadius: 3,
-    marginTop: 20,
-    marginBottom: 100,
+    borderRadius: 1,
+    marginTop: 15,
+    marginBottom: 60,
     alignSelf: 'center'
   },
   buttonText: {
