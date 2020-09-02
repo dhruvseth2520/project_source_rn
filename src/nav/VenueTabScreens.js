@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import VenuePromotersScreen from "../screens/VenuePromotersScreen";
 import VenueEventsScreen from "../screens/VenueEventsScreen";
-import TempScreen from '../shared/TempScreen';
+import TempScreen from '../screens/TempScreen';
 
 const VenueTabNav = createBottomTabNavigator();
 

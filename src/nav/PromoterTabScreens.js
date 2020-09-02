@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
 import PromoterEventListScreen from '../screens/PromoterEventListScreen';
-import TempScreen from '../shared/TempScreen';
+import TempScreen from '../screens/TempScreen';
 
 const PromoterTabNav = createBottomTabNavigator();
 
