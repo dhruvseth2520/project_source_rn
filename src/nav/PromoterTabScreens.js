@@ -12,14 +12,14 @@ const PromoterTabScreens = () => {
     return (
         <PromoterTabNav.Navigator>
             <PromoterTabNav.Screen
-                name="PromoterHomeTab"
+                name="PromoterEventList"
                 component={PromoterEventListScreen}
                 options={
                     {
                         title: "Events",
                         tabBarIcon: ({ focused, size, color }) => (
                             <Ionicons name="ios-albums" size={size} color={color} />
-                        )
+                        ),
                     }} />
             <PromoterTabNav.Screen
                 name="PromoterInbox"

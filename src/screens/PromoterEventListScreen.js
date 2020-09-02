@@ -8,10 +8,10 @@ const PromoterEventListScreen = ({ navigation }) => {
             <StatusBar barStyle={'dark-content'} />
             <SafeAreaView style={styles.safeArea}>
                 <ScrollView>
-                    <EventBanner title="20% off" onPress={() => navigation.navigate('PromoterRegister')} venueName="Harry's"/>
-                    <EventBanner title="40% off" onPress={() => navigation.navigate('PromoterRegister')} venueName="Harry's"/>
-                    <EventBanner title="40% off" onPress={() => navigation.navigate('PromoterRegister')} venueName="Harry's"/>
-                    <EventBanner title="40% off" onPress={() => navigation.navigate('PromoterRegister')} venueName="Harry's"/>
+                    <EventBanner title="20% off" onPress={() => navigation.navigate('PromoterInbox')} venueName="Harry's"/>
+                    <EventBanner title="40% off" onPress={() => navigation.navigate('PromoterInbox')} venueName="Harry's"/>
+                    <EventBanner title="40% off" onPress={() => navigation.navigate('PromoterInbox')} venueName="Harry's"/>
+                    <EventBanner title="40% off" onPress={() => navigation.navigate('PromoterInbox')} venueName="Harry's"/>
                 </ScrollView>
             </SafeAreaView>
         </View>
