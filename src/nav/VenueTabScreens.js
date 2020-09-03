@@ -21,7 +21,7 @@ const VenueTabScreens = ({ route }) => {
       <VenueTabNav.Screen name="VenuePromoters"
         options={{
           tabBarIcon: ({ focused, size }) => (
-              <Ionicons name="ios-contact" size={size} color={focused ? "#562093" : 'gray'} style={{"marginTop": 6}}/>
+              <Ionicons name="md-people" size={size} color={focused ? "#148995" : 'gray'} style={{"marginTop": 6}}/>
           ),
           headerShown: false,
           title: "Promoters"
@@ -32,7 +32,7 @@ const VenueTabScreens = ({ route }) => {
       <VenueTabNav.Screen name="VenueEvents"
         options={{
           tabBarIcon: ({ focused, size }) => (
-            <Ionicons name="ios-calendar" size={size} color={focused ? "#562093" : 'gray'} style={{"marginTop": 6}}/>
+            <Ionicons name="ios-calendar" size={size} color={focused ? "#148995" : 'gray'} style={{"marginTop": 6}}/>
           ),
           headerShown: false,
           title: "Events"
@@ -43,7 +43,7 @@ const VenueTabScreens = ({ route }) => {
       <VenueTabNav.Screen name="VenueMessages"
         options={{
           tabBarIcon: ({ focused, size, color }) => (
-            <Ionicons name="ios-chatboxes" size={size} color={focused ? color : 'gray'} style={{"marginTop": 6}}/>
+            <Ionicons name="ios-chatboxes" size={size} color={focused ? '#148995' : 'gray'} style={{"marginTop": 6}}/>
           ),
           headerShown: false,
           title: "Inbox"
@@ -53,7 +53,7 @@ const VenueTabScreens = ({ route }) => {
       <VenueTabNav.Screen name="VenueLedger"
         options={{
           tabBarIcon: ({ focused, size, color }) => (
-            <Ionicons name="ios-pricetags" size={size} color={focused ? color : 'gray'} style={{"marginTop": 6}}/>
+            <Ionicons name="ios-pricetags" size={size} color={focused ? '#148995' : 'gray'} style={{"marginTop": 6}}/>
           ),
           headerShown: false,
           title: "Ledger"
@@ -64,7 +64,7 @@ const VenueTabScreens = ({ route }) => {
         name="VenueSettings"
         options={{
           tabBarIcon: ({ focused, size }) => (
-            <Ionicons name="md-settings" size={size} color={focused ? "#562093" : 'gray'} style={{"marginTop": 6}}/>
+            <Ionicons name="md-settings" size={size} color={focused ? "#148995" : 'gray'} style={{"marginTop": 6}}/>
           ),
           headerShown: false,
           title: "Settings"

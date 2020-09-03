@@ -16,7 +16,7 @@ export default function App() {
       <RootStack.Navigator screenOptions={{ headerShown: false }}>
         <RootStack.Screen name="Login" component={LoginStackScreens} />
         <RootStack.Screen name="PromoterTab" component={PromoterTabScreens} options={{ /* gestureEnabled: false */ }} />
-        <RootStack.Screen name="VenueTab" component={VenueTabScreens} options={{ /*, gestureEnabled: false */ }} />
+        <RootStack.Screen name="VenueTab" component={VenueTabScreens} options={{ gestureEnabled: false }} />
       </RootStack.Navigator>
     </NavigationContainer>
   );

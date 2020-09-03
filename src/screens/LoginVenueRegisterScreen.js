@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCocktail, faCheck } from '@fortawesome/free-solid-svg-icons'
-import { View, Text, Image, StyleSheet, TextInput, Picker, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, TextInput, Picker, TouchableOpacity, ScrollView,
+KeyboardAvoidingView } from 'react-native';
 
 const LoginVenueRegisterScreen = ({ navigation }) => {
   const [venueName, setVenueName] = useState("");
@@ -11,6 +12,8 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactPhone, setContactPhone] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
 
   const handleSubmit = () => {
     const formData = {
@@ -22,65 +25,89 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
         contactPhone
     };
 
+    for (let key in formData) {
+      if (!formData[key]) {
+        setErrorMessage("Please fill in all fields");
+        return;
+      }
+    }
+
+    if (!contactEmail.includes('@') || !contactEmail.includes('.')) {
+      setErrorMessage("Please input a valid email");
+      return;
+    }
+
+    if (contactPhone.length < 8) {
+      setErrorMessage("Please input a valid phone number");
+      return;
+    }
+
+    setErrorMessage("");
     navigation.navigate('VenueTab', {
       form: formData
     });
+
   }
 
   return (
-              <ScrollView style={styles.background}>
-                  <TouchableOpacity onPress={() => navigation.navigate('VoP')}>
-                    <Entypo style={styles.backButton} name="chevron-small-left" size={24} color="black" />
-                  </TouchableOpacity>
-                  <View style={styles.header}>
-                    <Text style={styles.title}>Venue Details</Text>
-                    <FontAwesomeIcon style={styles.cocktailIcon} size={30} icon={ faCocktail } />
-                  </View>
-                  <View style={styles.form}>
-                    <View style={styles.inputContainer}>
-                      <Text style={styles.label}>Branch Name</Text>
-                      <TextInput style={styles.input} value={venueName} onChangeText={(val) => setVenueName(val)} autoCapitalize="none" />
-                    </View>
-                    <View style={styles.inputContainer}>
-                      <Text style={styles.label}>Category</Text>
-                      <Text style={styles.comment}>Type of establishment</Text>
-                      <Picker
-                        selectedValue={category}
-                        mode="dialog"
-                        onValueChange={(val) => setCategory(val)}
-                        style={styles.selectInput}>
-                        <Picker.Item label="Bar" value="bar" />
-                        <Picker.Item label="Restaurant" value="restaurant" />
-                        <Picker.Item label="Club" value="club" />
-                      </Picker>
-                    </View>
-                    <View style={styles.inputContainer}>
-                      <Text style={styles.label}>Branch Address</Text>
-                      <Text style={styles.comment}>Street address of branch</Text>
-                      <TextInput style={styles.input} value={venueAddress} onChangeText={(val) => setVenueAddress(val)} autoCapitalize="none" />
-                    </View>
-                    <View style={styles.inputContainer}>
-                      <Text style={styles.label}>Primary Contact Name</Text>
-                      <Text style={styles.comment}>The primary point of contact for your venue, either your General Manager or a Business representative</Text>
-                      <TextInput style={styles.input} value={contactName} onChangeText={(val) => setContactName(val)} autoCapitalize="none" />
-                    </View>
-                    <View style={styles.inputContainer}>
-                      <Text style={styles.label}>Contact Email</Text>
-                      <TextInput style={styles.input} value={contactEmail} onChangeText={(val) => setContactEmail(val)} autoCapitalize="none" />
-                    </View>
-                    <View style={styles.inputContainer}>
-                      <Text style={styles.label}>Contact Number</Text>
-                      <TextInput style={styles.input} value={contactPhone} onChangeText={(val) => setContactPhone(val)} autoCapitalize="none" />
-                    </View>
-                  </View>
-                  <Text style={styles.disclaimer}>By pressing Continue, you agree to our Terms of Service, Privacy Policy and Payment Policy</Text>
-                  <TouchableOpacity style={styles.submitButton} title="Submit" onPress={handleSubmit}>
-                     <Text style={styles.buttonText}>
-                       Agree & Continue
-                     </Text>
-                     <FontAwesomeIcon icon={ faCheck } style={styles.check}/>
-                  </TouchableOpacity>
-            </ScrollView>
+              <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+                  <ScrollView style={styles.background}>
+                      <TouchableOpacity onPress={() => navigation.navigate('VoP')}>
+                        <Entypo style={styles.backButton} name="chevron-small-left" size={24} color="black" />
+                      </TouchableOpacity>
+                      <View style={styles.header}>
+                        <Text style={styles.title}>Venue Details</Text>
+                        <FontAwesomeIcon style={styles.cocktailIcon} size={30} icon={ faCocktail } />
+                      </View>
+
+                      <View style={styles.form}>
+                        <View style={styles.inputContainer}>
+                          <Text style={styles.label}>Branch Name</Text>
+                          <TextInput style={styles.input} value={venueName} onChangeText={(val) => setVenueName(val)} autoCapitalize="none" />
+                        </View>
+                        <View style={styles.inputContainer}>
+                          <Text style={styles.label}>Category</Text>
+                          <Text style={styles.comment}>Type of establishment</Text>
+                          <Picker
+                            selectedValue={category}
+                            mode="dialog"
+                            onValueChange={(val) => setCategory(val)}
+                            style={styles.selectInput}>
+                            <Picker.Item label="Bar" value="bar" />
+                            <Picker.Item label="Restaurant" value="restaurant" />
+                            <Picker.Item label="Club" value="club" />
+                          </Picker>
+                        </View>
+                        <View style={styles.inputContainer}>
+                          <Text style={styles.label}>Branch Address</Text>
+                          <Text style={styles.comment}>Street address of branch</Text>
+                          <TextInput style={styles.input} value={venueAddress} onChangeText={(val) => setVenueAddress(val)} autoCapitalize="none" />
+                        </View>
+                        <View style={styles.inputContainer}>
+                          <Text style={styles.label}>Primary Contact Name</Text>
+                          <Text style={styles.comment}>The primary point of contact for your venue, either your General Manager or a Business representative</Text>
+                          <TextInput style={styles.input} value={contactName} onChangeText={(val) => setContactName(val)} autoCapitalize="none" />
+                        </View>
+                        <View style={styles.inputContainer}>
+                          <Text style={styles.label}>Contact Email</Text>
+                          <TextInput style={styles.input} keyboardType="email-address" value={contactEmail} onChangeText={(val) => setContactEmail(val)} autoCapitalize="none" />
+                        </View>
+                        <View style={styles.inputContainer}>
+                          <Text style={styles.label}>Contact Number</Text>
+                          <TextInput style={styles.input} value={contactPhone} keyboardType="phone-pad" onChangeText={(val) => setContactPhone(val)} autoCapitalize="none" />
+                        </View>
+                      </View>
+
+                      <Text style={styles.disclaimer}>By pressing Continue, you agree to our Terms of Service, Privacy Policy and Payment Policy</Text>
+                      <TouchableOpacity style={styles.submitButton} title="Submit" onPress={handleSubmit}>
+                         <Text style={styles.buttonText}>
+                           Agree & Continue
+                         </Text>
+                         <FontAwesomeIcon icon={ faCheck } style={styles.check}/>
+                      </TouchableOpacity>
+                      <Text style={styles.error}>{errorMessage}</Text>
+                </ScrollView>
+            </KeyboardAvoidingView>
 
   )
 }
@@ -155,12 +182,11 @@ const styles = StyleSheet.create({
   submitButton: {
     height: 50,
     width: 340,
-    borderColor: '#30154F',
-    backgroundColor: '#30154F',
+    backgroundColor: '#148995',
+    borderColor: '#148995',
     borderWidth: 1,
     borderRadius: 1,
     marginTop: 15,
-    marginBottom: 60,
     alignSelf: 'center'
   },
   buttonText: {
@@ -177,6 +203,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: -19,
     marginLeft: 125
+  },
+  error: {
+    paddingHorizontal: 22,
+    marginTop: 15,
+    fontWeight: '400',
+    marginBottom: 30,
+    marginLeft: 17,
+    fontSize: 13,
+    color: '#DB0B0B'
   }
 })
 
