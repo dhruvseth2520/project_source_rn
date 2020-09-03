@@ -32,7 +32,7 @@ const PromoterTabScreens = () => {
                         )
                     }} />
             <PromoterTabNav.Screen
-                name="PromoterProfileTab"
+                name="PromoterProfile"
                 component={TempScreen}
                 options={
                     {
