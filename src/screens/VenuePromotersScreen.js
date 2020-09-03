@@ -8,7 +8,7 @@ const VenuePromotersScreen = ({ route }) => {
       <Text style={styles.title}>Promoters</Text>
 
       <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1504270997636-07ddfbd48945?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80'}} />
-      <Text style={styles.description}>Our network of young promoters will use their social media influence and personal network to get your {route.params.formData.category} the traffic it needs to stand out</Text>
+      <Text style={styles.description}>Our network of young promoters will use their social media influence and personal network to get your {route.params.formData.category} the traffic you seek</Text>
 
       <Text style={styles.subTitle}>Promoters in your area</Text>
       <Text style={styles.comment}>Showing promoters near {route.params.formData.venueAddress}</Text>
