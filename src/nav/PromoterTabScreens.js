@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import PromoterEventListScreen from '../screens/PromoterEventListScreen';
+import PromoterEventStackScreens from './PromoterEventStackScreens';
 import TempScreen from '../screens/TempScreen';
 
 const PromoterTabNav = createBottomTabNavigator();
@@ -13,7 +13,7 @@ const PromoterTabScreens = () => {
         <PromoterTabNav.Navigator>
             <PromoterTabNav.Screen
                 name="PromoterEventList"
-                component={PromoterEventListScreen}
+                component={PromoterEventStackScreens}
                 options={
                     {
                         title: "Events",
