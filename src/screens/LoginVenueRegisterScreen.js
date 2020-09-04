@@ -25,7 +25,7 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
         contactPhone
     };
 
-    for (let key in formData) {
+    /* for (let key in formData) {
       if (!formData[key]) {
         setErrorMessage("Please fill in all fields");
         return;
@@ -40,7 +40,7 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
     if (contactPhone.length < 8) {
       setErrorMessage("Please input a valid phone number");
       return;
-    }
+    } */
 
     setErrorMessage("");
     navigation.navigate('VenueTab', {
@@ -162,9 +162,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: 'gray',
     paddingLeft: 6,
+    paddingTop: 8,
     borderBottomWidth: 0.3,
     borderRadius: 3,
     height: 40,
+    fontFamily: 'Avenir',
+    fontWeight: '300',
     width: '90%'
   },
   disclaimer: {
