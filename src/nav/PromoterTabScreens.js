@@ -4,6 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
 import PromoterEventStackScreens from './PromoterEventStackScreens';
+
+import PromoterProfile from '../screens/PromoterProfileScreen';
 import TempScreen from '../screens/TempScreen';
 
 const PromoterTabNav = createBottomTabNavigator();
@@ -33,7 +35,7 @@ const PromoterTabScreens = () => {
                     }} />
             <PromoterTabNav.Screen
                 name="PromoterProfile"
-                component={TempScreen}
+                component={PromoterProfile}
                 options={
                     {
                         title: "Profile",

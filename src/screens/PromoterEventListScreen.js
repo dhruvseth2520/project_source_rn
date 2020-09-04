@@ -62,7 +62,7 @@ export default PromoterEventListScreen;
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        backgroundColor: "#fff",
+        // backgroundColor: "#fff",
     },
     safeArea: {
         flex: 1
