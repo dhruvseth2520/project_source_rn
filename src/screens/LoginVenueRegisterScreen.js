@@ -63,7 +63,7 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
                       <View style={styles.form}>
                         <View style={styles.inputContainer}>
                           <Text style={styles.label}>Branch Name</Text>
-                          <TextInput style={styles.input} value={venueName} onChangeText={(val) => setVenueName(val)} autoCapitalize="none" />
+                          <TextInput style={styles.input} value={venueName} autoCapitalize="words" onChangeText={(val) => setVenueName(val)} />
                         </View>
                         <View style={styles.inputContainer}>
                           <Text style={styles.label}>Category</Text>
@@ -86,7 +86,7 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
                         <View style={styles.inputContainer}>
                           <Text style={styles.label}>Primary Contact Name</Text>
                           <Text style={styles.comment}>The primary point of contact for your venue, either your General Manager or a Business representative</Text>
-                          <TextInput style={styles.input} value={contactName} onChangeText={(val) => setContactName(val)} autoCapitalize="none" />
+                          <TextInput style={styles.input} value={contactName} onChangeText={(val) => setContactName(val)} autoCapitalize="words" />
                         </View>
                         <View style={styles.inputContainer}>
                           <Text style={styles.label}>Contact Email</Text>

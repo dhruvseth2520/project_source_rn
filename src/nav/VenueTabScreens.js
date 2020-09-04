@@ -4,13 +4,14 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import VenuePromotersScreen from "../screens/VenuePromotersScreen";
+import VenuePromoterStackScreen from "./VenuePromoterStackScreen";
 import VenueEventsScreen from "../screens/VenueEventsScreen";
 import TempScreen from '../screens/TempScreen';
 
 const VenueTabNav = createBottomTabNavigator();
 
 const VenueTabScreens = ({ route }) => {
+
   return (
     <VenueTabNav.Navigator tabBarOptions={{
     activeTintColor: '#313131',
@@ -26,8 +27,8 @@ const VenueTabScreens = ({ route }) => {
           headerShown: false,
           title: "Promoters"
         }}
-        component={VenuePromotersScreen}
-        initialParams={{formData: route.params.form}} />
+        component={VenuePromoterStackScreen}
+        initialParams={{form: route.params.form}} />
 
       <VenueTabNav.Screen name="VenueEvents"
         options={{
@@ -38,7 +39,7 @@ const VenueTabScreens = ({ route }) => {
           title: "Events"
         }}
         component={VenueEventsScreen}
-        initialParams={{formData: route.params.form}} />
+        initialParams={{form: route.params.form}} />
 
       <VenueTabNav.Screen name="VenueMessages"
         options={{

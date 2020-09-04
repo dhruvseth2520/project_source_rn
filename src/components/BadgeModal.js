@@ -62,10 +62,6 @@ const BadgeModal = ({ name, badge, modalVisible, setModalVisible }) => {
               </View>
           )}
 
-
-
-
-
           </View>
         </View>
       </Modal>

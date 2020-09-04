@@ -3,8 +3,9 @@ import { ScrollView, View, Image, Text, StyleSheet, FlatList, TouchableOpacity }
 import PromoterCard from "../components/PromoterCard";
 
 
-const VenuePromotersScreen = ({ route }) => {
+const VenuePromotersHome = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const formData = route.params.form;
 
   const promoters = [{
     'firstName': 'Dhruv',
@@ -28,10 +29,10 @@ const VenuePromotersScreen = ({ route }) => {
                   <Text style={styles.title}>Promoters</Text>
 
                   <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1504270997636-07ddfbd48945?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80'}} />
-                  <Text style={styles.description}>Our network of young promoters will use their social media influence and personal network to get your {route.params.formData.category} the traffic you seek</Text>
+                  <Text style={styles.description}>Our network of young promoters will use their social media influence and personal network to get your {formData.category} the traffic you seek</Text>
 
                   <Text style={styles.subTitle}>Top Promoters in the area</Text>
-                  <Text style={styles.comment}>Showing promoters near {route.params.formData.venueName}</Text>
+                  <Text style={styles.comment}>Showing promoters near {formData.venueName}</Text>
 
                   <FlatList horizontal
                     style={styles.promoterList}
@@ -97,4 +98,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default VenuePromotersScreen;
+export default VenuePromotersHome;

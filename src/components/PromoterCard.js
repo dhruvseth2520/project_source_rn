@@ -44,7 +44,10 @@ const PromoterCard = ({ name, image, badgeTitle }) => {
             </TouchableOpacity>
 
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={[styles.circularBtn, {width: 43}]}>
+              <TouchableOpacity style={[styles.circularBtn, {width: 43}]} onPress={() => navigation.navigate('VenuePromoterProfile', {
+                name: name,
+                imageUrl: image
+              })}>
                 <Text style={styles.btnText}>Profile</Text>
               </TouchableOpacity>
 
@@ -52,9 +55,6 @@ const PromoterCard = ({ name, image, badgeTitle }) => {
                 <Text style={styles.btnText}>Message</Text>
               </TouchableOpacity>
             </View>
-
-
-
           </View>
 
         </View>
