@@ -4,26 +4,25 @@ import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { ScrollView, View, TouchableOpacity, Text, Image, StyleSheet, FlatList } from 'react-native';
 import BadgeModal from "./BadgeModal";
 
-const PromoterCard = ({ name, image, badgeTitle }) => {
+const PromoterCard = ({ promoter }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [badge, setBadge] = useState({});
 
+  let iconName;
+  let color;
+
+  if (promoter.badgeTitle === "Followers") {
+    iconName = "hashtag";
+    color = "#E1306C";
+  } else if (promoter.badgeTitle === "Traffic") {
+    iconName = "award";
+    color = "#FFAA00";
+  }
 
   useEffect(() => {
-    let iconName;
-    let color;
-
-    if (badgeTitle === "Followers") {
-      iconName = "hashtag";
-      color = "#E1306C";
-    } else if (badgeTitle === "Traffic") {
-      iconName = "award";
-      color = "#FFAA00";
-    }
-
     setBadge({
-      badgeTitle,
+      badgeTitle: promoter.badgeTitle,
       iconName,
       color
     });
@@ -34,10 +33,10 @@ const PromoterCard = ({ name, image, badgeTitle }) => {
     <>
         <View style={styles.card}>
           <View style={styles.imageContainer}>
-            <Image style={styles.profileImg} source={{uri: image}} />
+            <Image style={styles.profileImg} source={{uri: promoter.images[0]}} />
           </View>
           <View style={styles.contentContainer}>
-            <Text style={styles.name}>{name + ", 22"}</Text>
+            <Text style={styles.name}>{promoter.firstName + ", 22"}</Text>
             <Text style={styles.role}>Student</Text>
             <TouchableOpacity style={styles.badgeBtn} onPress={() => setModalVisible(true)}>
               <FontAwesome5 style={[styles.badgeIcon, {color: badge.color}]} name={badge.iconName}></FontAwesome5>
@@ -45,8 +44,8 @@ const PromoterCard = ({ name, image, badgeTitle }) => {
 
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={[styles.circularBtn, {width: 43}]} onPress={() => navigation.navigate('VenuePromoterProfile', {
-                name: name,
-                imageUrl: image
+                promoter: promoter,
+                badge: badge
               })}>
                 <Text style={styles.btnText}>Profile</Text>
               </TouchableOpacity>
@@ -58,7 +57,7 @@ const PromoterCard = ({ name, image, badgeTitle }) => {
           </View>
 
         </View>
-        <BadgeModal name={name} badge={badge} modalVisible={modalVisible} setModalVisible={setModalVisible} />
+        <BadgeModal name={promoter.firstName} badge={badge} modalVisible={modalVisible} setModalVisible={setModalVisible} />
 
     </>
   )
