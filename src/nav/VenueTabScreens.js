@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 import VenuePromoterStackScreen from "./VenuePromoterStackScreen";
-import VenueEventsScreen from "../screens/VenueEventsScreen";
+import VenueEventStackScreen from "./VenueEventStackScreen";
 import TempScreen from '../screens/TempScreen';
 
 const VenueTabNav = createBottomTabNavigator();
@@ -38,7 +38,7 @@ const VenueTabScreens = ({ route }) => {
           headerShown: false,
           title: "Events"
         }}
-        component={VenueEventsScreen}
+        component={VenueEventStackScreen}
         initialParams={{form: route.params.form}} />
 
       <VenueTabNav.Screen name="VenueMessages"
