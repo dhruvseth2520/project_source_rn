@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import PromoterEventStackScreens from './PromoterEventStackScreens';
 
 import PromoterProfile from '../screens/promoter/ProfileScreen';
+import MessageListScreen from '../screens/MessageListScreen';
 import TempScreen from '../screens/TempScreen';
 
 const PromoterTabNav = createBottomTabNavigator();
@@ -25,7 +26,7 @@ const PromoterTabScreens = () => {
                     }} />
             <PromoterTabNav.Screen
                 name="PromoterInbox"
-                component={TempScreen}
+                component={MessageListScreen}
                 options={
                     {
                         title: "Inbox",
