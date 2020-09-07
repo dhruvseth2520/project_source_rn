@@ -19,7 +19,7 @@ const LoginScreen = ({ navigation }) => {
       />
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.logoArea}>
-          <Image style={styles.logoImage} source={require("../assets/icon.png")} />
+          <Image style={styles.logoImage} source={require("../../assets/icon.png")} />
         </View>
         <View style={styles.buttonArea}>
           <View style={styles.buttonContainer}>

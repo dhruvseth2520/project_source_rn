@@ -1,6 +1,6 @@
 import React, { useState, use } from 'react';
 import { ScrollView, View, Image, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import PromoterCard from "../components/PromoterCard";
+import PromoterCard from "../../components/PromoterCard";
 
 
 const VenuePromotersHome = ({ route }) => {
