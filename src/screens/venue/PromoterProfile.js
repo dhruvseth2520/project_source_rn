@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { SliderBox } from "react-native-image-slider-box";
-import BadgeModal from "../components/BadgeModal";
+import BadgeModal from "../../components/BadgeModal";
 import { Entypo } from '@expo/vector-icons';
 
 

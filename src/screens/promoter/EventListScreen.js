@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, SafeAreaView, StyleSheet, StatusBar, Image, ScrollView, Text } from 'react-native';
-import EventBanner from '../components/EventBanner'
+import EventBanner from '../../components/EventBanner'
 
 const PromoterEventListScreen = ({ navigation }) => {
     const tempEventsList = [

@@ -1,8 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import PromoterEventListScreen from "../screens/PromoterEventListScreen";
-import PromoterEventDetailScreen from '../screens/PromoterEventDetailScreen';
+import EventListScreen from "../screens/promoter/EventListScreen";
+import EventDetailScreen from '../screens/promoter/EventDetailScreen';
 
 const PromoterEventStackNav = createStackNavigator();
 
@@ -11,12 +11,12 @@ const PromoterEventStackScreens = ({ route }) => {
     <PromoterEventStackNav.Navigator>
       <PromoterEventStackNav.Screen
         name="PromoterEventHome"
-        component={PromoterEventListScreen}
+        component={EventListScreen}
         options={{ headerShown: false }}
       />
       <PromoterEventStackNav.Screen
         name="PromoterEventDetail"
-        component={PromoterEventDetailScreen}
+        component={EventDetailScreen}
         options={({ route }) => ({
           title: route.params.title
         })}

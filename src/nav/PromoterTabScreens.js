@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import PromoterEventStackScreens from './PromoterEventStackScreens';
 
-import PromoterProfile from '../screens/PromoterProfileScreen';
+import PromoterProfile from '../screens/promoter/ProfileScreen';
 import TempScreen from '../screens/TempScreen';
 
 const PromoterTabNav = createBottomTabNavigator();
