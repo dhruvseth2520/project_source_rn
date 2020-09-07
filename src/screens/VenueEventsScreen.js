@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { ScrollView, Image, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { ScrollView, Image, View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+
 
 const VenueEventsScreen = ({ route }) => {
   const [events, setEvents] = useState([]);
   const navigation = useNavigation();
+  const focused = useIsFocused();
+  const formData = route.params.formData;
+
+  console.log(formData);
 
   return (
     <ScrollView style={styles.background}>
@@ -16,7 +21,10 @@ const VenueEventsScreen = ({ route }) => {
 
       <Text style={styles.subTitle}>Your Events</Text>
       <View style={styles.eventContainer}>
-        {events.length === 0 ? <Text style={{fontFamily: "Avenir", fontWeight: '300'}}>You have no events to show yet. Add your first now!</Text> : <></>}
+        {events.length === 0
+          ? <Text style={{fontFamily: "Avenir", fontWeight: '300'}}>You have no events to show yet. Add your first now!</Text>
+          : <Text>{events[0].eventName}</Text>
+        }
         <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('VenueEventForm')}>
           <FontAwesome5 name="plus" style={{alignSelf: 'center', fontSize: 16, marginTop: 19, color: 'white'}} color="black" />
         </TouchableOpacity>
@@ -74,7 +82,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 132
   }
-
 })
 
 export default VenueEventsScreen;

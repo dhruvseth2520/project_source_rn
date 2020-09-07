@@ -12,10 +12,11 @@ const VenueEventStackScreen = () => {
       name="VenueEventsHome"
       options={{ headerShown: false }}
       component={VenueEventsScreen}
+      initialParams={{"id": "Dhruv"}}
     />
     <Stack.Screen
       name="VenueEventForm"
-      options={{ headerShown: false }}
+      options={{ headerShown: false, gestureEnabled: false }}
       component={VenueNewEventForm}
     />
   </Stack.Navigator>

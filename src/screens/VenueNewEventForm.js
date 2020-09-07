@@ -1,56 +1,116 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { useNavigation } from '@react-navigation/native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { View, Text, StyleSheet, TextInput, Picker, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, TextInput, Picker, TouchableOpacity,
+KeyboardAvoidingView } from 'react-native';
 
 const VenueNewEventForm = () => {
+  const navigation = useNavigation();
+  const [eventName, setEventName] = useState("");
+  const [description, setDescription] = useState("");
+  const [promotion, setPromotion] = useState("");
+  const [fees, setFees] = useState("");
+  const [date, setDate] = useState(new Date());
+
+  const handleSubmit = () => {
+    const form = {
+      eventName,
+      description,
+      promotion,
+      fees,
+      eventDate: date.toDateString() + " " + date.toLocaleTimeString()
+    }
+
+
+    navigation.navigate('VenueEventsHome', {
+      formData: form
+    })
+  }
+
+
   return (
-    <View style={styles.background}>
-      <View style={styles.header}>
-        <Text style={styles.title}>New Event</Text>
-        <FontAwesome5 name="calendar-alt" style={styles.headerIcon} size={24} />
+    <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+        <ScrollView style={styles.background}>
+          <View style={styles.header}>
+            <Text style={styles.title}>New Event</Text>
+            <FontAwesome5 name="calendar-alt" style={styles.headerIcon} size={24} />
 
-      </View>
-      <View style={styles.form}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Event Name</Text>
-          <TextInput style={styles.input} autoCapitalize="words" placeholder="Eg. Wine Wednesday, Tequila Thursday, Game Day"/>
-        </View>
+          </View>
+          <View style={styles.form}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Event Name</Text>
+              <TextInput style={styles.input}
+                onChangeText={(val) => setEventName(val)}
+                value={eventName}
+                autoCapitalize="words" placeholder="Eg. Wine Wednesday, Tequila Thursday, Game Day"/>
+            </View>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Event Description</Text>
-          <TextInput style={[styles.input, { marginTop: 10 }]} multiline={true} autoCapitalize="none"/>
-        </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Event Description</Text>
+              <TextInput
+                onChangeText={(val) => setDescription(val)}
+                value={description}
+                style={[styles.input, { marginTop: 10 }]} multiline={true} autoCapitalize="none"/>
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Event Date</Text>
+              <Text style={styles.comment}>The date and time of the event</Text>
+              <DateTimePicker
+                style={styles.dateSelector}
+                mode="datetime"
+                testID="dateTimePicker"
+                value={date}
+                onValueChange={(val) => setDate(val)}
+                minimumDate={new Date()}
+              />
+            </View>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Promotion</Text>
-          <Text style={styles.comment}>A promotion for customers eg. Free shot on entry, Buy 1 bottle get 1 bottle free.
-            This helps attract customers
-          </Text>
-          <TextInput style={styles.input} autoCapitalize="none" />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Promoter Fees</Text>
-          <Text style={styles.comment}>The per head fee promoters will get for promoting this event. This incentivizes promoters to share your event with their network</Text>
-          <TextInput style={styles.input} autoCapitalize="words" />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Contact Email</Text>
-          <TextInput style={styles.input} keyboardType="email-address" autoCapitalize="none" />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Contact Number</Text>
-          <TextInput style={styles.input} keyboardType="phone-pad" autoCapitalize="none" />
-        </View>
-      </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Promotion</Text>
+              <Text style={styles.comment}>A promotion for customers eg. Free shot on entry, Buy 1 bottle get 1 bottle free.
+                This helps attract customers
+              </Text>
+              <TextInput
+                onChangeText={(val) => setPromotion(val)}
+                value={promotion}
+                style={styles.input} autoCapitalize="none" />
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Promoter Fees</Text>
+              <Text style={styles.comment}>The per head fee promoters will get for promoting this event. This incentivizes promoters to share your event with their network</Text>
+              <View style={{flexDirection: 'row'}}>
+                  <TextInput
+                    onChangeText={(val) => setFees(val)}
+                    value={fees}
+                    style={[styles.input, { width: '60%'}]} autoCapitalize="none" keyboardType="numeric" />
+                  <TextInput style={[styles.input, { width: '25%', marginLeft: 18}]} autoCapitalize="none" value="MMK" editable={false}/>
+              </View>
+            </View>
 
-      <TouchableOpacity style={styles.submitButton} title="Submit">
-         <Text style={styles.buttonText}>
-           Agree & Continue
-         </Text>
-         <FontAwesome5 name="check" style={styles.check}/>
-      </TouchableOpacity>
+          </View>
 
-    </View>
+          <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.submitButton, { backgroundColor: '#DA0000', borderColor: '#DA0000' }]}
+                title="Cancel"
+                onPress={() => navigation.navigate('VenueEventsHome')}>
+                 <Text style={styles.buttonText}>
+                   Cancel
+                 </Text>
+                 <FontAwesome5 name="times" style={[styles.check, { marginLeft: 45}]}/>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.submitButton} title="Submit" onPress={handleSubmit}>
+                 <Text style={styles.buttonText}>
+                   Create Event
+                 </Text>
+                 <FontAwesome5 name="plus" style={styles.check}/>
+              </TouchableOpacity>
+          </View>
+
+        </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -59,6 +119,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'column',
     flex: 1
+  },
+  dateSelector: {
+    marginLeft: 4,
+    marginTop: 10,
+    marginBottom: -5,
+    width: '90%'
   },
   header: {
     flexDirection: 'row',
@@ -122,17 +188,24 @@ const styles = StyleSheet.create({
   },
   headerIcon: {
     marginLeft: 10,
-    marginTop: 28
+    marginTop: 29
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginLeft: 40,
+    marginTop: 10,
+    marginBottom: 50
   },
   submitButton: {
     height: 50,
-    width: 340,
+    width: 160,
     backgroundColor: '#148995',
     borderColor: '#148995',
     borderWidth: 1,
-    borderRadius: 1,
+    borderRadius: 4,
     marginTop: 15,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginRight: 10
   },
   buttonText: {
     fontFamily: 'Avenir',
@@ -146,8 +219,8 @@ const styles = StyleSheet.create({
   check: {
     color: 'white',
     alignSelf: 'center',
-    marginTop: -19,
-    marginLeft: 124,
+    marginTop: -18,
+    marginLeft: 90,
     fontSize: 15
   }
 })
