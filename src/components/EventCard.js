@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 
@@ -7,15 +8,29 @@ const EventCard = ({ event }) => {
   return (
     <View style={styles.card}>
       <Image style={styles.eventImage} source={{uri: event.imageURL}}></Image>
-      <Text style={styles.eventName}>{event.eventName}</Text>
-      <Text style={styles.eventDate}>{event.date.toDateString() + " " + event.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
-      <TouchableOpacity>
-        <View>
+      <View style={styles.cardContent}>
+          <View style={styles.leftCol}>
+            <Text style={styles.eventName}>{event.eventName}</Text>
+            <Text style={styles.eventDate}>{event.date.toDateString() + " " + event.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
 
-        </View>
-      </TouchableOpacity>
-      <Text style={styles.eventPromotion}>{event.promotion}</Text>
-      <Text style={styles.eventFees}>{event.fees + " MMK / promoter"}</Text>
+            <View style={styles.btnContainer}>
+                <TouchableOpacity>
+                  <View style={[styles.circularBtn, {borderColor: '#148995'}]}>
+                    <FontAwesome5 name="pen" style={{alignSelf: 'center', marginTop: 11, color: '#148995'}}/>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <View style={[styles.circularBtn, {borderColor: '#DA0000'}]}>
+                    <FontAwesome5 name="trash" style={{alignSelf: 'center', marginTop: 11, color: '#DA0000'}}/>
+                  </View>
+                </TouchableOpacity>
+            </View>
+          </View>
+          <View style={styles.rightCol}>
+            <Text style={styles.eventPromotion}>{event.promotion}</Text>
+            <Text style={styles.eventFees}>{event.fees + " MMK / promoter"}</Text>
+          </View>
+      </View>
     </View>
   )
 }
@@ -27,42 +42,56 @@ const styles = StyleSheet.create({
     width: 350,
     marginBottom: 20
   },
+  cardContent: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between'
+  },
+  leftCol: {
+    marginTop: 8
+  },
+  rightCol: {
+    marginTop: 12
+  },
   eventImage: {
     width: 350,
-    height: 220
+    height: 190
   },
   eventName: {
-    top: 12,
     fontFamily: 'Avenir',
     fontSize: 19,
     fontWeight: '300',
     alignSelf: 'flex-start'
   },
   eventDate: {
-    top: 12,
     fontFamily: 'Avenir',
     fontSize: 13,
     fontWeight: '300',
     alignSelf: 'flex-start',
-    marginBottom: 25
+    marginBottom: 10
   },
   eventFees: {
     fontFamily: 'Avenir',
     fontSize: 14,
     fontWeight: '300',
     alignSelf: 'flex-end',
-    top: 255,
-    position: 'absolute'
   },
   eventPromotion: {
-    top: 237,
-    marginBottom: 1,
     fontFamily: 'Avenir',
     fontSize: 14,
-    right: -2,
     fontWeight: '300',
-    alignSelf: 'flex-end',
-    position: 'absolute'
+  },
+  btnContainer: {
+    flexDirection: 'row',
+    marginBottom: 13
+  },
+  circularBtn: {
+    borderWidth: 0.5,
+    width: 36,
+    height: 36,
+    borderRadius: 36,
+    marginRight: 10
   }
 })
 
