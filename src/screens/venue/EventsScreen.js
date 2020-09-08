@@ -2,33 +2,49 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { ScrollView, Image, View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+import EventCard from "../../components/EventCard";
 
 
 const VenueEventsScreen = ({ route }) => {
   const [events, setEvents] = useState([]);
   const navigation = useNavigation();
   const focused = useIsFocused();
-  const formData = route.params.formData;
 
-  console.log(formData);
+  useEffect(() => {
+    if (route.params) {
+      const formData = route.params.formData;
+      if (formData) {
+        setEvents([...events, formData]);
+        navigation.setParams({formData: null});
+      }
+    }
+  }, [route])
+
 
   return (
-    <ScrollView style={styles.background}>
+    <ScrollView style={styles.background} showsVerticalScrollIndicator={false}>
       <Text style={styles.title}>Events</Text>
 
       <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1558346489-19413928158b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'}} />
       <Text style={styles.description}>Create custom events with promotions for your target market and share them with our vast network of promoters and influencers</Text>
 
       <Text style={styles.subTitle}>Your Events</Text>
-      <View style={styles.eventContainer}>
+      <ScrollView style={styles.eventContainer} >
         {events.length === 0
-          ? <Text style={{fontFamily: "Avenir", fontWeight: '300'}}>You have no events to show yet. Add your first now!</Text>
-          : <Text>{events[0].eventName}</Text>
+          ? <Text style={{fontFamily: "Avenir", fontWeight: '300', marginTop: -3}}>You have no events to show yet. Add your first now!</Text>
+          : <FlatList
+              showsVerticalScrollIndicator={false}
+              data={events}
+              keyExtractor={(event) => event.eventName}
+              renderItem={({ item }) => {
+                return <EventCard event={item} />
+              }}
+            ></FlatList>
         }
         <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('VenueEventForm')}>
           <FontAwesome5 name="plus" style={{alignSelf: 'center', fontSize: 16, marginTop: 19, color: 'white'}} color="black" />
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </ScrollView>
   )
 }
@@ -71,7 +87,7 @@ const styles = StyleSheet.create({
     marginTop: 30
   },
   eventContainer: {
-    marginTop: 8,
+    marginTop: 12,
     marginLeft: 35
   },
   addBtn: {
@@ -80,7 +96,8 @@ const styles = StyleSheet.create({
     borderRadius: 54,
     backgroundColor: '#148995',
     marginTop: 20,
-    marginLeft: 132
+    marginLeft: 142,
+    marginBottom: 50
   }
 })
 

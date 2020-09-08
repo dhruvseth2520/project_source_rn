@@ -8,6 +8,7 @@ KeyboardAvoidingView } from 'react-native';
 const VenueNewEventForm = () => {
   const navigation = useNavigation();
   const [eventName, setEventName] = useState("");
+  const [imageURL, setImageURL] = useState("");
   const [description, setDescription] = useState("");
   const [promotion, setPromotion] = useState("");
   const [fees, setFees] = useState("");
@@ -17,17 +18,16 @@ const VenueNewEventForm = () => {
     const form = {
       eventName,
       description,
+      imageURL,
       promotion,
       fees,
-      eventDate: date.toDateString() + " " + date.toLocaleTimeString()
+      date
     }
-
 
     navigation.navigate('VenueEventsHome', {
       formData: form
     })
   }
-
 
   return (
     <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
@@ -53,6 +53,17 @@ const VenueNewEventForm = () => {
                 value={description}
                 style={[styles.input, { marginTop: 10 }]} multiline={true} autoCapitalize="none"/>
             </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Event Image</Text>
+              <Text style={styles.comment}>Banner or Poster for the event</Text>
+
+              <TextInput style={styles.input}
+                onChangeText={(val) => setImageURL(val)}
+                value={imageURL}
+                autoCapitalize="words" />
+            </View>
+
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Event Date</Text>
               <Text style={styles.comment}>The date and time of the event</Text>
@@ -61,7 +72,7 @@ const VenueNewEventForm = () => {
                 mode="datetime"
                 testID="dateTimePicker"
                 value={date}
-                onValueChange={(val) => setDate(val)}
+                onChange={(event, val) => setDate(val)}
                 minimumDate={new Date()}
               />
             </View>
@@ -178,10 +189,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Gill Sans',
     color: '#424242',
     fontWeight: '400',
-    marginBottom: 5
+    marginBottom: 4
   },
   comment: {
-    marginTop: 6,
+    marginTop: 4,
     paddingRight: 30,
     fontSize: 12,
     color: '#424242',
