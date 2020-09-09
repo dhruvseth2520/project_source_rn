@@ -5,28 +5,39 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { View, ScrollView, Text, StyleSheet, TextInput, Picker, TouchableOpacity,
 KeyboardAvoidingView } from 'react-native';
 
-const VenueNewEventForm = () => {
+const VenueNewEventForm = ({ route }) => {
   const navigation = useNavigation();
-  const [eventName, setEventName] = useState("");
-  const [imageURL, setImageURL] = useState("");
-  const [description, setDescription] = useState("");
-  const [promotion, setPromotion] = useState("");
-  const [fees, setFees] = useState("");
-  const [date, setDate] = useState(new Date());
+
+  let action = 'Create Event';
+  let event = null;
+
+  if (route.params) {
+    action = route.params.action;
+    event = route.params.event;
+  }
+
+  const [eventName, setEventName] = useState(event ? event.eventName : "");
+  const [imageURL, setImageURL] = useState(event ? event.imageURL : "");
+  const [description, setDescription] = useState(event ? event.description : "");
+  const [promotion, setPromotion] = useState(event ? event.promotion : "");
+  const [fees, setFees] = useState(event ? event.fees : "");
+  const [date, setDate] = useState(event ? event.date : new Date());
 
   const handleSubmit = () => {
-    const form = {
-      eventName,
-      description,
-      imageURL,
-      promotion,
-      fees,
-      date
-    }
+      const form = {
+        eventName,
+        description,
+        imageURL,
+        promotion,
+        fees,
+        date
+      }
 
-    navigation.navigate('VenueEventsHome', {
-      formData: form
-    })
+      navigation.navigate('VenueEventsHome', {
+        action,
+        formData: form
+      })
+
   }
 
   return (
@@ -114,7 +125,7 @@ const VenueNewEventForm = () => {
 
               <TouchableOpacity style={styles.submitButton} title="Submit" onPress={handleSubmit}>
                  <Text style={styles.buttonText}>
-                   Create Event
+                   {action}
                  </Text>
                  <FontAwesome5 name="plus" style={styles.check}/>
               </TouchableOpacity>

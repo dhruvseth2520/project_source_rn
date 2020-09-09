@@ -13,10 +13,16 @@ const VenueEventsScreen = ({ route }) => {
   useEffect(() => {
     if (route.params) {
       const formData = route.params.formData;
-      if (formData) {
-        setEvents([...events, formData]);
-        navigation.setParams({formData: null});
+      if (route.params.action === 'Create Event') {
+        if (formData) {
+          setEvents([...events, formData]);
+          navigation.setParams({formData: null});
+        }
+      } else if (route.params.action === 'Update Event') {
+        // Send update request here
+        console.log('Updating');
       }
+
     }
   }, [route])
 
@@ -87,7 +93,7 @@ const styles = StyleSheet.create({
     marginTop: 30
   },
   eventContainer: {
-    marginTop: 12,
+    marginTop: 10,
     marginLeft: 35
   },
   addBtn: {

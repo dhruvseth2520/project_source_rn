@@ -18,6 +18,11 @@ const VenueEventStackScreen = () => {
       options={{ headerShown: false, gestureEnabled: false }}
       component={NewEventForm}
     />
+    <Stack.Screen
+      name="VenueEventPage"
+      options={{ headerShown: false }}
+      component={EventsScreen}
+    />
   </Stack.Navigator>
 }
 
