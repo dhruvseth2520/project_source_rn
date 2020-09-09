@@ -6,7 +6,9 @@ import { TextInput } from 'react-native-gesture-handler';
 const LoginPromoterRegisterScreen = ({ navigation }) => {
 
     const handlerRegister = () => {
-        navigation.navigate('PromoterTab')
+        navigation.reset({
+            routes: [{ name: 'PromoterTab' }]
+        })
     }
 
     const [nickname, setNickname] = useState('')
@@ -39,10 +41,10 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 0.5,
         marginTop: 10,
-        marginLeft: 10, 
+        marginLeft: 10,
         marginRight: 10
     },
-    defaultButton : {
+    defaultButton: {
         height: 40,
         marginTop: 40
     }

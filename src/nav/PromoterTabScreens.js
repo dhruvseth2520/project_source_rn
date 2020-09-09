@@ -4,10 +4,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
 import PromoterEventStackScreens from './PromoterEventStackScreens';
+import MessageStackScreens from './MessageStackScreens';
 
 import PromoterProfile from '../screens/promoter/ProfileScreen';
-import MessageListScreen from '../screens/MessageListScreen';
-import TempScreen from '../screens/TempScreen';
 
 const PromoterTabNav = createBottomTabNavigator();
 
@@ -26,7 +25,7 @@ const PromoterTabScreens = () => {
                     }} />
             <PromoterTabNav.Screen
                 name="PromoterInbox"
-                component={MessageListScreen}
+                component={MessageStackScreens}
                 options={
                     {
                         title: "Inbox",

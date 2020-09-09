@@ -3,7 +3,9 @@ import React from "react";
 
 const LoginScreen = ({ navigation }) => {
   const handleGoogle = () => {
-    navigation.navigate('VoP')
+    navigation.reset({
+      routes: [{ name: 'VoP' }]
+    })
   }
 
   const handleFacebook = () => {
