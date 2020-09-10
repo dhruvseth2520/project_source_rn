@@ -1,17 +1,18 @@
 import React from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 
+import TimeAgo from 'react-native-timeago';
 
-const MessageListItem = ({ name, image, lastMessage, timeStamp, read }) => {
+const MessageListItem = ({ name, avatar, latestMessage, createAtDate, read }) => {
 
-    const truncateLastMessage = (str, n) => (
+    const truncatelatestMessage = (str, n) => (
         (str.length > n) ? str.substr(0, n - 1) + '... ' : str + ' '
     )
 
     return (
         <View style={styles.rootContainer}>
-            <View style={styles.imageContainer}>
-                <Image style={styles.profileImage} source={{ uri: image }} />
+            <View style={styles.avatarContainer}>
+                <Image style={styles.avatar} source={{ uri: avatar }} />
             </View>
             <View style={styles.contentContainer}>
                 <View style={styles.nameContainer}>
@@ -22,15 +23,15 @@ const MessageListItem = ({ name, image, lastMessage, timeStamp, read }) => {
                     ]}>{name}</Text>
                 </View>
                 <View style={styles.detailsContainer}>
-                    <View style={styles.lastMessageContainer}>
+                    <View style={styles.latestMessageContainer}>
                         <Text style={[
-                            styles.lastMessageText,
+                            styles.latestMessageText,
                             read ? null :
                                 { fontWeight: 'bold' }
-                        ]}>{truncateLastMessage(lastMessage, 24)}</Text>
+                        ]}>{truncatelatestMessage(latestMessage, 24)}</Text>
                     </View>
-                    <View style={styles.timeStampContainer}>
-                        <Text style={styles.timeStampText}>{timeStamp}</Text>
+                    <View style={styles.createAtContainer}>
+                        <TimeAgo style={styles.createAtText} time={createAtDate} />
                     </View>
                 </View>
             </View>
@@ -48,12 +49,12 @@ const styles = StyleSheet.create({
         height: 70,
         flexDirection: 'row',
     },
-    imageContainer: {
+    avatarContainer: {
         flex: 2,
         justifyContent: 'center',
         alignItems: 'center'
     },
-    profileImage: {
+    avatar: {
         width: 60,
         height: 60,
         resizeMode: "cover",
@@ -74,13 +75,13 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row'
     },
-    lastMessageContainer: {
+    latestMessageContainer: {
     },
-    lastMessageText: {},
-    timeStampContainer: {
+    latestMessageText: {},
+    createAtContainer: {
         flex: 1
     },
-    timeStampText: {
+    createAtText: {
         color: '#636363'
     },
     statusContainer: {
