@@ -19,10 +19,10 @@ const VenueEventsScreen = ({ route }) => {
           navigation.setParams({formData: null});
         }
       } else if (route.params.action === 'Update Event') {
-        // Send update request here
+        // Update event in backend here
+        console.log(formData);
         console.log('Updating');
       }
-
     }
   }, [route])
 

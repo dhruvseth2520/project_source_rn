@@ -14,6 +14,12 @@ const EventCard = ({ event }) => {
     })
   }
 
+  const viewEvent = () => {
+    navigation.navigate('VenueEventPage', {
+      event
+    })
+  }
+
   return (
     <View style={styles.card}>
       <Image style={styles.eventImage} source={{uri: event.imageURL}}></Image>
@@ -26,7 +32,7 @@ const EventCard = ({ event }) => {
           </View>
           <View style={styles.rightCol}>
             <View style={styles.btnContainer}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={viewEvent}>
                   <View style={[styles.circularBtn, {borderColor: '#148995'}]}>
                     <FontAwesome5 name="book-open" style={{alignSelf: 'center', marginTop: 11, color: '#148995'}}/>
                   </View>
@@ -84,7 +90,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '300',
     alignSelf: 'flex-start',
-    marginBottom: 10
+    marginBottom: 8
   },
   btnContainer: {
     flexDirection: 'row',

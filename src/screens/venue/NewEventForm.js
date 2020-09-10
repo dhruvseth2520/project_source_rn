@@ -37,7 +37,6 @@ const VenueNewEventForm = ({ route }) => {
         action,
         formData: form
       })
-
   }
 
   return (

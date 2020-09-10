@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import EventsScreen from "../screens/venue/EventsScreen";
+import EventDetails from "../screens/venue/EventDetails";
 import NewEventForm from "../screens/venue/NewEventForm";
 
 const Stack = createStackNavigator();
@@ -21,7 +22,7 @@ const VenueEventStackScreen = () => {
     <Stack.Screen
       name="VenueEventPage"
       options={{ headerShown: false }}
-      component={EventsScreen}
+      component={EventDetails}
     />
   </Stack.Navigator>
 }
