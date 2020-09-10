@@ -27,8 +27,6 @@ const EventCard = ({ event }) => {
           <View style={styles.leftCol}>
             <Text style={styles.eventName}>{event.eventName}</Text>
             <Text style={styles.eventDate}>{event.date.toDateString() + " " + event.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
-
-
           </View>
           <View style={styles.rightCol}>
             <View style={styles.btnContainer}>

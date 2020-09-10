@@ -36,11 +36,15 @@ const PromoterCard = ({ promoter }) => {
             <Image style={styles.profileImg} source={{uri: promoter.images[0]}} />
           </View>
           <View style={styles.contentContainer}>
-            <Text style={styles.name}>{promoter.firstName + ", 22"}</Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.name}>{promoter.firstName + ", 22"}</Text>
+              <TouchableOpacity style={styles.badgeBtn} onPress={() => setModalVisible(true)}>
+                <FontAwesome5 style={[styles.badgeIcon, {color: badge.color}]} name={badge.iconName}></FontAwesome5>
+              </TouchableOpacity>
+            </View>
+
             <Text style={styles.role}>Student</Text>
-            <TouchableOpacity style={styles.badgeBtn} onPress={() => setModalVisible(true)}>
-              <FontAwesome5 style={[styles.badgeIcon, {color: badge.color}]} name={badge.iconName}></FontAwesome5>
-            </TouchableOpacity>
+
 
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={[styles.circularBtn, {width: 43}]} onPress={() => navigation.navigate('VenuePromoterProfile', {
@@ -68,10 +72,13 @@ const styles = StyleSheet.create({
     height: 309,
     width: 183,
     marginRight: 8,
-    flexDirection: 'column',
+    flexDirection: 'column'
   },
   profileImg: {
-    height: 206
+    height: 206,
+    borderTopStartRadius: 6,
+    borderTopEndRadius: 6,
+
   },
   imageContainer: {
     flex: 2
@@ -80,7 +87,9 @@ const styles = StyleSheet.create({
     flex: 1,
     borderColor: 'gray',
     borderWidth: 0.5,
-    alignItems: 'flex-end'
+    borderBottomEndRadius: 6,
+    borderBottomStartRadius: 6,
+    alignItems: 'flex-start'
   },
   buttonContainer: {
     alignSelf: 'flex-start',
@@ -89,7 +98,7 @@ const styles = StyleSheet.create({
     marginLeft: 5
   },
   name: {
-    marginRight: 10,
+    marginLeft: 12,
     marginTop: 10,
     fontFamily: 'Avenir',
     fontWeight: '300',
@@ -99,7 +108,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir',
     fontWeight: '300',
     fontSize: 11,
-    marginRight: 9
+    marginLeft: 12
   },
   circularBtn: {
     borderRadius: 2,
@@ -118,10 +127,8 @@ const styles = StyleSheet.create({
     marginLeft: 5
   },
   badgeBtn: {
-    position: 'absolute',
-    alignSelf: 'flex-start',
-    marginTop: 10,
-    marginLeft: 10
+    marginTop: 9,
+    marginLeft: 6
   },
   badgeIcon: {
     fontSize: 22,
