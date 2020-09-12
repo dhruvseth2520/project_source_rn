@@ -14,6 +14,11 @@ const EventCard = ({ event }) => {
     })
   }
 
+  const deleteEvent = () => {
+    console.log('Deleting');
+    console.log(event);
+  }
+
   const viewEvent = () => {
     navigation.navigate('VenueEventPage', {
       event
@@ -40,7 +45,7 @@ const EventCard = ({ event }) => {
                     <FontAwesome5 name="pen" style={{alignSelf: 'center', marginTop: 11, color: '#148995'}}/>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={deleteEvent}>
                   <View style={[styles.circularBtn, {borderColor: '#148995'}]}>
                     <FontAwesome5 name="trash" style={{alignSelf: 'center', marginTop: 11, color: '#148995'}}/>
                   </View>

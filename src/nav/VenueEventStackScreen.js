@@ -7,7 +7,8 @@ import NewEventForm from "../screens/venue/NewEventForm";
 
 const Stack = createStackNavigator();
 
-const VenueEventStackScreen = () => {
+const VenueEventStackScreen = ({ route }) => {
+
   return <Stack.Navigator>
     <Stack.Screen
       name="VenueEventsHome"

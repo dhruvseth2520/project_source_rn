@@ -1,23 +1,27 @@
-import React, { useState, use } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Image, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import PromoterCard from "../../components/PromoterCard";
 import { getPromoters } from "../../api/Promoters";
+import { getData } from "../../utils/localStorage";
 
 
-const VenuePromotersHome = ({ route }) => {
-  const formData = route.params.form;
-
+const VenuePromotersHome = () => {
   const promoters = getPromoters();
+  const [venue, setVenue] = useState({});
+
+  useEffect(() => {
+    getData('@venueFormData').then(data => setVenue(data));
+  }, [])
 
   return (
           <ScrollView style={styles.background}>
                   <Text style={styles.title}>Promoters</Text>
 
                   <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1504270997636-07ddfbd48945?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80'}} />
-                  <Text style={styles.description}>Our network of young promoters will use their social media influence and personal network to get your {formData.category} the traffic you seek</Text>
+                  <Text style={styles.description}>Our network of young promoters will use their social media influence and personal network to get your {venue.category} the traffic you seek</Text>
 
                   <Text style={styles.subTitle}>Top Promoters in the area</Text>
-                  <Text style={styles.comment}>Showing promoters near {formData.venueName}</Text>
+                  <Text style={styles.comment}>Showing promoters near {venue.venueName}</Text>
 
                   <FlatList horizontal
                     style={styles.promoterList}

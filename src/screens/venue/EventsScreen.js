@@ -22,7 +22,7 @@ const VenueEventsScreen = ({ route }) => {
         // Update event in backend here
         console.log(formData);
         console.log('Updating');
-      }
+      } 
     }
   }, [route])
 
@@ -30,18 +30,16 @@ const VenueEventsScreen = ({ route }) => {
   return (
     <ScrollView style={styles.background} showsVerticalScrollIndicator={false}>
       <Text style={styles.title}>Events</Text>
-
       <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1558346489-19413928158b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'}} />
       <Text style={styles.description}>Create custom events with promotions for your target market and share them with our vast network of promoters and influencers</Text>
-
       <Text style={styles.subTitle}>Your Events</Text>
-      <ScrollView style={styles.eventContainer} >
+      <View style={styles.eventContainer} >
         {events.length === 0
           ? <Text style={{fontFamily: "Avenir", fontWeight: '300', marginTop: -3}}>You have no events to show yet. Add your first now!</Text>
           : <FlatList
               showsVerticalScrollIndicator={false}
               data={events}
-              keyExtractor={(event) => event.eventName}
+              keyExtractor={event => event.eventName}
               renderItem={({ item }) => {
                 return <EventCard event={item} />
               }}
@@ -50,7 +48,7 @@ const VenueEventsScreen = ({ route }) => {
         <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('VenueEventForm')}>
           <FontAwesome5 name="plus" style={{alignSelf: 'center', fontSize: 16, marginTop: 19, color: 'white'}} color="black" />
         </TouchableOpacity>
-      </ScrollView>
+      </View>
     </ScrollView>
   )
 }

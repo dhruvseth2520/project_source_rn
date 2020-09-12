@@ -61,7 +61,7 @@ const VenueNewEventForm = ({ route }) => {
               <TextInput
                 onChangeText={(val) => setDescription(val)}
                 value={description}
-                style={[styles.input, { marginTop: 10 }]} multiline={true} autoCapitalize="none"/>
+                style={styles.input} autoCapitalize="sentences"/>
             </View>
 
             <View style={styles.inputContainer}>
@@ -71,7 +71,8 @@ const VenueNewEventForm = ({ route }) => {
               <TextInput style={styles.input}
                 onChangeText={(val) => setImageURL(val)}
                 value={imageURL}
-                autoCapitalize="words" />
+                autoCapitalize="none"
+              />
             </View>
 
             <View style={styles.inputContainer}>
@@ -95,7 +96,7 @@ const VenueNewEventForm = ({ route }) => {
               <TextInput
                 onChangeText={(val) => setPromotion(val)}
                 value={promotion}
-                style={styles.input} autoCapitalize="none" />
+                style={styles.input} autoCapitalize="sentences" />
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Promoter Fees</Text>

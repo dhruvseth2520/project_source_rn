@@ -5,14 +5,14 @@ import PromoterProfile from "../screens/venue/PromoterProfile";
 
 const Stack = createStackNavigator();
 
-const VenuePromoterStackScreen = ({ route }) => {
+const VenuePromoterStackScreen = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="VenuePromotersHome"
         options={{ headerShown: false }}
         component={PromotersHome}
-        initialParams={{form: route.params.form}}
+
       />
       <Stack.Screen
         name="VenuePromoterProfile"

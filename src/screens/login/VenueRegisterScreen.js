@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCocktail, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { View, Text, Image, StyleSheet, TextInput, Picker, TouchableOpacity, ScrollView,
 KeyboardAvoidingView } from 'react-native';
+import { storeData } from '../../utils/localStorage';
 
 const LoginVenueRegisterScreen = ({ navigation }) => {
   const [venueName, setVenueName] = useState("");
@@ -14,15 +15,14 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
   const [contactPhone, setContactPhone] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-
   const handleSubmit = () => {
     const formData = {
         venueName,
-        category,
+        venueCategory: category,
         venueAddress,
-        contactName,
-        contactEmail,
-        contactPhone
+        venueContactName: contactName,
+        venueContactEmail: contactEmail,
+        venueContactPhone: contactPhone
     };
 
     /* for (let key in formData) {
@@ -43,10 +43,9 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
     } */
 
     setErrorMessage("");
-    navigation.navigate('VenueTab', {
-      form: formData
+    storeData('@venueFormData', formData).then(() => {
+      navigation.navigate('VenueTab');
     });
-
   }
 
   return (
@@ -108,7 +107,6 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
                       <Text style={styles.error}>{errorMessage}</Text>
                 </ScrollView>
             </KeyboardAvoidingView>
-
   )
 }
 

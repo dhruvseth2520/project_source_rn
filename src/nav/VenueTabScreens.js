@@ -10,7 +10,7 @@ import TempScreen from '../screens/TempScreen';
 
 const VenueTabNav = createBottomTabNavigator();
 
-const VenueTabScreens = ({ route }) => {
+const VenueTabScreens = () => {
 
   return (
     <VenueTabNav.Navigator tabBarOptions={{
@@ -28,7 +28,7 @@ const VenueTabScreens = ({ route }) => {
           title: "Promoters"
         }}
         component={VenuePromoterStackScreen}
-        initialParams={{form: route.params.form}} />
+     />
 
       <VenueTabNav.Screen name="VenueEvents"
         options={{
@@ -39,7 +39,7 @@ const VenueTabScreens = ({ route }) => {
           title: "Events"
         }}
         component={VenueEventStackScreen}
-        initialParams={{form: route.params.form}} />
+       />
 
       <VenueTabNav.Screen name="VenueMessages"
         options={{

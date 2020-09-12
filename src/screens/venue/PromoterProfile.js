@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { SliderBox } from "react-native-image-slider-box";
 import BadgeModal from "../../components/BadgeModal";
 import { Entypo } from '@expo/vector-icons';
@@ -12,9 +12,8 @@ const VenuePromoterProfile = ({ route }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
 
-
   return (
-    <View style={styles.background}>
+    <ScrollView style={styles.background}>
       <TouchableOpacity style={styles.backArrow} onPress={() => navigation.navigate('VenuePromotersHome')}>
         <Entypo name="chevron-small-left" size={34} color="black" />
       </TouchableOpacity>
@@ -37,25 +36,53 @@ const VenuePromoterProfile = ({ route }) => {
       <View style={styles.profileHeader}>
         <Text style={styles.name}>{promoter.firstName + ", 22"}</Text>
         <Text style={styles.role}>Student</Text>
-
         <TouchableOpacity style={styles.badgeBtn} onPress={() => setModalVisible(true)}>
           <FontAwesome5 style={[styles.badgeIcon, {color: badge.color}]} name={badge.iconName}></FontAwesome5>
         </TouchableOpacity>
       </View>
 
       <View style={styles.profileContent}>
-        <Text style={styles.profileBio}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</Text>
+        <View style={styles.profileComponent}>
+          <Text style={styles.profileBio}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</Text>
+        </View>
+        <View style={styles.profileStats}>
+          <View style={styles.stat}>
+            <View style={{flexDirection: 'row'}}>
+                <Text style={styles.statNumber}>44</Text>
+                <FontAwesome5 style={styles.statIcon} name="briefcase"></FontAwesome5>
+            </View>
+
+            <Text style={styles.statCaption}>Total Jobs</Text>
+
+          </View>
+
+          <View style={styles.stat}>
+            <View style={{flexDirection: 'row'}}>
+                <Text style={styles.statNumber}>11</Text>
+                <FontAwesome5 style={[styles.statIcon, {left: 2}]} name="star"></FontAwesome5>
+            </View>
+
+            <Text style={styles.statCaption}>Positive Reviews</Text>
+          </View>
+
+          <View style={styles.stat}>
+            <View style={{flexDirection: 'row'}}>
+                <Text style={styles.statNumber}>2750</Text>
+                <FontAwesome5 style={styles.statIcon} name="network-wired"></FontAwesome5>
+            </View>
+
+            <Text style={styles.statCaption}>Connections</Text>
+
+          </View>
+        </View>
 
         <View style={styles.contentCol}>
-          <Text style={styles.label}>Total Jobs</Text>
-          <Text style={styles.value}>54</Text>
           <Text style={styles.label}>Active Since</Text>
           <Text style={styles.value}>07/23/2020</Text>
           <Text style={styles.label}>Availability</Text>
           <Text style={styles.value}>20 hours/week</Text>
           <Text style={styles.label}>Expected rate</Text>
           <Text style={styles.value}>1500 MMK per head</Text>
-
         </View>
 
         <View style={styles.contentCol}>
@@ -64,14 +91,20 @@ const VenuePromoterProfile = ({ route }) => {
           <Text style={styles.label}>Education</Text>
           <Text style={styles.value}>ESSEC Business School</Text>
 
+        </View>
+
+        <View style={styles.contentCol}>
           <Text style={styles.label}>Hobbies</Text>
           <Text style={styles.value}>Reading, Rock Climbing</Text>
+          <Text style={styles.label}>Favorite Drink</Text>
+          <Text style={styles.value}>Long-Island Iced Tea</Text>
+
         </View>
       </View>
 
       <BadgeModal name={promoter.firstName} badge={badge} modalVisible={modalVisible} setModalVisible={setModalVisible} />
 
-    </View>
+    </ScrollView>
 
 
   )
@@ -98,18 +131,27 @@ const styles = StyleSheet.create({
     marginTop: 15,
     paddingHorizontal: 19,
     flexDirection: 'row',
-    flex: 1,
     alignItems: 'flex-start',
     flexWrap: 'wrap'
   },
   profileBio: {
     fontSize: 16,
     fontFamily: 'Gill Sans',
-    fontWeight: '300'
+    fontWeight: '300',
+    marginTop: 5,
+    marginBottom: 20
+  },
+  profileComponent: {
+    marginTop: 5,
+    borderColor: 'gray',
+    borderBottomWidth: 0.5
   },
   contentCol: {
     marginTop: 15,
-    width: '50%'
+    marginLeft: 1,
+    marginRight: 15,
+    marginBottom: 30,
+    width: '29%'
   },
   name: {
     fontSize: 26,
@@ -148,6 +190,31 @@ const styles = StyleSheet.create({
     width: 50,
     marginLeft: -10,
     marginTop: -8
+  },
+  profileStats: {
+    flexDirection: 'row',
+    marginLeft: -10,
+    padding: 10,
+    marginTop: 5
+  },
+  stat: {
+    marginRight: 18,
+    width: '29%'
+  },
+  statIcon: {
+    fontSize: 18,
+    top: 15,
+    left: 8
+  },
+  statNumber: {
+    fontSize: 40,
+    fontFamily: 'Avenir',
+    fontWeight: '100'
+  },
+  statCaption: {
+    fontSize: 13,
+    fontWeight: '300',
+    fontFamily: 'Avenir'
   }
 });
 

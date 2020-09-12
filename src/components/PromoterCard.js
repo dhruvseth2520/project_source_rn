@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { ScrollView, View, TouchableOpacity, Text, Image, StyleSheet, FlatList } from 'react-native';
 import BadgeModal from "./BadgeModal";
 
@@ -44,18 +45,16 @@ const PromoterCard = ({ promoter }) => {
             </View>
 
             <Text style={styles.role}>Student</Text>
-
-
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={[styles.circularBtn, {width: 43}]} onPress={() => navigation.navigate('VenuePromoterProfile', {
+              <TouchableOpacity style={styles.circularBtn} onPress={() => navigation.navigate('VenuePromoterProfile', {
                 promoter: promoter,
                 badge: badge
               })}>
-                <Text style={styles.btnText}>Profile</Text>
+                <FontAwesome5 style={styles.icon} name="user"></FontAwesome5>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => navigation.navigate('VenueMessages')} style={[styles.circularBtn, {width: 56}]}>
-                <Text style={styles.btnText}>Message</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('VenueMessages')} style={styles.circularBtn}>
+                <FontAwesome5 style={styles.icon} name="comment"></FontAwesome5>
               </TouchableOpacity>
             </View>
           </View>
@@ -76,9 +75,8 @@ const styles = StyleSheet.create({
   },
   profileImg: {
     height: 206,
-    borderTopStartRadius: 6,
-    borderTopEndRadius: 6,
-
+    borderTopStartRadius: 10,
+    borderTopEndRadius: 10
   },
   imageContainer: {
     flex: 2
@@ -94,7 +92,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     alignSelf: 'flex-start',
     flexDirection: 'row',
-    marginTop: 20,
+    marginTop: 15,
     marginLeft: 5
   },
   name: {
@@ -110,21 +108,20 @@ const styles = StyleSheet.create({
     fontSize: 11,
     marginLeft: 12
   },
+  icon: {
+    fontSize: 13,
+    marginLeft: 9,
+    marginTop: 8,
+    color: '#148995'
+  },
   circularBtn: {
-    borderRadius: 2,
-    height: 24,
+    borderRadius: 17,
+    height: 32,
+    width: 32,
     marginLeft: 5,
     backgroundColor: 'white',
-    borderColor: '#4F4F4F',
-    borderWidth: 0.5
-  },
-  btnText: {
-    fontSize: 12,
-    fontFamily: "Avenir",
-    color: "#4F4F4F",
-    fontWeight: "300",
-    marginTop: 5,
-    marginLeft: 5
+    borderColor: '#10737C',
+    borderWidth: 1
   },
   badgeBtn: {
     marginTop: 9,
