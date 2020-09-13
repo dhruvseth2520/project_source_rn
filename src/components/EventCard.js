@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-
+import RegisterGuestsModal from "./RegisterGuestsModal";
 
 const EventCard = ({ event }) => {
   const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const editEvent = () => {
     navigation.navigate('VenueEventForm', {
@@ -32,9 +33,7 @@ const EventCard = ({ event }) => {
           <View style={styles.leftCol}>
             <Text style={styles.eventName}>{event.eventName}</Text>
             <Text style={styles.eventDate}>{event.date.toDateString() + " " + event.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
-            <TouchableOpacity style={styles.registerBtn} onPress={() => navigation.navigate('RegisterGuests', {
-              event
-            })}>
+            <TouchableOpacity style={styles.registerBtn} onPress={() => setModalVisible(true)}>
               <View style={{flexDirection: 'row'}}>
                 <Text style={styles.btnText}>Register Guests</Text>
                 <FontAwesome5 style={styles.btnIcon} name="edit"></FontAwesome5>
@@ -61,6 +60,7 @@ const EventCard = ({ event }) => {
             </View>
           </View>
       </View>
+      <RegisterGuestsModal event={event} modalVisible={modalVisible} setModalVisible={setModalVisible} />
     </View>
   )
 }
@@ -80,8 +80,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   leftCol: {
-    marginTop: 8,
-    marginBottom: 10
+    marginTop: 8
   },
   rightCol: {
     marginTop: 8
@@ -122,7 +121,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     marginTop: 10,
-    marginBottom: 5
+    marginBottom: 20
   },
   btnText: {
     fontFamily: 'Avenir',

@@ -61,7 +61,7 @@ const EventDetails = ({ route }) => {
             <Text style={styles.address}>{venue.venueAddress}</Text>
           </View>
           <View style={{width: "40%", marginTop: 1}}>
-            <Text style={[styles.contact, {fontWeight: '600', marginBottom: 5, fontSize: 14}]}>Contact</Text>
+            <Text style={[styles.contact, {fontWeight: '400', marginBottom: 5, fontSize: 15}]}>Contact Details</Text>
             <Text style={styles.contact}>{venue.venueContactEmail}</Text>
             <Text style={styles.contact}>{venue.venueContactPhone}</Text>
           </View>
