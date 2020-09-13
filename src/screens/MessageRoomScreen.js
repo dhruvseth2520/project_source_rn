@@ -1,23 +1,35 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 
-import { getThreads } from '../api/Messages'
+import { updateMessagesByThreadId, updateThreadById, getMessagesByThreadId, updateThreadAsRead } from '../api/Messages'
+import { useIsFocused } from '@react-navigation/native'
 
-const MessageRoomScreen = () => {
-    const [messages, setMessages] = useState([]);
+const MessageRoomScreen = ({ route }) => {
+    const userId = '64dhruv'
+    const threadId = route.params.threadId
+    const isFocused = useIsFocused()
 
-    useEffect(() => (
-        setMessages(getThreads()[0]['MESSAGES'])
-    ), [])
+    const [messages, setMessages] = useState([])
 
-    function handleSend(newMessage = []) {
-        setMessages(GiftedChat.append(messages, newMessage));
-    }
+    useEffect(() => {
+        setMessages(getMessagesByThreadId(threadId))
+        updateThreadAsRead(userId, threadId)
+    }, [isFocused])
+
+    const onSend = useCallback((newMessage = []) => {
+        setMessages(previousMessages => {
+            const newMessages = GiftedChat.append(previousMessages, newMessage)
+            updateMessagesByThreadId(threadId, newMessages)
+            return newMessages
+        })
+    }, [])
+
+
     return (
         <GiftedChat
             messages={messages}
-            onSend={newMessage => handleSend(newMessage)}
-            user={{ _id: '64dhruv' }}
+            onSend={newMessage => onSend(newMessage)}
+            user={{ _id: userId }}
         />
     );
 }

@@ -2,15 +2,16 @@ import React from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 
 import TimeAgo from 'react-native-timeago';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const MessageListItem = ({ name, avatar, latestMessage, createAtDate, read }) => {
+const MessageListItem = ({ name, avatar, latestMessage, createAtDate, read, onPress }) => {
 
     const truncatelatestMessage = (str, n) => (
         (str.length > n) ? str.substr(0, n - 1) + '... ' : str + ' '
     )
 
     return (
-        <View style={styles.rootContainer}>
+        <TouchableOpacity onPress={onPress} style={styles.rootContainer}>
             <View style={styles.avatarContainer}>
                 <Image style={styles.avatar} source={{ uri: avatar }} />
             </View>
@@ -38,7 +39,7 @@ const MessageListItem = ({ name, avatar, latestMessage, createAtDate, read }) =>
             <View style={styles.statusContainer}>
                 <View style={read ? null : styles.statusItem}></View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 }
 

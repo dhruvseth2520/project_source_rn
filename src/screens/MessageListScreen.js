@@ -3,32 +3,39 @@ import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
 
 
 import { getThreads } from '../api/Messages'
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useIsFocused } from '@react-navigation/native';
 
 import MessageListItem from '../components/MessageListItem'
 
 const MessageListScreen = ({ navigation }) => {
     const userId = '64dhruv'
+    const isFocused = useIsFocused()
 
     const [threads, setThreads] = useState(getThreads(userId))
 
+    useEffect(() => {
+        setThreads(getThreads(userId))
+    }, [isFocused])
 
-    const handleMessagePress = (message_id) => {
-        navigation.navigate('MessageRoom', { message_id: message_id })
-    }
 
     const handleMessageItem = (thread, userId) => {
         const latestMessage = thread.MESSAGES[0]
         switch (thread.threadType) {
             case '1on1':
-                const otherMemberDetail = thread.members.filter((member) => (userId != member._id))
+                const otherMemberDetail = thread.members.filter((member) => (userId != member._id))[0]
                 return (
                     <MessageListItem
-                        name={otherMemberDetail[0].name}
-                        avatar={otherMemberDetail[0].avatar}
+                        key={thread._id}
+                        name={otherMemberDetail.name}
+                        avatar={otherMemberDetail.avatar}
                         latestMessage={latestMessage.text}
                         createAtDate={latestMessage.createdAt}
-                        read={(userId in thread.unreadBy) ? true : false }
+                        read={thread.unreadBy.includes(userId)}
+                        onPress={() => navigation.navigate('MessageRoom', {
+                            threadName: otherMemberDetail.name,
+                            threadId: thread._id
+                        })}
                     />
                 )
             default:
@@ -39,13 +46,7 @@ const MessageListScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.rootContainer}>
             <ScrollView>
-                {
-                    threads.map((thread) => (
-                        <TouchableOpacity key={thread._id} onPress={() => handleMessagePress(thread._id)}>
-                            {handleMessageItem(thread, userId)}
-                        </TouchableOpacity>
-                    ))
-                }
+                {threads.map((thread) => (handleMessageItem(thread, userId)))}
             </ScrollView>
         </SafeAreaView>
     );

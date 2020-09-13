@@ -18,7 +18,7 @@ const MessageStackScreens = ({ route, navigation }) => {
         name="MessageRoom"
         component={MessageRoomScreen}
         options={({ route }) => ({
-          title: route.params.title
+          title: route.params.threadName
         })}
       />
     </MessageStackNav.Navigator>
