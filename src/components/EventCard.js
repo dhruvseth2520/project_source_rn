@@ -32,6 +32,14 @@ const EventCard = ({ event }) => {
           <View style={styles.leftCol}>
             <Text style={styles.eventName}>{event.eventName}</Text>
             <Text style={styles.eventDate}>{event.date.toDateString() + " " + event.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
+            <TouchableOpacity style={styles.registerBtn} onPress={() => navigation.navigate('RegisterGuests', {
+              event
+            })}>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.btnText}>Register Guests</Text>
+                <FontAwesome5 style={styles.btnIcon} name="edit"></FontAwesome5>
+              </View>
+            </TouchableOpacity>
           </View>
           <View style={styles.rightCol}>
             <View style={styles.btnContainer}>
@@ -106,6 +114,30 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 36,
     marginRight: 10
+  },
+  registerBtn: {
+    width: 130,
+    height: 35,
+    borderColor: '#148995',
+    borderWidth: 1,
+    borderRadius: 6,
+    marginTop: 10,
+    marginBottom: 5
+  },
+  btnText: {
+    fontFamily: 'Avenir',
+    alignSelf: 'flex-start',
+    top: 7,
+    left: 6,
+    fontWeight: '300',
+    color: '#148995'
+  },
+  btnIcon: {
+    alignSelf: 'flex-end',
+    fontSize: 17,
+    color: '#148995',
+    top: 5,
+    left: 11
   }
 })
 

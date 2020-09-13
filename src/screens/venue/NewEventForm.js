@@ -17,6 +17,7 @@ const VenueNewEventForm = ({ route }) => {
   }
 
   const [eventName, setEventName] = useState(event ? event.eventName : "");
+  const [category, setCategory] = useState(event ? event.category : "Show");
   const [imageURL, setImageURL] = useState(event ? event.imageURL : "");
   const [description, setDescription] = useState(event ? event.description : "");
   const [promotion, setPromotion] = useState(event ? event.promotion : "");
@@ -26,6 +27,7 @@ const VenueNewEventForm = ({ route }) => {
   const handleSubmit = () => {
       const form = {
         eventName,
+        category,
         description,
         imageURL,
         promotion,
@@ -54,6 +56,21 @@ const VenueNewEventForm = ({ route }) => {
                 onChangeText={(val) => setEventName(val)}
                 value={eventName}
                 autoCapitalize="words" placeholder="Eg. Wine Wednesday, Tequila Thursday, Game Day"/>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Event Type</Text>
+              <Picker
+                selectedValue={category}
+                mode="dropdown"
+                onValueChange={(val) => setCategory(val)}
+                style={styles.selectInput}>
+                <Picker.Item label="Show" value="Show" />
+                <Picker.Item label="Night Out" value="Night Out" />
+                <Picker.Item label="Themed Event" value="Themed Event" />
+                <Picker.Item label="Couples Event" value="Couples Event" />
+                <Picker.Item label="Activity" value="Activity" />
+              </Picker>
             </View>
 
             <View style={styles.inputContainer}>
@@ -170,7 +187,7 @@ const styles = StyleSheet.create({
   selectInput: {
     width: 300,
     height: 200,
-    marginTop: -45,
+    marginTop: -55,
     marginLeft: 15
   },
   input: {

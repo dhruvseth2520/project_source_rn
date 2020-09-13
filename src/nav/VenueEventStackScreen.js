@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import EventsScreen from "../screens/venue/EventsScreen";
 import EventDetails from "../screens/venue/EventDetails";
 import NewEventForm from "../screens/venue/NewEventForm";
+import RegisterGuests from "../screens/venue/RegisterGuests";
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,11 @@ const VenueEventStackScreen = ({ route }) => {
       name="VenueEventPage"
       options={{ headerShown: false }}
       component={EventDetails}
+    />
+    <Stack.Screen
+      name="RegisterGuests"
+      options={{ headerShown: false }}
+      component={RegisterGuests}
     />
   </Stack.Navigator>
 }

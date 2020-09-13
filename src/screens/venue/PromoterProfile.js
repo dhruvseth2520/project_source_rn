@@ -51,9 +51,7 @@ const VenuePromoterProfile = ({ route }) => {
                 <Text style={styles.statNumber}>44</Text>
                 <FontAwesome5 style={styles.statIcon} name="briefcase"></FontAwesome5>
             </View>
-
             <Text style={styles.statCaption}>Total Jobs</Text>
-
           </View>
 
           <View style={styles.stat}>
@@ -61,7 +59,6 @@ const VenuePromoterProfile = ({ route }) => {
                 <Text style={styles.statNumber}>11</Text>
                 <FontAwesome5 style={[styles.statIcon, {left: 2}]} name="star"></FontAwesome5>
             </View>
-
             <Text style={styles.statCaption}>Positive Reviews</Text>
           </View>
 
@@ -70,9 +67,7 @@ const VenuePromoterProfile = ({ route }) => {
                 <Text style={styles.statNumber}>2750</Text>
                 <FontAwesome5 style={styles.statIcon} name="network-wired"></FontAwesome5>
             </View>
-
             <Text style={styles.statCaption}>Connections</Text>
-
           </View>
         </View>
 
@@ -90,7 +85,6 @@ const VenuePromoterProfile = ({ route }) => {
           <Text style={styles.value}>English, Burmese</Text>
           <Text style={styles.label}>Education</Text>
           <Text style={styles.value}>ESSEC Business School</Text>
-
         </View>
 
         <View style={styles.contentCol}>
@@ -98,7 +92,6 @@ const VenuePromoterProfile = ({ route }) => {
           <Text style={styles.value}>Reading, Rock Climbing</Text>
           <Text style={styles.label}>Favorite Drink</Text>
           <Text style={styles.value}>Long-Island Iced Tea</Text>
-
         </View>
       </View>
 
