@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Alert,
   Modal,
   StyleSheet,
   Text,
   TouchableHighlight,
-  View
+  TouchableOpacity,
+  View,
+  FlatList
 } from "react-native";
+import { Searchbar } from 'react-native-paper';
+
 
 const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
+  const [query, setQuery] = useState("");
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    setData(["Apples", "Oranges", "Bananas"])
+  }, []);
+
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -21,15 +32,15 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Register Guests for {event.eventName}</Text>
-
+            <Text style={styles.title}>Register Guests for {event.eventName}</Text>
+            <Searchbar style={styles.promoterSearch} fontSize={15} placeholder="Promoter Name"></Searchbar>
             <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+              style={{ ...styles.openButton, backgroundColor: "#148995" }}
               onPress={() => {
                 setModalVisible(!modalVisible);
               }}
             >
-              <Text style={styles.textStyle}>Hide Modal</Text>
+              <Text style={styles.textStyle}>Submit</Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -48,11 +59,10 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   modalView: {
-    marginTop: 390,
+    marginTop: 300,
     marginLeft: 60,
     width: 300,
     height: 300,
-
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
@@ -77,10 +87,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center"
   },
-  modalText: {
+  title: {
+    textAlign: "center",
     marginBottom: 15,
-    textAlign: "center"
+    fontFamily: 'Avenir',
+    fontSize: 18
+  },
+  promoterSearch: {
+    fontSize: 13,
+    marginBottom: 20
   }
+
+
 });
 
 export default RegisterGuestsModal;

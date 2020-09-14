@@ -61,9 +61,10 @@ const EventDetails = ({ route }) => {
             <Text style={styles.address}>{venue.venueAddress}</Text>
           </View>
           <View style={{width: "40%", marginTop: 1}}>
-            <Text style={[styles.contact, {fontWeight: '400', marginBottom: 5, fontSize: 15}]}>Contact Details</Text>
-            <Text style={styles.contact}>{venue.venueContactEmail}</Text>
-            <Text style={styles.contact}>{venue.venueContactPhone}</Text>
+            <TouchableOpacity style={styles.contactButton} onPress={() => navigation.navigate('VenueMessages')}>
+              <Text style={{color: '#148995', fontFamily: 'Avenir', fontSize: 13, marginTop: 1, width: '80%'}}>Message Promoters</Text>
+              <FontAwesome5 style={{color: '#148995', fontFamily: 'Avenir', marginTop: 8, fontSize: 17, width: '20%'}} name="envelope"></FontAwesome5>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -75,11 +76,11 @@ const EventDetails = ({ route }) => {
         </View>
         <View style={styles.eventDetail}>
           <FontAwesome5 style={styles.detailIcon} name="clock" />
-          <Text style={[styles.detailText, {marginLeft: 18}]}>Starts at {event.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
+          <Text style={[styles.detailText, {marginLeft: 19}]}>Starts at {event.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
         </View>
         <View style={styles.eventDetail}>
           <FontAwesome5 style={styles.detailIcon} name="glass-cheers" />
-          <Text style={[styles.detailText, {marginLeft: 12}]}>{event.promotion}</Text>
+          <Text style={[styles.detailText, {marginLeft: 13}]}>{event.promotion}</Text>
         </View>
         <View style={[styles.eventDetail, {marginBottom: 10}]}>
           <FontAwesome5 style={styles.detailIcon} name="money-bill-wave" />
@@ -89,9 +90,7 @@ const EventDetails = ({ route }) => {
 
       <View style={{marginLeft: 20, paddingHorizontal: 5, paddingVertical: 20, width: '88%', marginBottom: 20}}>
         <Text style={styles.description}>{event.description}</Text>
-
       </View>
-
     </ScrollView>
   )
 }
@@ -165,6 +164,18 @@ const styles = StyleSheet.create({
     top: 45,
     left: 10,
     zIndex: 1
+  },
+  contactButton: {
+    flexDirection: 'row',
+    borderColor: '#148995',
+    borderWidth: 1,
+    paddingHorizontal: 7,
+    paddingVertical: 7,
+    width: 100,
+    height: 50,
+    borderRadius: 6,
+    marginTop: 10,
+    marginLeft: 25
   }
 
 })
