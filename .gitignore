@@ -13,4 +13,4 @@ web-build/
 .DS_Store
 
 # Vscode stuff
-.vscode/.react
+.vscode/.react/*
