@@ -7,12 +7,20 @@ import PromoterEventStackScreens from './PromoterEventStackScreens';
 import MessageStackScreens from './MessageStackScreens';
 
 import PromoterProfile from '../screens/promoter/ProfileScreen';
+import theme, { tabDefaults } from '../utils/theme.styles'
 
 const PromoterTabNav = createBottomTabNavigator();
 
 const PromoterTabScreens = () => {
     return (
-        <PromoterTabNav.Navigator>
+        <PromoterTabNav.Navigator tabBarOptions={{
+            activeTintColor: '#313131',
+            inactiveTintColor: 'gray',
+            style: {
+                height: 80,
+                marginTop: 6
+            },
+        }}>
             <PromoterTabNav.Screen
                 name="PromoterEventList"
                 component={PromoterEventStackScreens}
@@ -20,7 +28,7 @@ const PromoterTabScreens = () => {
                     {
                         title: "Events",
                         tabBarIcon: ({ focused, size, color }) => (
-                            <Ionicons name="ios-albums" size={size} color={color} />
+                            <Ionicons name="ios-albums" size={size} color={focused ? theme.PRIMARY_COLOR : 'gray'} />
                         ),
                     }} />
             <PromoterTabNav.Screen
@@ -30,7 +38,7 @@ const PromoterTabScreens = () => {
                     {
                         title: "Inbox",
                         tabBarIcon: ({ focused, size, color }) => (
-                            <Ionicons name="ios-chatboxes" size={size} color={color} />
+                            <Ionicons name="ios-chatboxes" size={size} color={focused ? theme.PRIMARY_COLOR : 'gray'} />
                         )
                     }} />
             <PromoterTabNav.Screen
@@ -40,7 +48,7 @@ const PromoterTabScreens = () => {
                     {
                         title: "Profile",
                         tabBarIcon: ({ focused, size, color }) => (
-                            <Ionicons name="ios-contact" size={size} color={color} />
+                            <Ionicons name="ios-contact" size={size} color={focused ? theme.PRIMARY_COLOR : 'gray'} />
                         ),
                     }} />
         </PromoterTabNav.Navigator>
