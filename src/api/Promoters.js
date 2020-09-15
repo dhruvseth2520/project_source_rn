@@ -14,6 +14,18 @@ export const getPromoters = () => {
   }, {
     'firstName': 'Ameya',
     'images': ['https://scontent.fphl2-4.fna.fbcdn.net/v/t1.0-9/29102166_10209128878658371_8715336630391544215_n.jpg?_nc_cat=107&_nc_sid=85a577&_nc_ohc=gd6njZk6UhwAX9eAzcf&_nc_ht=scontent.fphl2-4.fna&oh=f4f1f290a6d96659c1a399d29147f767&oe=5F75736C']
+  }, {
+    'firstName': 'Steve',
+    'images': ['https://upload.wikimedia.org/wikipedia/commons/d/dc/Steve_Jobs_Headshot_2010-CROP_%28cropped_2%29.jpg']
+  }, {
+    'firstName': 'Bill',
+    'images': ['https://static.hollywoodreporter.com/sites/default/files/2018/02/billgatesheadshot_-_h_2018-928x523.jpg']
+  }, {
+    'firstName': 'Elon',
+    'images': ['https://upload.wikimedia.org/wikipedia/commons/e/ed/Elon_Musk_Royal_Society.jpg']
+  }, {
+    'firstName': 'Donald',
+    'images': ['https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Donald_Trump_official_portrait.jpg/1200px-Donald_Trump_official_portrait.jpg']
   }];
   return promoters;
 }
