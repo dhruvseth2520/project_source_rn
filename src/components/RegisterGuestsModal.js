@@ -16,33 +16,14 @@ import { getPromoters } from "../api/Promoters";
 
 const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
   const [query, setQuery] = useState("");
-  const [data, setData] = useState([]);
   const [promoters, setPromoters] = useState([]);
 
   useEffect(() => {
     const fetchedData = getPromoters();
-    setData(fetchedData);
-    setPromoters(fetchedData.slice());
+    setPromoters(fetchedData);
   }, []);
 
-  const filterPromoters = (promoter) => {
-    let search = query.toLowerCase();
-    if (promoter.firstName.toLowerCase().startsWith(search)) {
-        return <TouchableOpacity onPress={() => 
-          setQuery(promoter.firstName);
-        }>
-          <View style={styles.flatList}>
-            <Text style={{fontSize: 15, marginLeft: 10, marginTop: 10}}>{promoter.firstName}</Text>
-          </View>
-        </TouchableOpacity>
-    } else if (!promoter.firstName.toLowerCase().startsWith(search)) {
-      promoters.splice(promoters.indexOf(promoter), 1);
-    }
-  }
-
-
   return (
-
       <Modal
         animationType="slide"
         transparent={true}
@@ -58,7 +39,6 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
               <Searchbar
                 onChangeText={input => {
                   setQuery(input);
-                  setPromoters(data.slice());
                 }}
                 value={query}
                 style={styles.promoterSearch}
@@ -67,17 +47,24 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
               </Searchbar>
 
               {query ?
-                     <FlatList
-                              data={promoters}
-                              keyExtractor={item => item.firstName}
-                              extraData={query}
-                              showsVerticalScrollIndicator={false}
-                              keyboardShouldPersistTaps="handled"
-                              renderItem={({ item }) => filterPromoters(item)}>
-                      </FlatList>
+                       <FlatList
+                           data={promoters}
+                           keyExtractor={item => item.firstName}
+                           extraData={query}
+                           showsVerticalScrollIndicator={false}
+                           renderItem={({ item }) => {
+                             if (item.firstName.toLowerCase().startsWith(query.toLowerCase())) {
+                               return <TouchableOpacity onPress={() => setQuery(item.firstName)}>
+                                 <View style={styles.listItem}>
+                                   <Text style={{marginLeft: 10}}>{item.firstName}</Text>
+                                 </View>
+                              </TouchableOpacity>
+                             }
+                           }}>
+                        </FlatList>
+              : <>
 
-              : <></>}
-
+              </>}
               <Text style={styles.inputLabel}>Number in party</Text>
               <NumericInput
                   /* value={this.state.value}
@@ -163,11 +150,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 15
   },
-  flatList: {
+  listItem: {
     borderBottomColor: '#26a69a',
     borderBottomWidth: 1,
     paddingBottom: 12,
-    width: 220
+    width: 220,
+    marginTop: 10
   },
   numericInput: {
     marginTop: 52,

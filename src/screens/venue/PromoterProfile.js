@@ -34,11 +34,20 @@ const VenuePromoterProfile = ({ route }) => {
       />
 
       <View style={styles.profileHeader}>
-        <Text style={styles.name}>{promoter.firstName + ", 22"}</Text>
-        <Text style={styles.role}>Student</Text>
-        <TouchableOpacity style={styles.badgeBtn} onPress={() => setModalVisible(true)}>
-          <FontAwesome5 style={[styles.badgeIcon, {color: badge.color}]} name={badge.iconName}></FontAwesome5>
-        </TouchableOpacity>
+        <View style={{flexDirection: 'row', width: '50%'}}>
+            <Text style={styles.name}>{promoter.firstName + ", 22"}</Text>
+            <Text style={styles.role}>Student</Text>
+            <TouchableOpacity style={styles.badgeBtn} onPress={() => setModalVisible(true)}>
+              <FontAwesome5 style={[styles.badgeIcon, {color: badge.color}]} name={badge.iconName}></FontAwesome5>
+            </TouchableOpacity>
+        </View>
+
+        <View style={{width: '40%'}}>
+          <TouchableOpacity style={styles.messageBtn} onPress={() => navigation.navigate('VenueMessages')}>
+            <Text style={{fontFamily: 'Avenir', color: '#1AA2B0'}}>Message</Text>
+            <FontAwesome5 name="comment" style={{color: '#1AA2B0', marginLeft: 5, marginTop: -1, fontSize: 16}}/>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.profileContent}>
@@ -208,6 +217,16 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '300',
     fontFamily: 'Avenir'
+  },
+  messageBtn: {
+    flexDirection: 'row',
+    borderColor: '#1AA2B0',
+    borderWidth: 1,
+    padding: 10,
+    width: 100,
+    height: 38,
+    marginLeft: 60,
+    borderRadius: 7
   }
 });
 

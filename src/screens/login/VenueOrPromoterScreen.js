@@ -6,8 +6,8 @@ const LoginVenueOrPromoterScreen = ({ navigation }) => {
         navigation.navigate('PromoterRegister')
     }
 
-    const handleVennue = () => {
-        navigation.navigate('VenueRegister');
+    const handleVenue = () => {
+        navigation.navigate('VenueInfo');
     }
 
     const handleBack = () => {
@@ -18,29 +18,26 @@ const LoginVenueOrPromoterScreen = ({ navigation }) => {
         <View style={styles.screen}>
             <StatusBar barStyle={'dark-content'} />
             <SafeAreaView style={styles.safeArea}>
-                <View style={styles.imageArea}>
-                    <Image style={styles.profileImage} source={{ uri: "https://pbs.twimg.com/media/EelyvfWXkAA3GjQ?format=jpg&name=medium" }} />
+                <View style={styles.heroText}>
+                  <Text style={styles.title}>Welcome to Source</Text>
+                  <Text style={styles.info}>The new way to promote</Text>
                 </View>
-                <View style={styles.profileInfo} >
-                    <Text style={styles.infoText} >Jonthan Swan</Text>
-                    <Text style={styles.infoText}>jonthan.swan@gmail.com</Text>
-                </View>
+
+
                 <View style={styles.buttonArea}>
+                    <Text style={styles.captionText}>Are you a</Text>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity style={styles.defaultButton} onPress={handlePromoter}>
                             <Text style={styles.buttonText}>Promoter</Text>
                         </TouchableOpacity>
                     </View>
+                    <Text style={styles.captionText}>or a</Text>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.defaultButton} onPress={handleVennue}>
+                        <TouchableOpacity style={styles.defaultButton} onPress={handleVenue}>
                             <Text style={styles.buttonText}>Venue</Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={[styles.defaultButton, {borderWidth: 0}]} onPress={handleBack}>
-                            <Text style={[styles.buttonText, {color: 'blue'}]}>Not you?</Text>
-                        </TouchableOpacity>
-                    </View>
+
                 </View>
             </SafeAreaView>
         </View>
@@ -61,29 +58,28 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         backgroundColor: 'white'
     },
-    imageArea: {
-        flex: 1,
-        alignSelf: 'center',
-        justifyContent: 'flex-end'
+    heroText: {
+      marginTop: 50,
+      marginLeft: 30,
+      padding: 15,
     },
-    profileImage: {
-        width: 150,
-        height: 150,
-        resizeMode: "contain",
-        borderRadius: 200
+    title: {
+      color: '#1EC5D6',
+      fontSize: 60,
+      fontFamily: 'Avenir-Heavy'
     },
-    profileInfo: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
+    info: {
+      fontFamily: 'Avenir',
+      marginTop: 10,
+      fontSize: 16,
+      fontWeight: '300'
     },
-    infoText: {
-        margin: 3
-    },
+
     buttonArea: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        alignItems: "center",
+      flex: 1,
+      justifyContent: 'flex-start',
+      alignItems: "center",
+      marginTop: 250
     },
     buttonContainer: {
         width: '80%',
@@ -95,13 +91,23 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: "center",
-        borderRadius: 2,
-        borderColor: 'black',
+        borderRadius: 5,
+        borderColor: '#1AA2B0',
+        backgroundColor: '#1AA2B0',
         borderWidth: 0.3
     },
     buttonText: {
         flex: 6,
-        color: 'grey',
-        textAlign: 'center'
+        color: 'white',
+        textAlign: 'center',
+        fontFamily: 'Avenir',
+        fontSize: 16
+    },
+    captionText: {
+      marginBottom: 5,
+      marginTop: 5,
+      fontFamily: 'Avenir',
+      fontSize: 15,
+      fontWeight: '300'
     }
 });

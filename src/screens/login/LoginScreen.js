@@ -14,14 +14,11 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <StatusBar barStyle={'light-content'} />
-      <Image
-        source={{ uri: "https://www.wildandaway.com/wp-content/uploads/2018/11/best-nightlife-in-asia-bangkok-1.jpg" }}
-        style={styles.backgroundImage}
-      />
+      <StatusBar barStyle={'dark-content'} />
+
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.logoArea}>
-          <Image style={styles.logoImage} source={require("../../assets/icon.png")} />
+          <Image style={styles.logoImage} source={require("../../assets/sourceLogo.png")} />
         </View>
         <View style={styles.buttonArea}>
           <View style={styles.buttonContainer}>
@@ -30,7 +27,7 @@ const LoginScreen = ({ navigation }) => {
                 source={{ uri: "https://avatars1.githubusercontent.com/u/7328930?v=4&s=80" }}
                 style={styles.LoginLogo}
               />
-              <Text style={styles.googleLoginText}>Login with Google</Text>
+              <Text style={styles.googleLoginText}>Sign-in with Google</Text>
               <View style={{ flex: 1 }} />
             </TouchableOpacity>
           </View>
@@ -40,7 +37,7 @@ const LoginScreen = ({ navigation }) => {
                 source={{ uri: "https://logodix.com/logo/1185546.png" }}
                 style={styles.LoginLogo}
               />
-              <Text style={styles.facebookLoginText}>Login with Facebook</Text>
+              <Text style={styles.facebookLoginText}>Sign-in with Facebook</Text>
               <View style={{ flex: 1 }} />
             </TouchableOpacity>
           </View>
@@ -74,7 +71,8 @@ const styles = StyleSheet.create({
   },
   logoImage: {
     width: 150,
-    resizeMode: "contain"
+    resizeMode: "contain",
+    marginTop: 150
   },
   buttonArea: {
     flex: 1,
@@ -82,7 +80,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonContainer: {
-    width: '80%',
+    width: '70%',
     height: 50,
     margin: 10,
   },
@@ -93,7 +91,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 2,
     borderColor: 'black',
-    borderWidth: 0.3
+    borderWidth: 0.3,
   },
   googleLoginButton: {
     backgroundColor: 'white',
@@ -101,7 +99,7 @@ const styles = StyleSheet.create({
   LoginLogo: {
     flex: 1,
     resizeMode: "contain",
-    padding: 15
+    padding: 15,
   },
   googleLoginText: {
     flex: 6,
@@ -110,6 +108,7 @@ const styles = StyleSheet.create({
   },
   facebookLoginButton: {
     backgroundColor: '#3b5998',
+    borderColor: '#3b5998'
   },
   facebookLoginText: {
     flex: 6,
