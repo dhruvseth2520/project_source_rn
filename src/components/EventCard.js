@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import RegisterGuestsModal from "./RegisterGuestsModal";
+import GuestListModal from "./GuestListModal";
 
 const EventCard = ({ event }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
+  const [guestListVisible, setGuestListVisible] = useState(false);
+  const [guests, setGuests] = useState({});
 
   const editEvent = () => {
     navigation.navigate('VenueEventForm', {
@@ -33,34 +36,55 @@ const EventCard = ({ event }) => {
           <View style={styles.leftCol}>
             <Text style={styles.eventName}>{event.eventName}</Text>
             <Text style={styles.eventDate}>{event.date.toDateString() + " " + event.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
-            <TouchableOpacity style={styles.registerBtn} onPress={() => setModalVisible(true)}>
-              <View style={{flexDirection: 'row'}}>
-                <Text style={styles.btnText}>Register Guests</Text>
-                <FontAwesome5 style={styles.btnIcon} name="edit"></FontAwesome5>
-              </View>
-            </TouchableOpacity>
+
+            <View style={{flexDirection: 'row', marginBottom: 15}}>
+              <TouchableOpacity style={styles.registerBtn} onPress={() => setModalVisible(true)}>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={styles.btnText}>Register Guests</Text>
+                  <FontAwesome5 style={styles.btnIcon} name="edit"></FontAwesome5>
+                </View>
+              </TouchableOpacity>
+              {Object.keys(guests).length ? (
+                <TouchableOpacity style={[styles.registerBtn, { marginLeft: 8, width: 125, borderColor: '#1A7DB0', flexDirection: 'row' }]} onPress={() => setGuestListVisible(true)}>
+                    <Text style={[styles.btnText, {color: '#1A7DB0'}]}>View Guest List</Text>
+                    <FontAwesome5 style={[styles.btnIcon, { top: -9, right: 7, color: '#1A7DB0'}]} name="receipt"></FontAwesome5>
+                </TouchableOpacity>
+              ) : <></>}
+            </View>
+
+
           </View>
           <View style={styles.rightCol}>
             <View style={styles.btnContainer}>
                 <TouchableOpacity onPress={viewEvent}>
-                  <View style={[styles.circularBtn, {borderColor: '#148995'}]}>
-                    <FontAwesome5 name="book-open" style={{alignSelf: 'center', marginTop: 11, color: '#148995'}}/>
+                  <View style={[styles.circularBtn, {borderColor: '#1AA2B0'}]}>
+                    <FontAwesome5 name="book-open" style={{alignSelf: 'center', marginTop: 11, color: '#1AA2B0'}}/>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={editEvent}>
-                  <View style={[styles.circularBtn, {borderColor: '#148995'}]}>
-                    <FontAwesome5 name="pen" style={{alignSelf: 'center', marginTop: 11, color: '#148995'}}/>
+                  <View style={[styles.circularBtn, {borderColor: '#1AA2B0'}]}>
+                    <FontAwesome5 name="pen" style={{alignSelf: 'center', marginTop: 11, color: '#1AA2B0'}}/>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={deleteEvent}>
-                  <View style={[styles.circularBtn, {borderColor: '#148995'}]}>
-                    <FontAwesome5 name="trash" style={{alignSelf: 'center', marginTop: 11, color: '#148995'}}/>
+                  <View style={[styles.circularBtn, {borderColor: '#1AA2B0'}]}>
+                    <FontAwesome5 name="trash" style={{alignSelf: 'center', marginTop: 11, color: '#1AA2B0'}}/>
                   </View>
                 </TouchableOpacity>
             </View>
           </View>
       </View>
-      <RegisterGuestsModal event={event} modalVisible={modalVisible} setModalVisible={setModalVisible} />
+      <RegisterGuestsModal
+        event={event}
+        modalVisible={modalVisible} setModalVisible={setModalVisible}
+        guests={guests} setGuests={setGuests}
+      />
+
+      <GuestListModal
+        modalVisible={guestListVisible} setModalVisible={setGuestListVisible}
+        guests={guests} event={event}
+      />
+
     </View>
   )
 }
@@ -80,7 +104,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   leftCol: {
-    marginTop: 8
+    marginTop: 8,
+    width: '60%'
   },
   rightCol: {
     marginTop: 8
@@ -117,11 +142,10 @@ const styles = StyleSheet.create({
   registerBtn: {
     width: 130,
     height: 35,
-    borderColor: '#148995',
+    borderColor: '#1AA2B0',
     borderWidth: 1,
     borderRadius: 6,
-    marginTop: 10,
-    marginBottom: 20
+    marginTop: 10
   },
   btnText: {
     fontFamily: 'Avenir',
@@ -129,12 +153,12 @@ const styles = StyleSheet.create({
     top: 7,
     left: 6,
     fontWeight: '300',
-    color: '#148995'
+    color: '#1AA2B0'
   },
   btnIcon: {
     alignSelf: 'flex-end',
     fontSize: 17,
-    color: '#148995',
+    color: '#1AA2B0',
     top: 5,
     left: 11
   }

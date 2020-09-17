@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     title: {
       color: '#1EC5D6',
       fontSize: 60,
-      fontFamily: 'Avenir-Heavy'
+      fontFamily: 'Arial Rounded MT Bold'
     },
     info: {
       fontFamily: 'Avenir',
@@ -74,12 +74,11 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: '300'
     },
-
     buttonArea: {
       flex: 1,
       justifyContent: 'flex-start',
       alignItems: "center",
-      marginTop: 250
+      marginTop: 300
     },
     buttonContainer: {
         width: '80%',

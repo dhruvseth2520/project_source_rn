@@ -10,18 +10,50 @@ import {
   View,
   FlatList
 } from "react-native";
+import { FontAwesome5 } from '@expo/vector-icons';
 import { Searchbar } from 'react-native-paper';
 import NumericInput from 'react-native-numeric-input'
 import { getPromoters } from "../api/Promoters";
 
-const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
+
+const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, setGuests }) => {
   const [query, setQuery] = useState("");
   const [promoters, setPromoters] = useState([]);
+  const [count, setCount] = useState(1);
+  const [errorMessage, setErrorMessage] = useState("");
+
 
   useEffect(() => {
     const fetchedData = getPromoters();
     setPromoters(fetchedData);
   }, []);
+
+
+  const handleSubmit = () => {
+    setErrorMessage("");
+
+    for (let i = 0; i < promoters.length; i++) {
+      let promoter = promoters[i];
+      let promoterName = promoter.firstName;
+      if (promoterName.toLowerCase() === query.toLowerCase()) {
+          let guestsCopy = {...guests};
+          if (promoterName in guestsCopy) {
+            const newCount = guestsCopy[promoterName] + count;
+            guestsCopy[promoterName] = newCount;
+          } else {
+            guestsCopy[promoterName] = count;
+          }
+
+          setGuests(guestsCopy);
+          setQuery("");
+          setCount(1);
+          setModalVisible(!modalVisible);
+          return null;
+      }
+    }
+
+    setErrorMessage("Promoter not found");
+  }
 
   return (
       <Modal
@@ -33,8 +65,17 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
         }}
       >
 
+
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+              <TouchableOpacity style={styles.closeButton} onPress={() => {
+                setErrorMessage("");
+                setQuery("");
+                setCount(1);
+                setModalVisible(!modalVisible);
+              }}>
+                <FontAwesome5 name="times" style={{fontSize: 15, color: 'gray', alignSelf: 'center', top: 7}} />
+              </TouchableOpacity>
               <Text style={styles.title}>Register Guests for {event.eventName}</Text>
               <Searchbar
                 onChangeText={input => {
@@ -46,8 +87,8 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
                 placeholder="Promoter Name">
               </Searchbar>
 
-              {query ?
-                       <FlatList
+
+              {query ?  <FlatList
                            data={promoters}
                            keyExtractor={item => item.firstName}
                            extraData={query}
@@ -62,14 +103,12 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
                              }
                            }}>
                         </FlatList>
-              : <>
+              : <></>}
 
-              </>}
               <Text style={styles.inputLabel}>Number in party</Text>
               <NumericInput
-                  /* value={this.state.value}
-                  onChange={value => this.setState({value})}
-                  onLimitReached={(isMax,msg) => console.log(isMax,msg)} */
+                  value={count}
+                  onChange={value => setCount(value)}
                   containerStyle={styles.numericInput}
                   totalWidth={220}
                   totalHeight={40}
@@ -86,15 +125,14 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
                   leftButtonBackgroundColor='#5ACBD6'
               />
 
+              {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : <></>}
+
               <TouchableHighlight
                 style={{ ...styles.openButton, backgroundColor: "#1E9BA8" }}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                }}
+                onPress={handleSubmit}
               >
                 <Text style={styles.textStyle}>Submit</Text>
               </TouchableHighlight>
-
           </View>
         </View>
       </Modal>
@@ -111,7 +149,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   modalView: {
-    marginTop: 240,
+    marginTop: 260,
     marginLeft: 60,
     width: 300,
     backgroundColor: "white",
@@ -142,6 +180,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     marginBottom: 15,
+    marginTop: 12,
     fontFamily: 'Avenir',
     fontSize: 18
   },
@@ -167,8 +206,24 @@ const styles = StyleSheet.create({
     top: 40,
     left: 5,
     alignSelf: 'flex-start',
-    marginTop: -10,
+    marginTop: -20,
     fontWeight: '400'
+  },
+  error: {
+    color: '#C90000',
+    alignSelf: 'center',
+    marginBottom: 10,
+    fontSize: 12
+  },
+  closeButton: {
+    position: 'absolute',
+    alignSelf: 'flex-start',
+    left: 5,
+    top: 15,
+    width: 40,
+    height: 40,
+
+
   }
 
 

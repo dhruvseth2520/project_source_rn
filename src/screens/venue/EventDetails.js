@@ -62,8 +62,8 @@ const EventDetails = ({ route }) => {
           </View>
           <View style={{width: "40%"}}>
             <TouchableOpacity style={styles.contactButton} onPress={() => navigation.navigate('VenueMessages')}>
-              <Text style={{color: '#148995', fontFamily: 'Avenir', fontSize: 13, marginTop: 1, width: '80%'}}>Message Promoters</Text>
-              <FontAwesome5 style={{color: '#148995', fontFamily: 'Avenir', marginTop: 8, fontSize: 17, width: '20%'}} name="envelope"></FontAwesome5>
+              <Text style={{color: '#1AA2B0', fontFamily: 'Avenir', fontSize: 13, marginTop: 1, width: '80%'}}>Message Promoters</Text>
+              <FontAwesome5 style={{color: '#1AA2B0', fontFamily: 'Avenir', marginTop: 8, fontSize: 17, width: '20%'}} name="envelope"></FontAwesome5>
             </TouchableOpacity>
           </View>
         </View>
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   },
   contactButton: {
     flexDirection: 'row',
-    borderColor: '#148995',
+    borderColor: '#1AA2B0',
     borderWidth: 1,
     paddingHorizontal: 7,
     paddingVertical: 7,
