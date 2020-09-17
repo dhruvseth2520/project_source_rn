@@ -27,6 +27,9 @@ const GuestListModal = ({ modalVisible, setModalVisible, guests, event }) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
+              <TouchableOpacity style={styles.close} onPress={() => setModalVisible(!modalVisible)}>
+                <FontAwesome5 name="times" style={{color: 'gray', alignSelf: 'center', fontSize: 15, top: 8}} />
+              </TouchableOpacity>
               <Text style={styles.title}>Guest List for {event.eventName}</Text>
 
                 <View style={styles.tableHeader}>
@@ -57,21 +60,7 @@ const GuestListModal = ({ modalVisible, setModalVisible, guests, event }) => {
                     )}
                     >
                   </FlatList>
-
                 </View>
-
-
-
-
-
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                }}
-              >
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </TouchableHighlight>
             </View>
           </View>
         </Modal>
@@ -153,6 +142,15 @@ const styles = StyleSheet.create({
   tableData: {
     fontFamily: 'Avenir',
     fontWeight: '300'
+  },
+  close: {
+    position: 'absolute',
+    alignSelf: 'flex-start',
+    top: 10,
+    left: 10,
+
+    width: 35,
+    height: 35
   }
 });
 

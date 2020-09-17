@@ -111,7 +111,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, set
                   onChange={value => setCount(value)}
                   containerStyle={styles.numericInput}
                   totalWidth={220}
-                  totalHeight={40}
+                  totalHeight={45}
                   iconSize={25}
                   minValue={1}
                   initValue={1}
@@ -121,14 +121,14 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, set
                   textColor='#525252'
                   iconStyle={{ color: 'white' }}
                   borderColor='white'
-                  rightButtonBackgroundColor='#126C75'
+                  rightButtonBackgroundColor='#5AACD6'
                   leftButtonBackgroundColor='#5ACBD6'
               />
 
               {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : <></>}
 
               <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#1E9BA8" }}
+                style={{ ...styles.openButton, backgroundColor: "#1AA2B0" }}
                 onPress={handleSubmit}
               >
                 <Text style={styles.textStyle}>Submit</Text>
@@ -166,11 +166,12 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   openButton: {
-    backgroundColor: "#F194FF",
+
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    marginTop: 5
+    marginTop: 10,
+    marginLeft: 5
   },
   textStyle: {
     color: "white",
@@ -222,8 +223,6 @@ const styles = StyleSheet.create({
     top: 15,
     width: 40,
     height: 40,
-
-
   }
 
 
