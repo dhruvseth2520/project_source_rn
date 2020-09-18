@@ -23,14 +23,14 @@ export default () => {
     </View>
     <View style={styles.slide2}>
       <Image style={styles.image} source={require('../../assets/eventsCartoon.png')} />
-      <Text style={styles.text}>View events being hosted by venues in your area</Text>
+      <Text style={styles.text}>View upcoming promotional events hosted by venues in your area</Text>
       <TouchableOpacity style={styles.skipButton} onPress={toRegister}>
         <Text style={styles.btnText}>Skip</Text>
       </TouchableOpacity>
     </View>
     <View style={styles.slide3}>
       <Image style={styles.image} source={require('../../assets/socialMedia.png')} />
-      <Text style={styles.text}>Share upcoming promotional events with your friends, family and social network</Text>
+      <Text style={styles.text}>Share these events with your friends, family and social network</Text>
       <TouchableOpacity style={styles.skipButton} onPress={toRegister}>
         <Text style={styles.btnText}>Skip</Text>
       </TouchableOpacity>

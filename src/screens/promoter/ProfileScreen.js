@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, SafeAreaView, Image } from 'react-native';
+import { getData } from "../../utils/localStorage";
+
+
 
 const PromoterProfileScreen = () => {
+    useEffect(() => {
+      getData('@promoterFormData').then(data => console.log(data));
+    }, [])
+
     return (
         <SafeAreaView style={styles.rootContainer}>
             <View style={styles.profileContainer}>
@@ -57,7 +64,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     detailContainer: {
-        flex: 1, 
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     }

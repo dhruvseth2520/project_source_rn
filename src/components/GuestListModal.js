@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Alert,
   Modal,
@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { FontAwesome5 } from '@expo/vector-icons';
 
-// Add total guests to bottom of table
 
 const GuestListModal = ({ modalVisible, setModalVisible, guests, event }) => {
 
@@ -60,6 +59,15 @@ const GuestListModal = ({ modalVisible, setModalVisible, guests, event }) => {
                     )}
                     >
                   </FlatList>
+
+                  <View style={styles.tableFooter}>
+                    <View style={{width: '50%'}}>
+                      <Text style={styles.tableHeaderText}>Total</Text>
+                    </View>
+                    <View style={{width: '50%'}}>
+                      <Text style={styles.tableHeaderText}>{}</Text>
+                    </View>
+                  </View>
 
 
                 </View>
@@ -152,6 +160,14 @@ const styles = StyleSheet.create({
     left: 10,
     width: 35,
     height: 35
+  },
+  tableFooter: {
+    flexDirection: 'row',
+    borderTopWidth: 0.5,
+    borderTopColor: 'gray',
+    marginTop: 5,
+    marginBottom: 5,
+    padding: 10
   }
 });
 
