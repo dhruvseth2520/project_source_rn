@@ -61,8 +61,6 @@ const GuestListModal = ({ modalVisible, setModalVisible, guests, event }) => {
                   </FlatList>
 
 
-
-
                 </View>
                 <View style={styles.tableFooter}>
                   <View style={{width: '50%'}}>
