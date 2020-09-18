@@ -3,7 +3,7 @@ import React from "react";
 
 const LoginVenueOrPromoterScreen = ({ navigation }) => {
     const handlePromoter = () => {
-        navigation.navigate('PromoterRegister')
+        navigation.navigate('PromoterInfo')
     }
 
     const handleVenue = () => {

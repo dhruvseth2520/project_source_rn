@@ -41,6 +41,7 @@ const VenueEventsScreen = ({ route }) => {
               data={events}
               keyExtractor={event => event.eventName}
               renderItem={({ item }) => {
+                // Only render events that are occuring today or in the future here
                 return <EventCard event={item} />
               }}
             ></FlatList>

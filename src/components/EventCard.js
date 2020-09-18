@@ -84,7 +84,6 @@ const EventCard = ({ event }) => {
         modalVisible={guestListVisible} setModalVisible={setGuestListVisible}
         guests={guests} event={event}
       />
-
     </View>
   )
 }

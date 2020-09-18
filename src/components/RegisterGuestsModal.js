@@ -31,28 +31,32 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, set
 
   const handleSubmit = () => {
     setErrorMessage("");
+    const currentDate = new Date();
 
-    for (let i = 0; i < promoters.length; i++) {
-      let promoter = promoters[i];
-      let promoterName = promoter.firstName;
-      if (promoterName.toLowerCase() === query.toLowerCase()) {
-          let guestsCopy = {...guests};
-          if (promoterName in guestsCopy) {
-            const newCount = guestsCopy[promoterName] + count;
-            guestsCopy[promoterName] = newCount;
-          } else {
-            guestsCopy[promoterName] = count;
-          }
-
-          setGuests(guestsCopy);
-          setQuery("");
-          setCount(1);
-          setModalVisible(!modalVisible);
-          return null;
+    if (currentDate.getDate() < event.date.getDate()) {
+      const difference = event.date.getDate() - currentDate.getDate();
+      setErrorMessage("This event doesn't occur for another " + difference + " days");
+    } else {
+      for (let i = 0; i < promoters.length; i++) {
+        let promoter = promoters[i];
+        let promoterName = promoter.firstName;
+        if (promoterName.toLowerCase() === query.toLowerCase()) {
+            let guestsCopy = {...guests};
+            if (promoterName in guestsCopy) {
+              const newCount = guestsCopy[promoterName] + count;
+              guestsCopy[promoterName] = newCount;
+            } else {
+              guestsCopy[promoterName] = count;
+            }
+            setGuests(guestsCopy);
+            setQuery("");
+            setCount(1);
+            setModalVisible(!modalVisible);
+            return null;
+        }
       }
+      setErrorMessage("Promoter not found");
     }
-
-    setErrorMessage("Promoter not found");
   }
 
   return (
@@ -111,7 +115,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, set
                   onChange={value => setCount(value)}
                   containerStyle={styles.numericInput}
                   totalWidth={220}
-                  totalHeight={45}
+                  totalHeight={402}
                   iconSize={25}
                   minValue={1}
                   initValue={1}

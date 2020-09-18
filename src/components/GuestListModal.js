@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { FontAwesome5 } from '@expo/vector-icons';
 
-
+// Add total guests to bottom of table
 
 const GuestListModal = ({ modalVisible, setModalVisible, guests, event }) => {
 
@@ -60,6 +60,8 @@ const GuestListModal = ({ modalVisible, setModalVisible, guests, event }) => {
                     )}
                     >
                   </FlatList>
+
+
                 </View>
             </View>
           </View>
@@ -148,7 +150,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     top: 10,
     left: 10,
-
     width: 35,
     height: 35
   }

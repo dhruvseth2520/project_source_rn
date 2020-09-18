@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 export default () => {
   const navigation = useNavigation();
   const toRegister = () => {
-    navigation.navigate('VenueRegister');
+    navigation.navigate('PromoterRegister');
   }
 
   return (<Swiper style={styles.wrapper}
@@ -15,40 +15,34 @@ export default () => {
      loop={false}
      activeDot={<View style={{backgroundColor: '#fff', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />}>
     <View style={styles.slide1}>
-      <Image style={styles.image} source={require('../../assets/venuesCartoon.png')} />
-      <Text style={styles.text}>As a venue, you can</Text>
+      <Image style={styles.image} source={require('../../assets/promotersCartoon.png')} />
+      <Text style={styles.text}>As a promoter, you can</Text>
       <TouchableOpacity style={styles.skipButton} onPress={toRegister}>
         <Text style={styles.btnText}>Skip</Text>
       </TouchableOpacity>
     </View>
     <View style={styles.slide2}>
-      <Image style={styles.image} source={require('../../assets/promotersCartoon.png')} />
-      <Text style={styles.text}>View and message promoters in your area</Text>
+      <Image style={styles.image} source={require('../../assets/eventsCartoon.png')} />
+      <Text style={styles.text}>View events being hosted by venues in your area</Text>
       <TouchableOpacity style={styles.skipButton} onPress={toRegister}>
         <Text style={styles.btnText}>Skip</Text>
       </TouchableOpacity>
     </View>
     <View style={styles.slide3}>
-      <Image style={styles.image} source={require('../../assets/eventsCartoon.png')} />
-      <Text style={styles.text}>Create themed events for promoters to share with their network</Text>
+      <Image style={styles.image} source={require('../../assets/socialMedia.png')} />
+      <Text style={styles.text}>Share upcoming promotional events with your friends, family and social network</Text>
       <TouchableOpacity style={styles.skipButton} onPress={toRegister}>
         <Text style={styles.btnText}>Skip</Text>
       </TouchableOpacity>
     </View>
     <View style={styles.slide4}>
-      <Image style={[styles.image, { width: 300}]} source={require('../../assets/crowdCartoon.png')} />
-      <Text style={styles.text}>Rejoice as the crowds come in</Text>
-      <TouchableOpacity style={styles.skipButton} onPress={toRegister}>
-        <Text style={styles.btnText}>Skip</Text>
-      </TouchableOpacity>
-    </View>
-    <View style={styles.slide5}>
-      <Image style={styles.image} source={require('../../assets/restaurantHost.png')} />
-      <Text style={styles.text}>Register guests so promoters get their due and continue to work with you</Text>
+      <Image style={[styles.image, { width: 300}]} source={require('../../assets/payment.png')} />
+      <Text style={styles.text}>Get paid for every guest you bring in</Text>
       <TouchableOpacity style={styles.skipButton} onPress={toRegister}>
         <Text style={styles.btnText}>Done</Text>
       </TouchableOpacity>
     </View>
+
   </Swiper>)
 
 }
