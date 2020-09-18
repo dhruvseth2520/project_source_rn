@@ -115,7 +115,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, set
                   onChange={value => setCount(value)}
                   containerStyle={styles.numericInput}
                   totalWidth={220}
-                  totalHeight={402}
+                  totalHeight={40}
                   iconSize={25}
                   minValue={1}
                   initValue={1}
