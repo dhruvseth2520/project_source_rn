@@ -60,16 +60,17 @@ const GuestListModal = ({ modalVisible, setModalVisible, guests, event }) => {
                     >
                   </FlatList>
 
-                  <View style={styles.tableFooter}>
-                    <View style={{width: '50%'}}>
-                      <Text style={styles.tableHeaderText}>Total</Text>
-                    </View>
-                    <View style={{width: '50%'}}>
-                      <Text style={styles.tableHeaderText}>{}</Text>
-                    </View>
+
+
+
+                </View>
+                <View style={styles.tableFooter}>
+                  <View style={{width: '50%'}}>
+                    <Text style={styles.tableHeaderText}>Total</Text>
                   </View>
-
-
+                  <View style={{width: '50%'}}>
+                    <Text style={styles.tableHeaderText}>{Object.keys(guests).reduce((sum, guest) => sum + guests[guest], 0)}</Text>
+                  </View>
                 </View>
             </View>
           </View>
@@ -165,7 +166,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderTopWidth: 0.5,
     borderTopColor: 'gray',
-    marginTop: 5,
     marginBottom: 5,
     padding: 10
   }
