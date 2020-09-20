@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   registerBtn: {
     width: 130,
     height: 35,
-    borderColor: '#1AA2B0',
+    borderColor: '#218A95',
     borderWidth: 1,
     borderRadius: 6,
     marginTop: 10
@@ -152,12 +152,12 @@ const styles = StyleSheet.create({
     top: 7,
     left: 6,
     fontWeight: '300',
-    color: '#1AA2B0'
+    color: '#218A95'
   },
   btnIcon: {
     alignSelf: 'flex-end',
     fontSize: 17,
-    color: '#1AA2B0',
+    color: '#218A95',
     top: 5,
     left: 11
   }
