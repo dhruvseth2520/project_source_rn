@@ -1,11 +1,38 @@
 import { Text, View, StyleSheet, Image, SafeAreaView, TouchableOpacity, StatusBar } from "react-native";
 import React from "react";
+import * as Google from "expo-google-app-auth";
+
+
 
 const LoginScreen = ({ navigation }) => {
+  async function signInWithGoogleAsync() {
+    try {
+      const result = await Google.logInAsync({
+        // androidClientId: "649481912557-qem9m0m1sueat8p8jlp833dpdd8dr49s.apps.googleusercontent.com",
+        iosClientId: "649481912557-qem9m0m1sueat8p8jlp833dpdd8dr49s.apps.googleusercontent.com",
+        scopes: ['profile', 'email']
+      });
+
+      if (result.type === 'success') {
+        return result;
+      } else {
+        return {
+          cancelled: true
+        };
+      }
+    } catch(e) {
+      return {
+        error: true
+      };
+    }
+  }
+
   const handleGoogle = () => {
-    navigation.reset({
-      routes: [{ name: 'VoP' }]
-    })
+    signInWithGoogleAsync().then(response => {
+      console.log(response.user);
+
+      navigation.navigate('VoP');
+    });
   }
 
   const handleFacebook = () => {
@@ -15,7 +42,6 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <StatusBar barStyle={'dark-content'} />
-
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.logoArea}>
           <Image style={styles.logoImage} source={require("../../assets/sourceLogo.png")} />
