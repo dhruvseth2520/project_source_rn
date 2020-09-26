@@ -2,8 +2,6 @@ import { Text, View, StyleSheet, Image, SafeAreaView, TouchableOpacity, StatusBa
 import React from "react";
 import * as Google from "expo-google-app-auth";
 
-
-
 const LoginScreen = ({ navigation }) => {
   async function signInWithGoogleAsync() {
     try {
@@ -29,8 +27,26 @@ const LoginScreen = ({ navigation }) => {
 
   const handleGoogle = () => {
     signInWithGoogleAsync().then(response => {
-      console.log(response.user);
-      navigation.navigate('VoP');
+      fetch('http://192.168.1.202:3000/api/auth/user', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          userId: response.user.id
+        })
+      }).then(response => response.json()).then(data => {
+        if (!data.registered) {
+          navigation.navigate('VoP');
+        } else {
+          if (data.type === "Promoter") {
+            navigation.navigate('PromoterTab');
+          } else if (data.type === "Venue") {
+            navigation.navigate('VenueTab');
+          }
+        }
+      })
     });
   }
 
