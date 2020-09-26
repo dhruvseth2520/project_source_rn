@@ -30,7 +30,6 @@ const LoginScreen = ({ navigation }) => {
   const handleGoogle = () => {
     signInWithGoogleAsync().then(response => {
       console.log(response.user);
-
       navigation.navigate('VoP');
     });
   }
