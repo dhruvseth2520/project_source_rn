@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCocktail, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { View, Text, Image, StyleSheet, TextInput, Picker, TouchableOpacity, ScrollView,
 KeyboardAvoidingView } from 'react-native';
-import { storeData } from '../../utils/localStorage';
+import { storeData, getData } from '../../utils/localStorage';
 
 const LoginVenueRegisterScreen = ({ navigation }) => {
   const [venueName, setVenueName] = useState("");
@@ -25,7 +25,7 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
         venueContactPhone: contactPhone
     };
 
-    /* for (let key in formData) {
+    for (let key in formData) {
       if (!formData[key]) {
         setErrorMessage("Please fill in all fields");
         return;
@@ -40,7 +40,18 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
     if (contactPhone.length < 8) {
       setErrorMessage("Please input a valid phone number");
       return;
-    } */
+    }
+
+    getData('@userId').then(response => {
+      fetch(`http://192.168.1.42:3000/api/register/venue/${response}`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      })
+    });
 
     setErrorMessage("");
     storeData('@venueFormData', formData).then(() => {

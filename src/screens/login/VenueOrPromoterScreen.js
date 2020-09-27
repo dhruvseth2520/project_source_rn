@@ -1,9 +1,9 @@
 import { Text, View, StyleSheet, Image, SafeAreaView, TouchableOpacity, StatusBar } from "react-native";
 import React from "react";
 
-const LoginVenueOrPromoterScreen = ({ navigation }) => {
+const LoginVenueOrPromoterScreen = ({ navigation, route }) => {
     const handlePromoter = () => {
-        navigation.navigate('PromoterInfo')
+        navigation.navigate('PromoterInfo');
     }
 
     const handleVenue = () => {

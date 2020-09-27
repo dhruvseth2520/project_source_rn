@@ -1,6 +1,8 @@
 import { Text, View, StyleSheet, Image, SafeAreaView, TouchableOpacity, StatusBar } from "react-native";
 import React from "react";
 import * as Google from "expo-google-app-auth";
+import { storeData } from '../../utils/localStorage';
+
 
 const LoginScreen = ({ navigation }) => {
   async function signInWithGoogleAsync() {
@@ -27,7 +29,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleGoogle = () => {
     signInWithGoogleAsync().then(response => {
-      fetch('http://192.168.1.202:3000/api/auth/user', {
+      fetch('http://192.168.1.42:3000/api/auth/user', {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -38,12 +40,20 @@ const LoginScreen = ({ navigation }) => {
         })
       }).then(response => response.json()).then(data => {
         if (!data.registered) {
-          navigation.navigate('VoP');
+          storeData('@userId', data.id).then(() => {
+            navigation.navigate('VoP');
+          });
         } else {
           if (data.type === "Promoter") {
             navigation.navigate('PromoterTab');
           } else if (data.type === "Venue") {
-            navigation.navigate('VenueTab');
+            fetch(`http://192.168.1.42:3000/api/venue/${data.id}`)
+            .then(response => response.json())
+            .then(data => {
+                storeData('@venueFormData', data).then(() => {
+                  navigation.navigate('VenueTab');
+                });
+            })
           }
         }
       })
