@@ -3,6 +3,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { ScrollView, Image, View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import EventCard from "../../components/EventCard";
+import Header from "../../components/Header";
 
 
 const VenueEventsScreen = ({ route }) => {
@@ -29,7 +30,7 @@ const VenueEventsScreen = ({ route }) => {
 
   return (
     <ScrollView style={styles.background} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always">
-      <Text style={styles.title}>Events</Text>
+      <Header title="Events" />
       <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1558346489-19413928158b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'}} />
       <Text style={styles.description}>Create custom events with promotions for your target market and share them with our vast network of promoters and influencers</Text>
       <Text style={styles.subTitle}>Your Events</Text>

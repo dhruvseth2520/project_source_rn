@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import { View, Text, Image, StyleSheet, TextInput, Picker, TouchableOpacity, ScrollView,
 KeyboardAvoidingView } from 'react-native';
-import { storeData } from '../../utils/localStorage';
+import { storeData, getData } from '../../utils/localStorage';
 
 const LoginPromoterRegisterScreen = ({ navigation }) => {
 
@@ -17,19 +17,34 @@ const LoginPromoterRegisterScreen = ({ navigation }) => {
 
     const handleSubmit = () => {
       const formData = {
-        promoterName,
-        identification,
+        firstName,
+        lastName,
+        age,
         contactEmail,
         contactPhone,
       }
 
+      /* getData('@userId').then(response => {
+        fetch(`http://192.168.1.202:3000/api/register/promoter/${response}`, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(formData)
+        })
+      }) */
+
       storeData('@promoterFormData', formData).then(() => {
-        navigation.navigate('PromoterTab');
+        navigation.navigate('PromoterProfileSetup', {
+          formData
+        });
       });
     }
 
-    const [promoterName, setPromoterName] = useState("");
-    const [identification, setIdentification] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [age, setAge] = useState("");
     const [contactEmail, setContactEmail] = useState("");
     const [contactPhone, setContactPhone] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -47,15 +62,21 @@ const LoginPromoterRegisterScreen = ({ navigation }) => {
 
                   <View style={styles.form}>
                     <View style={styles.inputContainer}>
-                      <Text style={styles.label}>Full Name</Text>
-                      <TextInput style={styles.input} value={promoterName} autoCapitalize="words" onChangeText={(val) => setPromoterName(val)} />
+                      <Text style={styles.label}>First Name</Text>
+                      <TextInput style={styles.input} value={firstName} autoCapitalize="words" onChangeText={(val) => setFirstName(val)} />
                     </View>
 
                     <View style={styles.inputContainer}>
-                      <Text style={styles.label}>Identification</Text>
-                      <Text style={styles.comment}>Please upload a picture of a identification card or official government document so we can verify your age. All promoters must be 18+</Text>
-                      <TextInput style={styles.input} value={identification} autoCapitalize="words" onChangeText={(val) => setIdentification(val)} />
+                      <Text style={styles.label}>Last Name</Text>
+                      <TextInput style={styles.input} value={lastName} autoCapitalize="words" onChangeText={(val) => setLastName(val)} />
                     </View>
+
+                    <View style={styles.inputContainer}>
+                      <Text style={styles.label}>Age</Text>
+                      <Text style={styles.comment}>Please upload a picture of a identification card or official government document so we can verify your age. All promoters must be 18+</Text>
+                      <TextInput style={styles.input} value={age} keyboardType="numeric" autoCapitalize="words" onChangeText={(val) => setAge(val)} />
+                    </View>
+
 
                     <View style={styles.inputContainer}>
                       <Text style={styles.label}>Contact Email</Text>

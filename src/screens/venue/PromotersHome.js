@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Image, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import PromoterCard from "../../components/PromoterCard";
-import { getPromoters } from "../../api/Promoters";
+import Header from "../../components/Header";
 import { getData } from "../../utils/localStorage";
 
 
 const VenuePromotersHome = () => {
-  const promoters = getPromoters();
+  const [promoters, setPromoters] = useState({});
   const [venue, setVenue] = useState({});
+
+  useEffect(() => {
+    fetch('http://192.168.1.202:3000/api/promoters').then(response => response.json()).then(data => {
+      setPromoters(data);
+    })
+  }, [])
 
   useEffect(() => {
     getData('@venueFormData').then(data => setVenue(data));
@@ -15,10 +21,9 @@ const VenuePromotersHome = () => {
 
   return (
           <ScrollView style={styles.background}>
-                  <Text style={styles.title}>Promoters</Text>
-
-                  <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1504270997636-07ddfbd48945?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80'}} />
+                  <Header title="Promoters" />
                   <Text style={styles.description}>Our network of young promoters will use their social media influence and personal network to get your {venue.venueCategory} the traffic you seek</Text>
+                  <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1504270997636-07ddfbd48945?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80'}} />
 
                   <Text style={styles.subTitle}>Top Promoters in the area</Text>
                   <Text style={styles.comment}>Showing promoters near {venue.venueName}</Text>
@@ -27,7 +32,7 @@ const VenuePromotersHome = () => {
                     style={styles.promoterList}
                     showsHorizontalScrollIndicator={false}
                     data={promoters}
-                    keyExtractor={promoter => promoter.firstName}
+                    keyExtractor={promoter => promoter.promoterName}
                     renderItem={({ item }) => {
                       return <PromoterCard promoter={item}></PromoterCard>
                     }}
@@ -42,14 +47,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1
   },
-  title: {
-    fontSize: 24,
-    fontFamily: 'Gill Sans',
-    fontWeight: '400',
-    color: '#424242',
-    marginLeft: 33,
-    marginTop: 70
-  },
   subTitle: {
     fontSize: 24,
     fontFamily: 'Gill Sans',
@@ -63,7 +60,7 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     color: '#424242',
     marginLeft: 32,
-    marginTop: 15,
+    marginTop: 25,
     paddingRight: 25,
     fontSize: 15
   },
@@ -83,8 +80,10 @@ const styles = StyleSheet.create({
   },
   promoterList: {
     marginLeft: 32,
-    marginTop: 15
+    marginTop: 15,
+    marginBottom: 35
   }
+
 })
 
 export default VenuePromotersHome;

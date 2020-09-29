@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, SafeAreaView, Image } from 'react-native';
 import { getData } from "../../utils/localStorage";
 
 
 
 const PromoterProfileScreen = () => {
+    const [name, setName] = useState("");
     useEffect(() => {
-      getData('@promoterFormData').then(data => console.log(data));
+      getData('@promoterFormData').then(data => setName(data.firstName + " " + data.lastName));
     }, [])
 
     return (
@@ -15,7 +16,7 @@ const PromoterProfileScreen = () => {
                 <View style={styles.proileImageContainer}>
                     <Image style={styles.profileImage} source={{ uri: "https://pbs.twimg.com/media/EelyvfWXkAA3GjQ?format=jpg&name=medium" }} />
                 </View>
-                <Text style={styles.profileName}> Jonthan Swan</Text>
+                <Text style={styles.profileName}>{name}</Text>
             </View>
             <View style={styles.detailContainer}>
                 <Text>Promoter Details</Text>
@@ -23,8 +24,6 @@ const PromoterProfileScreen = () => {
         </SafeAreaView>
     );
 }
-
-export default PromoterProfileScreen;
 
 const styles = StyleSheet.create({
     rootContainer: {
@@ -69,3 +68,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     }
 })
+
+export default PromoterProfileScreen;

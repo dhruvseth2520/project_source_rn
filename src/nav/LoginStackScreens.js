@@ -6,6 +6,7 @@ import PromoterRegisterScreen from "../screens/login/PromoterRegisterScreen";
 import VenueRegisterScreen from "../screens/login/VenueRegisterScreen";
 import VenueInfoDeck from "../screens/login/VenueInfoDeck";
 import PromoterInfoDeck from "../screens/login/PromoterInfoDeck";
+import PromoterProfileSetup from "../screens/login/PromoterProfileSetup";
 const LoginStackNav = createStackNavigator()
 
 const LoginStackScreens = () => {
@@ -13,9 +14,10 @@ const LoginStackScreens = () => {
         <LoginStackNav.Navigator>
             <LoginStackNav.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
             <LoginStackNav.Screen name="VoP" component={VenueOrPromoterScreen} options={{ headerShown: false, gestureEnabled: false }} />
-            <LoginStackNav.Screen name="PromoterRegister" component={PromoterRegisterScreen} options={{ headerShown: false, gestureEnabled: false }} />
-            <LoginStackNav.Screen name="VenueInfo" component={VenueInfoDeck} options={{ headerShown: false, gestureEnabled: false }} />
             <LoginStackNav.Screen name="PromoterInfo" component={PromoterInfoDeck} options={{ headerShown: false, gestureEnabled: false }} />
+            <LoginStackNav.Screen name="PromoterRegister" component={PromoterRegisterScreen} options={{ headerShown: false, gestureEnabled: false }} />
+            <LoginStackNav.Screen name="PromoterProfileSetup" component={PromoterProfileSetup} options={{ headerShown: false, gestureEnabled: false }} />
+            <LoginStackNav.Screen name="VenueInfo" component={VenueInfoDeck} options={{ headerShown: false, gestureEnabled: false }} />
             <LoginStackNav.Screen name="VenueRegister" component={VenueRegisterScreen} options={{ headerShown: false, gestureEnabled: false }} />
         </LoginStackNav.Navigator>
     );

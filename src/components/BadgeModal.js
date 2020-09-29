@@ -9,18 +9,9 @@ import {
   View
 } from "react-native";
 
-const BadgeModal = ({ name, badge, modalVisible, setModalVisible }) => {
-  const [description, setDescription] = useState("");
-
-  useEffect(() => {
-    if (badge.badgeTitle === "Followers") {
-      setDescription(name + " has 2000+ combined followers on social media");
-    } else if (badge.badgeTitle === "Traffic") {
-      setDescription(name + " has sourced 500+ clients to events in Yangon");
-    }
-
-  }, [badge])
-
+const BadgeModal = ({ promoter, modalVisible, setModalVisible }) => {
+  const badge = promoter.badge;
+  const description = badge.description;
 
   return (
     <View style={styles.centeredView}>
@@ -46,7 +37,7 @@ const BadgeModal = ({ name, badge, modalVisible, setModalVisible }) => {
 
 
             <FontAwesome5 name={badge.iconName} style={{color: badge.color, fontSize: 30, marginTop: -35, marginBottom: 10}} />
-            <Text style={styles.modalText}>{description}</Text>
+            <Text style={styles.modalText}>{badge.description}</Text>
 
             {badge.badgeTitle === "Followers" ? (
               <View style={styles.iconRow}>

@@ -8,41 +8,11 @@ import BadgeModal from "./BadgeModal";
 const PromoterCard = ({ promoter }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
-  const [badge, setBadge] = useState({});
-
-  /*
-  <TouchableOpacity style={styles.circularBtn} onPress={() => navigation.navigate('VenuePromoterProfile', {
-    promoter: promoter,
-    badge: badge
-  })}>
-
-  */
-
-  useEffect(() => {
-    let iconName;
-    let color;
-
-    if (promoter.badgeTitle === "Followers") {
-      iconName = "hashtag";
-      color = "#E1306C";
-    } else if (promoter.badgeTitle === "Traffic") {
-      iconName = "award";
-      color = "#FFAA00";
-    }
-
-    setBadge({
-      badgeTitle: promoter.badgeTitle,
-      iconName,
-      color
-    });
-  }, [])
-
-
+ 
   return (
     <>
         <TouchableOpacity onPress={() => navigation.navigate('VenuePromoterProfile', {
-          promoter: promoter,
-          badge: badge
+          promoter: promoter
         })}>
             <View style={styles.card}>
                   <View style={styles.imageContainer}>
@@ -50,16 +20,23 @@ const PromoterCard = ({ promoter }) => {
                   </View>
                   <View style={styles.contentContainer}>
                         <View style={{flexDirection: 'row'}}>
-                          <Text style={styles.name}>{promoter.firstName + ", 22"}</Text>
-                          <TouchableOpacity style={styles.badgeBtn} onPress={() => setModalVisible(true)}>
-                            <FontAwesome5 style={[styles.badgeIcon, {color: badge.color}]} name={badge.iconName}></FontAwesome5>
-                          </TouchableOpacity>
+                          <Text style={styles.name}>{promoter.firstName + ", " + promoter.age}</Text>
+                          {promoter.badge ? (
+                            <>
+                                <TouchableOpacity style={styles.badgeBtn} onPress={() => setModalVisible(true)}>
+                                  <FontAwesome5 style={[styles.badgeIcon, {color: promoter.badge.color}]} name={promoter.badge.iconName}></FontAwesome5>
+                                </TouchableOpacity>
+
+                                <BadgeModal promoter={promoter} modalVisible={modalVisible} setModalVisible={setModalVisible} />
+                            </>
+                          ) : <></>}
+
                         </View>
                         <Text style={styles.role}>Student</Text>
                 </View>
             </View>
         </TouchableOpacity>
-        <BadgeModal name={promoter.firstName} badge={badge} modalVisible={modalVisible} setModalVisible={setModalVisible} />
+
 
     </>
   )

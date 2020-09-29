@@ -8,7 +8,7 @@ import { Entypo } from '@expo/vector-icons';
 
 
 const VenuePromoterProfile = ({ route }) => {
-  const { promoter, badge } = route.params;
+  const { promoter } = route.params;
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -35,11 +35,16 @@ const VenuePromoterProfile = ({ route }) => {
 
       <View style={styles.profileHeader}>
         <View style={{flexDirection: 'row', width: '50%'}}>
-            <Text style={styles.name}>{promoter.firstName + ", 22"}</Text>
+            <Text style={styles.name}>{promoter.firstName + ", " + promoter.age}</Text>
             <Text style={styles.role}>Student</Text>
-            <TouchableOpacity style={styles.badgeBtn} onPress={() => setModalVisible(true)}>
-              <FontAwesome5 style={[styles.badgeIcon, {color: badge.color}]} name={badge.iconName}></FontAwesome5>
-            </TouchableOpacity>
+            {promoter.badge ? (
+              <>
+                <TouchableOpacity style={styles.badgeBtn} onPress={() => setModalVisible(true)}>
+                  <FontAwesome5 style={[styles.badgeIcon, {color: promoter.badge.color}]} name={promoter.badge.iconName}></FontAwesome5>
+                </TouchableOpacity>
+                <BadgeModal promoter={promoter} modalVisible={modalVisible} setModalVisible={setModalVisible} />
+              </>
+            ) : <></>}
         </View>
 
         <View style={{width: '40%'}}>
@@ -73,10 +78,10 @@ const VenuePromoterProfile = ({ route }) => {
 
           <View style={styles.stat}>
             <View style={{flexDirection: 'row'}}>
-                <Text style={styles.statNumber}>2750</Text>
+                <Text style={styles.statNumber}>275</Text>
                 <FontAwesome5 style={styles.statIcon} name="network-wired"></FontAwesome5>
             </View>
-            <Text style={styles.statCaption}>Connections</Text>
+            <Text style={styles.statCaption}>Clients Sourced</Text>
           </View>
         </View>
 
@@ -103,12 +108,7 @@ const VenuePromoterProfile = ({ route }) => {
           <Text style={styles.value}>Long-Island Iced Tea</Text>
         </View>
       </View>
-
-      <BadgeModal name={promoter.firstName} badge={badge} modalVisible={modalVisible} setModalVisible={setModalVisible} />
-
     </ScrollView>
-
-
   )
 }
 
