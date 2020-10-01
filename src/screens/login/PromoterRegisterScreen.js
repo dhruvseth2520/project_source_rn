@@ -24,21 +24,8 @@ const LoginPromoterRegisterScreen = ({ navigation }) => {
         contactPhone,
       }
 
-      /* getData('@userId').then(response => {
-        fetch(`http://192.168.1.202:3000/api/register/promoter/${response}`, {
-          method: 'POST',
-          mode: 'cors',
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(formData)
-        })
-      }) */
-
-      storeData('@promoterFormData', formData).then(() => {
-        navigation.navigate('PromoterProfileSetup', {
-          formData
-        });
+      navigation.navigate('PromoterProfileSetup', {
+        formData
       });
     }
 
@@ -68,12 +55,13 @@ const LoginPromoterRegisterScreen = ({ navigation }) => {
 
                     <View style={styles.inputContainer}>
                       <Text style={styles.label}>Last Name</Text>
+                      <Text style={styles.comment}>This should match the name on your government id</Text>
                       <TextInput style={styles.input} value={lastName} autoCapitalize="words" onChangeText={(val) => setLastName(val)} />
                     </View>
 
                     <View style={styles.inputContainer}>
                       <Text style={styles.label}>Age</Text>
-                      <Text style={styles.comment}>Please upload a picture of a identification card or official government document so we can verify your age. All promoters must be 18+</Text>
+                      <Text style={styles.comment}>Promoters must be 18+ to register</Text>
                       <TextInput style={styles.input} value={age} keyboardType="numeric" autoCapitalize="words" onChangeText={(val) => setAge(val)} />
                     </View>
 

@@ -9,6 +9,7 @@ import { Entypo } from '@expo/vector-icons';
 
 const VenuePromoterProfile = ({ route }) => {
   const { promoter } = route.params;
+  const promoterProfile = promoter.promoterProfile;
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -19,7 +20,7 @@ const VenuePromoterProfile = ({ route }) => {
       </TouchableOpacity>
       <SliderBox
         sliderBoxHeight={450}
-        images={promoter.images}
+        images={promoterProfile.images}
         dotColor="white"
         inactiveDotColor="#90A4AE"
         dotStyle={{
@@ -34,9 +35,9 @@ const VenuePromoterProfile = ({ route }) => {
       />
 
       <View style={styles.profileHeader}>
-        <View style={{flexDirection: 'row', width: '50%'}}>
+
             <Text style={styles.name}>{promoter.firstName + ", " + promoter.age}</Text>
-            <Text style={styles.role}>Student</Text>
+            <Text style={styles.role}>{promoterProfile.occupation}</Text>
             {promoter.badge ? (
               <>
                 <TouchableOpacity style={styles.badgeBtn} onPress={() => setModalVisible(true)}>
@@ -45,19 +46,13 @@ const VenuePromoterProfile = ({ route }) => {
                 <BadgeModal promoter={promoter} modalVisible={modalVisible} setModalVisible={setModalVisible} />
               </>
             ) : <></>}
-        </View>
 
-        <View style={{width: '40%'}}>
-          <TouchableOpacity style={styles.messageBtn} onPress={() => navigation.navigate('VenueMessages')}>
-            <Text style={{fontFamily: 'Avenir', color: '#1AA2B0'}}>Message</Text>
-            <FontAwesome5 name="comment" style={{color: '#1AA2B0', marginLeft: 5, marginTop: -1, fontSize: 16}}/>
-          </TouchableOpacity>
-        </View>
+
       </View>
 
       <View style={styles.profileContent}>
         <View style={styles.profileComponent}>
-          <Text style={styles.profileBio}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</Text>
+          <Text style={styles.profileBio}>{promoterProfile.bio}</Text>
         </View>
         <View style={styles.profileStats}>
           <View style={styles.stat}>
@@ -65,7 +60,7 @@ const VenuePromoterProfile = ({ route }) => {
                 <Text style={styles.statNumber}>44</Text>
                 <FontAwesome5 style={styles.statIcon} name="briefcase"></FontAwesome5>
             </View>
-            <Text style={styles.statCaption}>Total Jobs</Text>
+            <Text style={styles.statCaption}>Clients Sourced</Text>
           </View>
 
           <View style={styles.stat}>
@@ -78,34 +73,34 @@ const VenuePromoterProfile = ({ route }) => {
 
           <View style={styles.stat}>
             <View style={{flexDirection: 'row'}}>
-                <Text style={styles.statNumber}>275</Text>
+                <Text style={styles.statNumber}>{promoterProfile.numConnections}</Text>
                 <FontAwesome5 style={styles.statIcon} name="network-wired"></FontAwesome5>
             </View>
-            <Text style={styles.statCaption}>Clients Sourced</Text>
+            <Text style={styles.statCaption}>Total Connections</Text>
           </View>
         </View>
 
         <View style={styles.contentCol}>
           <Text style={styles.label}>Active Since</Text>
-          <Text style={styles.value}>07/23/2020</Text>
+          <Text style={styles.value}>{promoterProfile.activeSinceDate}</Text>
           <Text style={styles.label}>Availability</Text>
-          <Text style={styles.value}>20 hours/week</Text>
+          <Text style={styles.value}>{promoterProfile.availability} hours/week</Text>
           <Text style={styles.label}>Expected rate</Text>
-          <Text style={styles.value}>1500 MMK per head</Text>
+          <Text style={styles.value}>{promoterProfile.expectedRate} MMK per head</Text>
         </View>
 
         <View style={styles.contentCol}>
           <Text style={styles.label}>Languages</Text>
-          <Text style={styles.value}>English, Burmese</Text>
+          <Text style={styles.value}>{promoterProfile.languages}</Text>
           <Text style={styles.label}>Education</Text>
-          <Text style={styles.value}>ESSEC Business School</Text>
+          <Text style={styles.value}>{promoterProfile.education}</Text>
         </View>
 
         <View style={styles.contentCol}>
           <Text style={styles.label}>Hobbies</Text>
-          <Text style={styles.value}>Reading, Rock Climbing</Text>
+          <Text style={styles.value}>{promoterProfile.hobbies}</Text>
           <Text style={styles.label}>Favorite Drink</Text>
-          <Text style={styles.value}>Long-Island Iced Tea</Text>
+          <Text style={styles.value}>{promoterProfile.favoriteDrink}</Text>
         </View>
       </View>
     </ScrollView>
@@ -130,7 +125,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   profileContent: {
-    marginTop: 15,
+    marginTop: 25,
     paddingHorizontal: 19,
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -144,6 +139,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   profileComponent: {
+    width: 360,
     marginTop: 5,
     borderColor: 'gray',
     borderBottomWidth: 0.5
@@ -191,7 +187,8 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     marginLeft: -10,
-    marginTop: -8
+    marginTop: -8,
+    marginBottom: -15
   },
   profileStats: {
     flexDirection: 'row',

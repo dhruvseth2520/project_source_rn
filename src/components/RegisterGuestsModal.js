@@ -14,7 +14,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Searchbar } from 'react-native-paper';
 import NumericInput from 'react-native-numeric-input'
 import { getPromoters } from "../api/Promoters";
-
+import env from '../utils/environment';
 
 const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, setGuests }) => {
   const [query, setQuery] = useState("");
@@ -24,8 +24,10 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, set
 
 
   useEffect(() => {
-    const fetchedData = getPromoters();
-    setPromoters(fetchedData);
+    fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
+      setPromoters(data);
+    })
+
   }, []);
 
 

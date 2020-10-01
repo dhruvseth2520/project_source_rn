@@ -3,6 +3,7 @@ import { ScrollView, View, Image, Text, StyleSheet, FlatList, TouchableOpacity }
 import PromoterCard from "../../components/PromoterCard";
 import Header from "../../components/Header";
 import { getData } from "../../utils/localStorage";
+import env from "../../utils/environment";
 
 
 const VenuePromotersHome = () => {
@@ -10,7 +11,7 @@ const VenuePromotersHome = () => {
   const [venue, setVenue] = useState({});
 
   useEffect(() => {
-    fetch('http://192.168.1.202:3000/api/promoters').then(response => response.json()).then(data => {
+    fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
       setPromoters(data);
     })
   }, [])
@@ -22,8 +23,8 @@ const VenuePromotersHome = () => {
   return (
           <ScrollView style={styles.background}>
                   <Header title="Promoters" />
-                  <Text style={styles.description}>Our network of young promoters will use their social media influence and personal network to get your {venue.venueCategory} the traffic you seek</Text>
                   <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1504270997636-07ddfbd48945?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80'}} />
+                  <Text style={styles.description}>Our network of young promoters will use their social media influence and personal network to get your {venue.venueCategory} the traffic you seek</Text>
 
                   <Text style={styles.subTitle}>Top Promoters in the area</Text>
                   <Text style={styles.comment}>Showing promoters near {venue.venueName}</Text>
@@ -32,7 +33,7 @@ const VenuePromotersHome = () => {
                     style={styles.promoterList}
                     showsHorizontalScrollIndicator={false}
                     data={promoters}
-                    keyExtractor={promoter => promoter.promoterName}
+                    keyExtractor={promoter => promoter.promoterId}
                     renderItem={({ item }) => {
                       return <PromoterCard promoter={item}></PromoterCard>
                     }}
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     color: '#424242',
     marginLeft: 32,
-    marginTop: 25,
+    marginTop: 15,
     paddingRight: 25,
     fontSize: 15
   },

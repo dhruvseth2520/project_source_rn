@@ -35,7 +35,7 @@ const EventCard = ({ event }) => {
       <View style={styles.cardContent}>
           <View style={styles.leftCol}>
             <Text style={styles.eventName}>{event.eventName}</Text>
-            <Text style={styles.eventDate}>{event.date.toDateString() + " " + event.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
+            <Text style={styles.eventDate}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
 
             <View style={{flexDirection: 'row', marginBottom: 15}}>
               <TouchableOpacity style={styles.registerBtn} onPress={() => setModalVisible(true)}>

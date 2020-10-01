@@ -2,7 +2,7 @@ import { Text, View, StyleSheet, Image, SafeAreaView, TouchableOpacity, StatusBa
 import React from "react";
 import * as Google from "expo-google-app-auth";
 import { storeData } from '../../utils/localStorage';
-
+import env from  "../../utils/environment";
 
 const LoginScreen = ({ navigation }) => {
   async function signInWithGoogleAsync() {
@@ -29,7 +29,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleGoogle = () => {
     signInWithGoogleAsync().then(response => {
-      fetch('http://192.168.1.202:3000/api/auth/user', {
+      fetch(`${env.API_URL}/api/auth/user`, {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -45,7 +45,7 @@ const LoginScreen = ({ navigation }) => {
           });
         } else {
           if (data.type === "Promoter") {
-            fetch(`http://192.168.1.202:3000/api/promoter/${data.id}`)
+            fetch(`${env.API_URL}/api/promoter/${data.id}`)
             .then(response => response.json())
             .then(data => {
                 storeData('@promoterFormData', data).then(() => {
@@ -53,7 +53,7 @@ const LoginScreen = ({ navigation }) => {
                 });
             })
           } else if (data.type === "Venue") {
-            fetch(`http://192.168.1.202:3000/api/venue/${data.id}`)
+            fetch(`${env.API_URL}/api/venue/${data.id}`)
             .then(response => response.json())
             .then(data => {
                 storeData('@venueFormData', data).then(() => {

@@ -5,6 +5,7 @@ import { faCocktail, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { View, Text, Image, StyleSheet, TextInput, Picker, TouchableOpacity, ScrollView,
 KeyboardAvoidingView } from 'react-native';
 import { storeData, getData } from '../../utils/localStorage';
+import env from "../../utils/environment";
 
 const LoginVenueRegisterScreen = ({ navigation }) => {
   const [venueName, setVenueName] = useState("");
@@ -43,20 +44,25 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
     }
 
     getData('@userId').then(response => {
-      fetch(`http://192.168.1.202:3000/api/register/venue/${response}`, {
+      const venueData = {...formData, venueId: response};
+      fetch(`${env.API_URL}/api/register/venue`, {
         method: 'POST',
         mode: 'cors',
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(venueData)
+      }).then(response => response.json()).then(data => {
+        if (data.status === "Success") {
+          setErrorMessage("");
+          storeData('@venueFormData', venueData).then(() => {
+            navigation.navigate('VenueTab');
+          });
+        }
       })
     });
 
-    setErrorMessage("");
-    storeData('@venueFormData', formData).then(() => {
-      navigation.navigate('VenueTab');
-    });
+
   }
 
   return (

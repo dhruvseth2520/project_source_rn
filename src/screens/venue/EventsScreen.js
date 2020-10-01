@@ -1,31 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { ScrollView, Image, View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import EventCard from "../../components/EventCard";
 import Header from "../../components/Header";
+import env from "../../utils/environment";
+import { getData } from "../../utils/localStorage";
 
 
-const VenueEventsScreen = ({ route }) => {
+const VenueEventsScreen = () => {
   const [events, setEvents] = useState([]);
   const navigation = useNavigation();
-  const focused = useIsFocused();
 
   useEffect(() => {
-    if (route.params) {
-      const formData = route.params.formData;
-      if (route.params.action === 'Create Event') {
-        if (formData) {
-          setEvents([...events, formData]);
-          navigation.setParams({formData: null});
-        }
-      } else if (route.params.action === 'Update Event') {
-        // Update event in backend here
-        console.log(formData);
-        console.log('Updating');
-      }
-    }
-  }, [route])
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchData();
+    });
+
+    return unsubscribe;
+  }, [])
+
+  const fetchData = () => {
+    getData('@venueFormData').then(response => {
+      fetch(`${env.API_URL}/api/events/${response.venueId}`).then(response => response.json()).then(data => {
+        setEvents(data);
+      })
+    })
+  }
 
 
   return (

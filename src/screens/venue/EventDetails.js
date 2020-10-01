@@ -72,11 +72,11 @@ const EventDetails = ({ route }) => {
       <View style={styles.eventComponent}>
         <View style={styles.eventDetail}>
           <FontAwesome5 style={styles.detailIcon} name="calendar-alt" />
-          <Text style={[styles.detailText, {marginLeft: 21}]}>Occurs next on {event.date.toDateString()}</Text>
+          <Text style={[styles.detailText, {marginLeft: 21}]}>Occurs next on {new Date(event.date).toDateString()}</Text>
         </View>
         <View style={styles.eventDetail}>
           <FontAwesome5 style={styles.detailIcon} name="clock" />
-          <Text style={[styles.detailText, {marginLeft: 19}]}>Starts at {event.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
+          <Text style={[styles.detailText, {marginLeft: 19}]}>Starts at {new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
         </View>
         <View style={styles.eventDetail}>
           <FontAwesome5 style={styles.detailIcon} name="glass-cheers" />

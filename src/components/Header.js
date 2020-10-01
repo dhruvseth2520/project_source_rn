@@ -6,7 +6,6 @@ const Header = ({ title }) => {
     <View>
       <Image style={styles.header} source={require('../assets/canva-photo-editor.png')}></Image>
       <Text style={styles.title}>{title}</Text>
-
     </View>
   )
 }
@@ -14,8 +13,8 @@ const Header = ({ title }) => {
 const styles = StyleSheet.create({
   header: {
     height: 220,
-    width: '100%',
-    marginTop: 0
+    marginTop: 0,
+    width: '100%'
   },
   title: {
     fontSize: 36,

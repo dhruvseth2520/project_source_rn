@@ -23,7 +23,6 @@ const LoginVenueOrPromoterScreen = ({ navigation, route }) => {
                   <Text style={styles.info}>The new way to promote</Text>
                 </View>
 
-
                 <View style={styles.buttonArea}>
                     <Text style={styles.captionText}>Are you a</Text>
                     <View style={styles.buttonContainer}>
@@ -37,7 +36,6 @@ const LoginVenueOrPromoterScreen = ({ navigation, route }) => {
                             <Text style={styles.buttonText}>Venue</Text>
                         </TouchableOpacity>
                     </View>
-
                 </View>
             </SafeAreaView>
         </View>

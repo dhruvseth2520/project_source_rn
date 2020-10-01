@@ -8,7 +8,7 @@ import BadgeModal from "./BadgeModal";
 const PromoterCard = ({ promoter }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
- 
+
   return (
     <>
         <TouchableOpacity onPress={() => navigation.navigate('VenuePromoterProfile', {
@@ -16,7 +16,7 @@ const PromoterCard = ({ promoter }) => {
         })}>
             <View style={styles.card}>
                   <View style={styles.imageContainer}>
-                    <Image style={styles.profileImg} source={{uri: promoter.images[0]}} />
+                    <Image style={styles.profileImg} source={{uri: promoter.promoterProfile.images[0]}} />
                   </View>
                   <View style={styles.contentContainer}>
                         <View style={{flexDirection: 'row'}}>
@@ -32,7 +32,7 @@ const PromoterCard = ({ promoter }) => {
                           ) : <></>}
 
                         </View>
-                        <Text style={styles.role}>Student</Text>
+                        <Text style={styles.role}>{promoter.promoterProfile.occupation}</Text>
                 </View>
             </View>
         </TouchableOpacity>
@@ -51,11 +51,7 @@ const styles = StyleSheet.create({
   },
   profileImg: {
     height: 320,
-    borderTopStartRadius: 10,
-    borderTopEndRadius: 10,
-    borderBottomStartRadius: 10,
-    borderBottomEndRadius: 10,
-    elevation: 5,
+    borderRadius: 10,
   },
   imageContainer: {
     flex: 2

@@ -7,7 +7,9 @@ import { getData } from "../../utils/localStorage";
 const PromoterProfileScreen = () => {
     const [name, setName] = useState("");
     useEffect(() => {
-      getData('@promoterFormData').then(data => setName(data.firstName + " " + data.lastName));
+      getData('@promoterFormData').then(data => {
+        setName(data.firstName + " " + data.lastName);
+      })
     }, [])
 
     return (

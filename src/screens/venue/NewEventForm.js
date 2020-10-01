@@ -4,6 +4,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { View, ScrollView, Text, StyleSheet, TextInput, Picker, TouchableOpacity,
 KeyboardAvoidingView } from 'react-native';
+import { getData } from '../../utils/localStorage';
+import env from '../../utils/environment';
 
 const VenueNewEventForm = ({ route }) => {
   const navigation = useNavigation();
@@ -25,19 +27,39 @@ const VenueNewEventForm = ({ route }) => {
   const [date, setDate] = useState(event ? event.date : new Date());
 
   const handleSubmit = () => {
-      const form = {
-        eventName,
-        category,
-        description,
-        imageURL,
-        promotion,
-        fees,
-        date
-      }
+      getData('@venueFormData').then(response => {
+        const eventForm = {
+          venueId: response.venueId,
+          eventName: eventName.trim(),
+          category,
+          description,
+          imageURL,
+          promotion,
+          fees,
+          date
+        }
 
-      navigation.navigate('VenueEventsHome', {
-        action,
-        formData: form
+        let method = "";
+        if (action === 'Create Event') {
+          method = "POST";
+        } else if (action === 'Update Event') {
+          method = "PUT";
+        }
+
+        fetch(`${env.API_URL}/api/events`, {
+          method: method,
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(eventForm)
+        }).then(response => response.json()).then(data => {
+          if (data.status === "Success") {
+            navigation.navigate('VenueEventsHome');
+          }
+        })
+
+
       })
   }
 
@@ -52,10 +74,13 @@ const VenueNewEventForm = ({ route }) => {
           <View style={styles.form}>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Event Name</Text>
-              <TextInput style={styles.input}
+
+              <TextInput style={[styles.input, {color: (action === 'Create Event' ? 'black' : 'gray')}]}
                 onChangeText={(val) => setEventName(val)}
                 value={eventName}
-                autoCapitalize="words" placeholder="Eg. Wine Wednesday, Tequila Thursday, Game Day"/>
+                autoCapitalize="words" placeholder="Eg. Wine Wednesday, Tequila Thursday, Game Day"
+                editable={action === 'Create Event' ? true : false}
+              />
             </View>
 
             <View style={styles.inputContainer}>
@@ -99,7 +124,7 @@ const VenueNewEventForm = ({ route }) => {
                 style={styles.dateSelector}
                 mode="datetime"
                 testID="dateTimePicker"
-                value={date}
+                value={new Date(date)}
                 onChange={(event, val) => setDate(val)}
                 minimumDate={new Date()}
               />
@@ -122,7 +147,9 @@ const VenueNewEventForm = ({ route }) => {
                   <TextInput
                     onChangeText={(val) => setFees(val)}
                     value={fees}
-                    style={[styles.input, { width: '60%'}]} autoCapitalize="none" keyboardType="numeric" />
+                    style={[styles.input, { width: '60%', color: (action === 'Create Event' ? 'black' : 'gray')}]} autoCapitalize="none" keyboardType="numeric"
+                    editable={action === 'Create Event' ? true : false}
+                  />
                   <TextInput style={[styles.input, { width: '25%', marginLeft: 18}]} autoCapitalize="none" value="MMK" editable={false}/>
               </View>
             </View>
