@@ -35,13 +35,13 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, set
     setErrorMessage("");
     const currentDate = new Date();
 
-    if (currentDate.getDate() < event.date.getDate()) {
-      const difference = event.date.getDate() - currentDate.getDate();
+    if (currentDate.getDate() < new Date(event.date).getDate()) {
+      const difference = new Date(event.date).getDate() - currentDate.getDate();
       setErrorMessage("This event doesn't occur for another " + difference + " days");
     } else {
       for (let i = 0; i < promoters.length; i++) {
         let promoter = promoters[i];
-        let promoterName = promoter.firstName;
+        let promoterName = promoter.firstName + " " + promoter.lastName;
         if (promoterName.toLowerCase() === query.toLowerCase()) {
             let guestsCopy = {...guests};
             if (promoterName in guestsCopy) {
@@ -89,6 +89,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, set
                 }}
                 value={query}
                 style={styles.promoterSearch}
+                inputStyle={styles.inputSearch}
                 fontSize={15}
                 placeholder="Promoter Name">
               </Searchbar>
@@ -100,10 +101,11 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, set
                            extraData={query}
                            showsVerticalScrollIndicator={false}
                            renderItem={({ item }) => {
-                             if (item.firstName.toLowerCase().startsWith(query.toLowerCase())) {
-                               return <TouchableOpacity onPress={() => setQuery(item.firstName)}>
+                             const name = item.firstName + " " + item.lastName;
+                             if (name.toLowerCase().startsWith(query.toLowerCase())) {
+                               return <TouchableOpacity onPress={() => setQuery(name)}>
                                  <View style={styles.listItem}>
-                                   <Text style={{marginLeft: 10}}>{item.firstName}</Text>
+                                   <Text style={{marginLeft: 10}}>{name}</Text>
                                  </View>
                               </TouchableOpacity>
                              }
@@ -194,7 +196,8 @@ const styles = StyleSheet.create({
   promoterSearch: {
     fontSize: 13,
     marginTop: 10,
-    marginBottom: 15
+    marginBottom: 15,
+    width: '100%'
   },
   listItem: {
     borderBottomColor: '#26a69a',
