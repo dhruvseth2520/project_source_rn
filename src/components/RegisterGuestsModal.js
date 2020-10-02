@@ -13,10 +13,11 @@ import {
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Searchbar } from 'react-native-paper';
 import NumericInput from 'react-native-numeric-input'
-import { getPromoters } from "../api/Promoters";
+import { getData } from "../utils/localStorage";
 import env from '../utils/environment';
 
-const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, setGuests }) => {
+
+const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
   const [query, setQuery] = useState("");
   const [promoters, setPromoters] = useState([]);
   const [count, setCount] = useState(1);
@@ -41,19 +42,32 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, set
     } else {
       for (let i = 0; i < promoters.length; i++) {
         let promoter = promoters[i];
-        let promoterName = promoter.firstName + " " + promoter.lastName;
-        if (promoterName.toLowerCase() === query.toLowerCase()) {
-            let guestsCopy = {...guests};
-            if (promoterName in guestsCopy) {
-              const newCount = guestsCopy[promoterName] + count;
-              guestsCopy[promoterName] = newCount;
-            } else {
-              guestsCopy[promoterName] = count;
-            }
-            setGuests(guestsCopy);
-            setQuery("");
-            setCount(1);
-            setModalVisible(!modalVisible);
+        let promoterUser = promoter.firstName + " (" + promoter.promoterCode + ")";
+        if (promoterUser.toLowerCase() === query.toLowerCase()) {
+            getData('@venueFormData').then(response => {
+              const attendance = {
+                venueName: response.venueName,
+                promoterId: promoter._id,
+                promoterName: promoter.firstName + " " + promoter.lastName,
+                eventId: event._id,
+                eventName: event.eventName,
+                guestCount: count,
+                amount: event.fees * count
+              }
+
+              fetch(`${env.API_URL}/api/events/attendance`, {
+                  method: "POST",
+                  mode: "cors",
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(attendance)
+              })
+
+              setQuery("");
+              setCount(1);
+              setModalVisible(!modalVisible);
+            })
             return null;
         }
       }
@@ -89,7 +103,6 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, set
                 }}
                 value={query}
                 style={styles.promoterSearch}
-                inputStyle={styles.inputSearch}
                 fontSize={15}
                 placeholder="Promoter Name">
               </Searchbar>
@@ -101,11 +114,11 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, set
                            extraData={query}
                            showsVerticalScrollIndicator={false}
                            renderItem={({ item }) => {
-                             const name = item.firstName + " " + item.lastName;
-                             if (name.toLowerCase().startsWith(query.toLowerCase())) {
-                               return <TouchableOpacity onPress={() => setQuery(name)}>
+                             const display = item.firstName + " (" + item.promoterCode + ")";
+                             if (display.toLowerCase().startsWith(query.toLowerCase())) {
+                               return <TouchableOpacity onPress={() => setQuery(display)}>
                                  <View style={styles.listItem}>
-                                   <Text style={{marginLeft: 10}}>{name}</Text>
+                                   <Text style={{marginLeft: 10}}>{display}</Text>
                                  </View>
                               </TouchableOpacity>
                              }
@@ -119,17 +132,15 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event, guests, set
                   onChange={value => setCount(value)}
                   containerStyle={styles.numericInput}
                   totalWidth={220}
-                  totalHeight={40}
-                  iconSize={25}
+                  totalHeight={42}
                   minValue={1}
-                  initValue={1}
                   step={1}
                   valueType='real'
                   rounded
                   textColor='#525252'
                   iconStyle={{ color: 'white' }}
                   borderColor='white'
-                  rightButtonBackgroundColor='#5AACD6'
+                  rightButtonBackgroundColor='#5ACDF6'
                   leftButtonBackgroundColor='#5ACBD6'
               />
 

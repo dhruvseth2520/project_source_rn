@@ -58,8 +58,6 @@ const VenueNewEventForm = ({ route }) => {
             navigation.navigate('VenueEventsHome');
           }
         })
-
-
       })
   }
 
@@ -75,7 +73,7 @@ const VenueNewEventForm = ({ route }) => {
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Event Name</Text>
 
-              <TextInput style={[styles.input, {color: (action === 'Create Event' ? 'black' : 'gray')}]}
+              <TextInput style={[styles.input, {color: (action === 'Create Event' ? 'black' : '#727272')}]}
                 onChangeText={(val) => setEventName(val)}
                 value={eventName}
                 autoCapitalize="words" placeholder="Eg. Wine Wednesday, Tequila Thursday, Game Day"
@@ -147,7 +145,7 @@ const VenueNewEventForm = ({ route }) => {
                   <TextInput
                     onChangeText={(val) => setFees(val)}
                     value={fees}
-                    style={[styles.input, { width: '60%', color: (action === 'Create Event' ? 'black' : 'gray')}]} autoCapitalize="none" keyboardType="numeric"
+                    style={[styles.input, { width: '60%', color: (action === 'Create Event' ? 'black' : '#727272')}]} autoCapitalize="none" keyboardType="numeric"
                     editable={action === 'Create Event' ? true : false}
                   />
                   <TextInput style={[styles.input, { width: '25%', marginLeft: 18}]} autoCapitalize="none" value="MMK" editable={false}/>

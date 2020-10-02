@@ -32,10 +32,10 @@ const GuestListModal = ({ modalVisible, setModalVisible, guests, event }) => {
               <Text style={styles.title}>Guest List for {event.eventName}</Text>
 
                 <View style={styles.tableHeader}>
-                  <View style={{width: '50%'}}>
+                  <View style={{width: '60%'}}>
                     <Text style={styles.tableHeaderText}>Promoter</Text>
                   </View>
-                  <View style={{width: '50%'}}>
+                  <View style={{width: '40%'}}>
                     <Text style={styles.tableHeaderText}>Guest Count</Text>
                   </View>
                 </View>
@@ -47,10 +47,10 @@ const GuestListModal = ({ modalVisible, setModalVisible, guests, event }) => {
                     renderItem={({ item }) => (
                         <>
                           <View style={styles.row}>
-                            <View style={styles.col}>
+                            <View style={{width: '60%'}}>
                               <Text style={styles.tableData}>{item}</Text>
                             </View>
-                            <View style={styles.col}>
+                            <View style={{width: '40%'}}>
                               <Text style={styles.tableData}>{guests[item]}</Text>
                             </View>
                           </View>
@@ -63,10 +63,10 @@ const GuestListModal = ({ modalVisible, setModalVisible, guests, event }) => {
 
                 </View>
                 <View style={styles.tableFooter}>
-                  <View style={{width: '50%'}}>
+                  <View style={{width: '60%'}}>
                     <Text style={styles.tableHeaderText}>Total</Text>
                   </View>
-                  <View style={{width: '50%'}}>
+                  <View style={{width: '40%'}}>
                     <Text style={styles.tableHeaderText}>{Object.keys(guests).reduce((sum, guest) => sum + guests[guest], 0)}</Text>
                   </View>
                 </View>
@@ -138,9 +138,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'Avenir',
     fontWeight: '500'
-  },
-  col: {
-    width: '50%'
   },
   row: {
     paddingHorizontal: 12,

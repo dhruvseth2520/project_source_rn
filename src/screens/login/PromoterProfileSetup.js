@@ -228,7 +228,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderColor: 'black',
     padding: 5,
-    top: 1
+    top: 1,
+    fontFamily: 'Avenir',
+    fontSize: 13,
+    color: '#424242'
   },
   wrapper: {
   },

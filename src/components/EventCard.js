@@ -77,7 +77,6 @@ const EventCard = ({ event }) => {
       <RegisterGuestsModal
         event={event}
         modalVisible={modalVisible} setModalVisible={setModalVisible}
-        guests={guests} setGuests={setGuests}
       />
 
       <GuestListModal
