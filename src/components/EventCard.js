@@ -4,12 +4,29 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import RegisterGuestsModal from "./RegisterGuestsModal";
 import GuestListModal from "./GuestListModal";
+import ErrorModal from "./ErrorModal";
+import env from "../utils/environment";
 
-const EventCard = ({ event }) => {
+
+const EventCard = ({ event, refreshEvents }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [guestListVisible, setGuestListVisible] = useState(false);
-  const [guests, setGuests] = useState({});
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [guests, setGuests] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, [guestListVisible, modalVisible]);
+
+  const fetchData = (type) => {
+    fetch(`${env.API_URL}/api/events/attendance/event/${event._id}`)
+    .then(response => response.json())
+    .then(data => {
+      setGuests(data);
+    })
+  }
 
   const editEvent = () => {
     navigation.navigate('VenueEventForm', {
@@ -19,8 +36,26 @@ const EventCard = ({ event }) => {
   }
 
   const deleteEvent = () => {
-    console.log('Deleting');
-    console.log(event);
+    const currentDate = new Date();
+    const difference = new Date(event.date).getDate() - currentDate.getDate();
+    if (difference >= 0 && difference <= 3) {
+      setErrorMessage("Events can't be deleted within 3 days of the event date");
+      setErrorModalVisible(true);
+    } else {
+      fetch(`${env.API_URL}/api/events/${event._id}`, {
+        method: "DELETE",
+        mode: "cors",
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json()).then(data => {
+        if (data.status === "Success") {
+          refreshEvents();
+        }
+      })
+    }
+
+
   }
 
   const viewEvent = () => {
@@ -44,7 +79,7 @@ const EventCard = ({ event }) => {
                   <FontAwesome5 style={styles.btnIcon} name="edit"></FontAwesome5>
                 </View>
               </TouchableOpacity>
-              {Object.keys(guests).length ? (
+              {guests.length !== 0 ? (
                 <TouchableOpacity style={[styles.registerBtn, { marginLeft: 8, width: 125, borderColor: '#1A7DB0', flexDirection: 'row' }]} onPress={() => setGuestListVisible(true)}>
                     <Text style={[styles.btnText, {color: '#1A7DB0'}]}>View Guest List</Text>
                     <FontAwesome5 style={[styles.btnIcon, { top: -9, right: 7, color: '#1A7DB0'}]} name="receipt"></FontAwesome5>
@@ -81,7 +116,14 @@ const EventCard = ({ event }) => {
 
       <GuestListModal
         modalVisible={guestListVisible} setModalVisible={setGuestListVisible}
-        guests={guests} event={event}
+        guests={guests} setGuests={setGuests}
+        event={event}
+      />
+
+      <ErrorModal
+        modalVisible={errorModalVisible}
+        setModalVisible={setErrorModalVisible}
+        errorMessage={errorMessage}
       />
     </View>
   )

@@ -9,10 +9,12 @@ import {
   FlatList,
   View
 } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 
-const GuestListModal = ({ modalVisible, setModalVisible, guests, event }) => {
+const GuestListModal = ({ modalVisible, setModalVisible, event, guests, setGuests }) => {
+    const navigation = useNavigation();
 
     return (
       <View style={styles.centeredView}>
@@ -32,26 +34,32 @@ const GuestListModal = ({ modalVisible, setModalVisible, guests, event }) => {
               <Text style={styles.title}>Guest List for {event.eventName}</Text>
 
                 <View style={styles.tableHeader}>
-                  <View style={{width: '60%'}}>
+                  <View style={{width: '45%'}}>
                     <Text style={styles.tableHeaderText}>Promoter</Text>
                   </View>
-                  <View style={{width: '40%'}}>
+                  <View style={{width: '25%'}}>
                     <Text style={styles.tableHeaderText}>Guest Count</Text>
+                  </View>
+                  <View style={{width: '30%'}}>
+                    <Text style={styles.tableHeaderText}>Payable (MMK)</Text>
                   </View>
                 </View>
 
                 <View style={styles.tableContent}>
                   <FlatList
-                    data={Object.keys(guests)}
-                    keyExtractor={guest => guest}
+                    data={guests}
+                    keyExtractor={guest => guest._id}
                     renderItem={({ item }) => (
                         <>
                           <View style={styles.row}>
-                            <View style={{width: '60%'}}>
-                              <Text style={styles.tableData}>{item}</Text>
+                            <View style={{width: '45%'}}>
+                              <Text style={styles.tableData}>{item.promoterName}</Text>
                             </View>
-                            <View style={{width: '40%'}}>
-                              <Text style={styles.tableData}>{guests[item]}</Text>
+                            <View style={{width: '25%'}}>
+                              <Text style={styles.tableData}>{item.guestCount}</Text>
+                            </View>
+                            <View style={{width: '30%'}}>
+                              <Text style={styles.tableData}>{item.payable}</Text>
                             </View>
                           </View>
                         </>
@@ -63,11 +71,14 @@ const GuestListModal = ({ modalVisible, setModalVisible, guests, event }) => {
 
                 </View>
                 <View style={styles.tableFooter}>
-                  <View style={{width: '60%'}}>
+                  <View style={{width: '45%'}}>
                     <Text style={styles.tableHeaderText}>Total</Text>
                   </View>
-                  <View style={{width: '40%'}}>
-                    <Text style={styles.tableHeaderText}>{Object.keys(guests).reduce((sum, guest) => sum + guests[guest], 0)}</Text>
+                  <View style={{width: '25%'}}>
+                    <Text style={styles.tableHeaderText}>{guests.reduce((sum, guest) => sum + guest.guestCount, 0)}</Text>
+                  </View>
+                  <View style={{width: '30%'}}>
+                    <Text style={styles.tableHeaderText}>{guests.reduce((sum, guest) => sum + guest.payable, 0)}</Text>
                   </View>
                 </View>
             </View>
@@ -86,7 +97,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    marginTop: 60,
+    marginTop: 10,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
@@ -99,7 +110,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    width: 300
+    width: 320
   },
   openButton: {
     backgroundColor: "#F194FF",
@@ -119,7 +130,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     marginBottom: 15,
-    marginTop: 4,
+    marginTop: 15,
     fontFamily: 'Avenir',
     fontSize: 18
   },
