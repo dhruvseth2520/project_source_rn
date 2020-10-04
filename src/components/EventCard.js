@@ -80,9 +80,11 @@ const EventCard = ({ event, refreshEvents }) => {
                 </View>
               </TouchableOpacity>
               {guests.length !== 0 ? (
-                <TouchableOpacity style={[styles.registerBtn, { marginLeft: 8, width: 125, borderColor: '#1A7DB0', flexDirection: 'row' }]} onPress={() => setGuestListVisible(true)}>
-                    <Text style={[styles.btnText, {color: '#1A7DB0'}]}>View Guest List</Text>
-                    <FontAwesome5 style={[styles.btnIcon, { top: -9, right: 7, color: '#1A7DB0'}]} name="receipt"></FontAwesome5>
+                <TouchableOpacity style={[styles.registerBtn, { marginLeft: 8, width: 125, borderColor: '#1A7DB0'}]} onPress={() => setGuestListVisible(true)}>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text style={[styles.btnText, {color: '#1A7DB0'}]}>View Guest List</Text>
+                      <FontAwesome5 style={[styles.btnIcon, { top: 5, right: 6, color: '#1A7DB0'}]} name="receipt"></FontAwesome5>
+                    </View>
                 </TouchableOpacity>
               ) : <></>}
             </View>

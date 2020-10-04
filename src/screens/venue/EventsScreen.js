@@ -9,6 +9,9 @@ import { getData } from "../../utils/localStorage";
 
 const VenueEventsScreen = () => {
   const [events, setEvents] = useState([]);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [pastEvents, setPastEvents] = useState([]);
+
   const [isUpcoming, setUpcoming] = useState(true);
   const [isPast, setPast] = useState(false);
   const navigation = useNavigation();
@@ -26,9 +29,27 @@ const VenueEventsScreen = () => {
   const fetchData = () => {
     getData('@venueFormData').then(response => {
       fetch(`${env.API_URL}/api/events/${response.venueId}`).then(response => response.json()).then(data => {
-        setEvents(data);
+        const currentDate = new Date();
+        let upcomingArr = [];
+        let pastArr = [];
+        data.forEach(event => {
+          const difference = new Date(event.date).getDate() - currentDate.getDate();
+          if (difference >= 0) {
+            upcomingArr.push(event);
+          } else {
+            pastArr.push(event);
+          }
+        })
+        setUpcoming(true);
+        setPast(false);
+        setUpcomingEvents(upcomingArr);
+        setEvents(upcomingArr);
+        setPastEvents(pastArr);
       })
+
     })
+
+
   }
 
   const handlePress = (btn) => {
@@ -36,11 +57,13 @@ const VenueEventsScreen = () => {
       if (!isUpcoming) {
         setUpcoming(true);
         setPast(false);
+        setEvents(upcomingEvents);
       }
     } else if (btn === 'Past') {
       if (!isPast) {
         setUpcoming(false);
         setPast(true);
+        setEvents(pastEvents);
       }
     }
 
@@ -50,13 +73,14 @@ const VenueEventsScreen = () => {
 
   return (
     <ScrollView style={styles.background} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always">
-      <Header title="Events" />
+      <Header title="Events" dashboard={upcomingEvents.length + " events happening soon"}/>
       <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1558346489-19413928158b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'}} />
       <Text style={styles.description}>Create custom events with promotions for your target market and share them with our vast network of promoters and influencers</Text>
       <Text style={styles.subTitle}>Your Events</Text>
 
       <ScrollView style={styles.eventContainer}>
-        {events.length === 0
+
+        {upcomingEvents.length === 0
           ? <Text style={{fontFamily: "Avenir", fontWeight: '300', marginTop: 5}}>You have no events to show yet. Add your first now!</Text>
           :
           <>
@@ -78,7 +102,7 @@ const VenueEventsScreen = () => {
                   }}
                 ></FlatList>
           </>
-}
+        }
         <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('VenueEventForm')}>
           <FontAwesome5 name="plus" style={{alignSelf: 'center', fontSize: 16, marginTop: 19, color: 'white'}} color="black" />
         </TouchableOpacity>
@@ -140,11 +164,12 @@ const styles = StyleSheet.create({
   btnContainer: {
     flexDirection: 'row',
     marginTop: 5,
-    marginBottom: 3
+    marginBottom: 5
   },
   btnText: {
     fontFamily: 'Avenir',
-    fontWeight: '300'
+    fontWeight: '300',
+    fontSize: 15
   },
   tabButton: {
     marginRight: 10
@@ -152,7 +177,8 @@ const styles = StyleSheet.create({
   active: {
     color: '#1AA2B0',
     fontFamily: 'Avenir',
-    fontWeight: '300'
+    fontWeight: '300',
+    fontSize: 15
   }
 
 })

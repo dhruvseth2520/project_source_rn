@@ -31,7 +31,10 @@ const ErrorModal = ({ modalVisible, setModalVisible, errorMessage }) => {
               <TouchableOpacity style={styles.close} onPress={() => setModalVisible(!modalVisible)}>
                 <FontAwesome5 name="times" style={{color: 'gray', alignSelf: 'center', fontSize: 15, top: 8}} />
               </TouchableOpacity>
-              <Text style={styles.title}>We're Sorry</Text>
+              <View style={{flexDirection: 'row', marginLeft: -10}}>
+                <Text style={styles.title}>We're Sorry</Text>
+                <FontAwesome5 name="sad-cry" style={{color: '#ffcb4c', alignSelf: 'center', fontSize: 18, left: 5, top: -8}} />
+              </View>
               <Text style={styles.message}>{errorMessage}</Text>
             </View>
           </View>

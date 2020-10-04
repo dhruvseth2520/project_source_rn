@@ -33,7 +33,7 @@ const VenuePromotersHome = () => {
                     style={styles.promoterList}
                     showsHorizontalScrollIndicator={false}
                     data={promoters}
-                    keyExtractor={promoter => promoter.promoterId}
+                    keyExtractor={promoter => promoter._id}
                     renderItem={({ item }) => {
                       return <PromoterCard promoter={item}></PromoterCard>
                     }}
