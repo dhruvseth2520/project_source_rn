@@ -60,12 +60,7 @@ const EventDetails = ({ route }) => {
             <Text style={styles.venueName}>{venue.venueName}</Text>
             <Text style={styles.address}>{venue.venueAddress}</Text>
           </View>
-          <View style={{width: "40%"}}>
-            <TouchableOpacity style={styles.contactButton} onPress={() => navigation.navigate('VenueMessages')}>
-              <Text style={{color: '#1AA2B0', fontFamily: 'Avenir', fontSize: 13, marginTop: 1, width: '80%'}}>Message Promoters</Text>
-              <FontAwesome5 style={{color: '#1AA2B0', fontFamily: 'Avenir', marginTop: 8, fontSize: 17, width: '20%'}} name="envelope"></FontAwesome5>
-            </TouchableOpacity>
-          </View>
+          
         </View>
       </View>
 

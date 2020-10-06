@@ -43,6 +43,7 @@ const VenueEventsScreen = () => {
         setUpcoming(true);
         setPast(false);
         setUpcomingEvents(upcomingArr);
+
         setEvents(upcomingArr);
         setPastEvents(pastArr);
       })

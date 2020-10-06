@@ -28,6 +28,7 @@ const LoginScreen = ({ navigation }) => {
   }
 
   const handleGoogle = () => {
+
     signInWithGoogleAsync().then(response => {
       fetch(`${env.API_URL}/api/auth/user`, {
         method: 'POST',

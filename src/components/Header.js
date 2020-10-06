@@ -6,7 +6,6 @@ const Header = ({ title, dashboard }) => {
     <View>
       <Image style={styles.header} source={require('../assets/canva-photo-editor.png')}></Image>
       <Text style={styles.title}>{title}</Text>
-
     </View>
   )
 }
@@ -27,7 +26,7 @@ const styles = StyleSheet.create({
     left: 32,
     zIndex: 1
   },
-  
+
 })
 
 export default Header;
