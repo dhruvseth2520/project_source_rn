@@ -4,10 +4,11 @@ import PromoterCard from "../../components/PromoterCard";
 import Header from "../../components/Header";
 import { getData } from "../../utils/localStorage";
 import { FontAwesome5 } from '@expo/vector-icons';
-import { Button, Chip } from 'react-native-paper';
-
+import { Button } from 'react-native-paper';
 import env from "../../utils/environment";
+import FilterGrid from "../../components/FilterGrid";
 
+// On press of hide advanced search all filters should be reset
 
 const VenuePromotersHome = () => {
   const [promoters, setPromoters] = useState([]);
@@ -15,8 +16,21 @@ const VenuePromotersHome = () => {
   const [query, setQuery] = useState("");
   const [venue, setVenue] = useState({});
   const [visible, setVisible] = useState(false);
-
-
+  const [price, setPrice] = useState({
+    active: false,
+    displayValue: 5000,
+    filterValue: 5000
+  });
+  const [availability, setAvailability] = useState({
+    active: false,
+    displayValue: 3,
+    filterValue: 3
+  })
+  const [connections, setConnections] = useState({
+    active: false,
+    displayValue: 100,
+    filterValue: 100
+  })
 
   useEffect(() => {
     fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
@@ -25,32 +39,35 @@ const VenuePromotersHome = () => {
     })
   }, [])
 
+
+  // Try doing query and filters together, filter promoters by query name and any active filters all in one function instead of using 2 different functions for handleSearch and filters
   useEffect(() => {
-    handleSearch();
-  }, [query])
+    setPromoters(handleSearch());
+  }, [query, price, availability, connections])
 
   useEffect(() => {
     getData('@venueFormData').then(data => setVenue(data));
   }, [])
 
   const handleSearch = () => {
-    if (query && query != "") {
       let filteredPromoters = [];
       promoterData.forEach(promoter => {
+        const nameMatch = promoter.firstName.toLowerCase().trim().startsWith(query.toLowerCase().trim());
+        const priceMatch = promoter.promoterProfile.expectedRate <= price.filterValue;
+        const availabilityMatch = promoter.promoterProfile.availability >= availability.filterValue;
+        const connectionsMatch = promoter.promoterProfile.numConnections >= connections.filterValue;
 
-        if (promoter.firstName.toLowerCase().trim().startsWith(query.toLowerCase().trim()) || promoter.firstName.toLowerCase().trim().includes(query.toLowerCase().trim())) {
+        if (nameMatch && priceMatch && availabilityMatch && connectionsMatch) {
           filteredPromoters.push(promoter);
         }
       })
-      setPromoters(filteredPromoters);
-    } else {
-      setPromoters(promoterData);
-    }
+      return filteredPromoters;
+
   }
 
   return (
           <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
-            <ScrollView style={styles.background}>
+            <ScrollView style={styles.background} showsVerticalScrollIndicator={false}>
                   <Header title="Promoters" />
                   <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1504270997636-07ddfbd48945?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80'}} />
                   <Text style={styles.description}>Our network of young promoters will use their social media influence and personal network to get your {venue.venueCategory} the traffic you seek</Text>
@@ -68,10 +85,12 @@ const VenuePromotersHome = () => {
                     </TextInput>
                   </View>
 
-                  {visible ?
-                  <View style={styles.filterGrid}>
-
-                  </View> : <></>}
+                  {visible ? <FilterGrid
+                    price={price} setPrice={setPrice}
+                    availability={availability} setAvailability={setAvailability}
+                    connections={connections} setConnections={setConnections}
+                  />
+                   : <></>}
 
 
                   <Button icon="account-search" compact={true}
@@ -84,7 +103,6 @@ const VenuePromotersHome = () => {
                   </Button>
 
 
-
                   <FlatList horizontal
                     style={styles.promoterList}
                     showsHorizontalScrollIndicator={false}
@@ -94,8 +112,6 @@ const VenuePromotersHome = () => {
                       return <PromoterCard promoter={item}></PromoterCard>
                     }}
                   />
-
-
               </ScrollView>
           </KeyboardAvoidingView>
   )
