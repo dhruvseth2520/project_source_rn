@@ -9,13 +9,13 @@ import env from "../../utils/environment";
 import FilterGrid from "../../components/FilterGrid";
 
 // On press of hide advanced search all filters should be reset
+// Add filter for number of clients sourced, compute number of clients sourced from promoter ledger
 
 const VenuePromotersHome = () => {
   const [promoters, setPromoters] = useState([]);
   const [promoterData, setPromoterData] = useState([]);
   const [query, setQuery] = useState("");
   const [venue, setVenue] = useState({});
-  const [visible, setVisible] = useState(false);
   const [price, setPrice] = useState({
     active: false,
     displayValue: 5000,
@@ -25,12 +25,24 @@ const VenuePromotersHome = () => {
     active: false,
     displayValue: 3,
     filterValue: 3
-  })
+  });
   const [connections, setConnections] = useState({
     active: false,
-    displayValue: 100,
-    filterValue: 100
-  })
+    displayValue: 500,
+    filterValue: 500
+  });
+  const [languages, setLanguages] = useState({
+    active: false,
+    displayValue: [],
+    filterValue: []
+  });
+  const [clients, setClients] = useState({
+    active: false,
+    displayValue: 0,
+    filterValue: 0
+  });
+
+
 
   useEffect(() => {
     fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
@@ -39,15 +51,15 @@ const VenuePromotersHome = () => {
     })
   }, [])
 
-
-  // Try doing query and filters together, filter promoters by query name and any active filters all in one function instead of using 2 different functions for handleSearch and filters
-  useEffect(() => {
-    setPromoters(handleSearch());
-  }, [query, price, availability, connections])
-
   useEffect(() => {
     getData('@venueFormData').then(data => setVenue(data));
   }, [])
+
+  useEffect(() => {
+    setPromoters(handleSearch());
+  }, [query, price, availability, connections, languages, clients])
+
+
 
   const handleSearch = () => {
       let filteredPromoters = [];
@@ -57,12 +69,22 @@ const VenuePromotersHome = () => {
         const availabilityMatch = promoter.promoterProfile.availability >= availability.filterValue;
         const connectionsMatch = promoter.promoterProfile.numConnections >= connections.filterValue;
 
-        if (nameMatch && priceMatch && availabilityMatch && connectionsMatch) {
+        const promoterGuestCount = (promoter.ledger.map(entry => entry.guestCount)).reduce((acc, curr) => acc + curr, 0);
+        const clientsMatch = promoterGuestCount >= clients.filterValue;
+
+        let languagesMatch = true;
+        const filteredLanguages = languages.filterValue.map(lang => lang.value);
+        filteredLanguages.forEach(lang => {
+          if (!promoter.promoterProfile.languages.includes(lang)) {
+            languagesMatch = false;
+          }
+        })
+
+        if (nameMatch && priceMatch && clientsMatch && availabilityMatch && connectionsMatch && languagesMatch) {
           filteredPromoters.push(promoter);
         }
       })
       return filteredPromoters;
-
   }
 
   return (
@@ -85,23 +107,13 @@ const VenuePromotersHome = () => {
                     </TextInput>
                   </View>
 
-                  {visible ? <FilterGrid
+                  <FilterGrid
                     price={price} setPrice={setPrice}
                     availability={availability} setAvailability={setAvailability}
                     connections={connections} setConnections={setConnections}
+                    languages={languages} setLanguages={setLanguages}
+                    clients={clients} setClients={setClients}
                   />
-                   : <></>}
-
-
-                  <Button icon="account-search" compact={true}
-                    color="#26A5B2"
-                    style={{alignSelf: 'flex-start', left: 25}}
-                    labelStyle={{fontFamily: 'Futura', fontSize: 11}}
-                    onPress={() => setVisible(!visible)}>
-                    {visible ? "Hide Advanced Search" :
-                    "Advanced Search"}
-                  </Button>
-
 
                   <FlatList horizontal
                     style={styles.promoterList}
@@ -148,7 +160,7 @@ const styles = StyleSheet.create({
   },
   promoterList: {
     marginLeft: 32,
-    marginTop: 5,
+    marginTop: 12,
     marginBottom: 35
   },
   searchBar: {

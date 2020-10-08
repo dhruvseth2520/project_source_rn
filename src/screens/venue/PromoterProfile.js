@@ -13,6 +13,8 @@ const VenuePromoterProfile = ({ route }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
 
+  const guestCount = (promoter.ledger.map(entry => entry.guestCount)).reduce((acc, curr) => acc + curr, 0);
+
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity style={styles.backArrow} onPress={() => navigation.navigate('VenuePromotersHome')}>
@@ -57,7 +59,7 @@ const VenuePromoterProfile = ({ route }) => {
         <View style={styles.profileStats}>
           <View style={styles.stat}>
             <View style={{flexDirection: 'row'}}>
-                <Text style={styles.statNumber}>44</Text>
+                <Text style={styles.statNumber}>{guestCount}</Text>
                 <FontAwesome5 style={styles.statIcon} name="briefcase"></FontAwesome5>
             </View>
             <Text style={styles.statCaption}>Clients Sourced</Text>

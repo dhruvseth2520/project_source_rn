@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { ScrollView, View, StyleSheet, Text } from 'react-native';
+import { ScrollView, View, StyleSheet, Text, Image } from 'react-native';
 import { Chip } from 'react-native-paper';
 import Popover, { PopoverPlacement } from 'react-native-popover-view';
 import Slider from '@react-native-community/slider';
 import { Button } from 'react-native-paper';
+import SelectMultiple from 'react-native-select-multiple'
 
-const Filter = ({ state, setState, title, icon, unit, step, min, max, label, maxOrMin }) => {
+
+const FilterRange = ({ state, setState, title, icon, unit, step, min, max, label, maxOrMin }) => {
   const [visible, setVisible] = useState(false);
   let left = 160 / (max - min) * state.displayValue - 20 - 160 * min / (max - min);
 
@@ -43,15 +45,6 @@ const Filter = ({ state, setState, title, icon, unit, step, min, max, label, max
           onSlidingComplete={val => setState({...state, displayValue: val})}
         />
         <View style={{flexDirection: 'row', marginLeft: 20}}>
-          <Button icon="check" compact={true} onPress={() => {
-            setState({...state, active: true, filterValue: state.displayValue});
-            setVisible(false);
-          }}
-            color="#515151"
-            style={{alignSelf: 'center', top: 5, left: -5}}
-            labelStyle={{fontFamily: 'Futura', fontSize: 12}}>
-              Apply
-          </Button>
           <Button icon="close" compact={true} onPress={() => {
               setState({active: false, filterValue: (maxOrMin === "max" ? max : min), displayValue: (maxOrMin === "max" ? max : min)});
               setVisible(false);
@@ -60,6 +53,15 @@ const Filter = ({ state, setState, title, icon, unit, step, min, max, label, max
             style={{alignSelf: 'center', top: 5, left: -5}}
             labelStyle={{fontFamily: 'Futura', fontSize: 12}}>Remove
           </Button>
+          <Button icon="check" compact={true} onPress={() => {
+            setState({...state, active: true, filterValue: state.displayValue});
+            setVisible(false);
+          }}
+            color="#515151"
+            style={{alignSelf: 'center', top: 5, left: -12}}
+            labelStyle={{fontFamily: 'Futura', fontSize: 12}}>
+              Apply
+          </Button>
         </View>
       </View>
     </Popover>
@@ -67,33 +69,106 @@ const Filter = ({ state, setState, title, icon, unit, step, min, max, label, max
 
 }
 
+const FilterSelect = ({ state, setState, icon, title, label }) => {
+  const [visible, setVisible] = useState(false);
 
-const FilterGrid = ({ price, setPrice, availability, setAvailability, connections, setConnections }) => {
+  return (
+    <Popover
+      isVisible={visible}
+      onRequestClose={() => {
+        setVisible(false);
+        setState({...state, displayValue: state.filterValue});
+      }}
+      placement={PopoverPlacement.BOTTOM}
+      arrowStyle={{backgroundColor: 'transparent'}}
+      from={(
+        <Chip icon={icon} compact={true} selectedColor={state.active ? 'white' : 'black'}
+          textStyle={{fontFamily: 'Avenir', fontSize: 13}}
+          style={[styles.filterBtn, {backgroundColor: state.active ? '#19D2CC' : '#EAEAEA'}]}
+          onPress={() => setVisible(true)}
+        >
+          {title}
+        </Chip>
+      )}>
+      <View style={[styles.filterCard, {height: 177}]}>
+        <Text style={styles.label}>{label}</Text>
+
+        <SelectMultiple
+          items={["English", "Burmese"]}
+          selectedItems={state.displayValue}
+          onSelectionsChange={(val) => setState({...state, displayValue: val})}
+          rowStyle={{borderBottomWidth: 0, marginBottom: -15}}
+          labelStyle={{fontFamily: 'Avenir', fontWeight: '300', top: 1, left: 3}}
+          style={{top: -5}}
+         />
+
+
+        <View style={{flexDirection: 'row', marginLeft: 20, top: 5}}>
+          <Button icon="close" compact={true} onPress={() => {
+              setState({active: false, displayValue: [], filterValue: []});
+              setVisible(false);
+            }}
+            color="#515151"
+            style={{alignSelf: 'center', top: 5, left: -5}}
+            labelStyle={{fontFamily: 'Futura', fontSize: 12}}>Remove
+          </Button>
+          <Button icon="check" compact={true} onPress={() => {
+            setState({...state, active: true, filterValue: state.displayValue});
+            setVisible(false);
+          }}
+            color="#515151"
+            style={{alignSelf: 'center', top: 5, left: -12}}
+            labelStyle={{fontFamily: 'Futura', fontSize: 12}}>
+              Apply
+          </Button>
+        </View>
+      </View>
+    </Popover>
+  )
+}
+
+
+const FilterGrid = ({ price, setPrice, clients, setClients, availability, setAvailability, connections, setConnections, languages, setLanguages }) => {
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterGrid}>
-      <Filter setState={setPrice} state={price} maxOrMin="max"
+      <FilterRange setState={setPrice} state={price} maxOrMin="max"
               icon="currency-usd" title="Promoter Fees"
               label="Maximum Promoter Fees"
               unit="MMK"
               min={500} max={5000} step={100}
        />
 
-       <Filter setState={setAvailability} state={availability} maxOrMin="min"
+       <FilterRange setState={setClients} state={clients} maxOrMin="min"
+               icon="account-key" title="Clients Sourced"
+               label="Minimum # of Clients Sourced"
+               unit=""
+               min={0} max={100} step={1}
+        />
+
+
+       <FilterRange setState={setAvailability} state={availability} maxOrMin="min"
                icon="clock" title="Availability"
                label="Minimum Weekly Availability"
                unit="hrs"
                min={3} max={15} step={1}
         />
 
-        <Filter setState={setConnections} state={connections} maxOrMin="min"
+        <FilterRange setState={setConnections} state={connections} maxOrMin="min"
                 icon="instagram" title="Social Connections"
                 label="Minimum Social Connections"
                 unit=""
-                min={100} max={3000} step={100}
+                min={500} max={3000} step={100}
          />
+
+         <FilterSelect state={languages} setState={setLanguages}
+           icon="alphabetical" title="Languages" label="Preferred Languages" />
+
+
+
     </ScrollView>
   )
+
 }
 
 const styles = StyleSheet.create({

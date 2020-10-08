@@ -6,6 +6,16 @@ import EventCard from "../../components/EventCard";
 import Header from "../../components/Header";
 import env from "../../utils/environment";
 import { getData } from "../../utils/localStorage";
+import { FAB } from 'react-native-paper';
+
+
+/*
+<TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('VenueEventForm')}>
+  <FontAwesome5 name="plus" style={{alignSelf: 'center', fontSize: 16, marginTop: 19, color: 'white'}} color="black" />
+</TouchableOpacity>
+
+*/
+
 
 const VenueEventsScreen = () => {
   const [events, setEvents] = useState([]);
@@ -104,10 +114,17 @@ const VenueEventsScreen = () => {
                 ></FlatList>
           </>
         }
-        <TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('VenueEventForm')}>
-          <FontAwesome5 name="plus" style={{alignSelf: 'center', fontSize: 16, marginTop: 19, color: 'white'}} color="black" />
-        </TouchableOpacity>
+
+
+
+
       </ScrollView>
+      <FAB
+        style={styles.fab}
+        icon="plus"
+        onPress={() => console.log('Pressed')}
+      />
+
     </ScrollView>
   )
 }
@@ -180,7 +197,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir',
     fontWeight: '300',
     fontSize: 15
+  },
+  fab: {
+    backgroundColor: '#1AA2B0',
+    width: 56,
+    height: 56,
+    marginTop: 25,
+    marginBottom: 60,
+    right: 5,
+    alignSelf: 'center'
+
   }
+
 
 })
 
