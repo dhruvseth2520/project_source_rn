@@ -36,7 +36,7 @@ export default () => {
       </TouchableOpacity>
     </View>
     <View style={styles.slide4}>
-      <Image style={[styles.image, { width: 300}]} source={require('../../assets/payment.png')} />
+      <Image style={styles.image} source={require('../../assets/payment.png')} />
       <Text style={styles.text}>Get paid for every guest you bring in</Text>
       <TouchableOpacity style={styles.skipButton} onPress={toRegister}>
         <Text style={styles.btnText}>Done</Text>

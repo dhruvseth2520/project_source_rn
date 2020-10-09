@@ -23,7 +23,7 @@ const FilterRange = ({ state, setState, title, icon, unit, step, min, max, label
       from={(
         <Chip icon={icon} compact={true} selectedColor={state.active ? 'white' : 'black'}
           textStyle={{fontFamily: 'Avenir', fontSize: 13}}
-          style={[styles.filterBtn, {backgroundColor: state.active ? '#19D2CC' : '#EAEAEA'}]}
+          style={[styles.filterBtn, {backgroundColor: state.active ? '#19D2CC' : '#EFEFEF'}]}
           onPress={() => setVisible(true)}
         >
           {title}

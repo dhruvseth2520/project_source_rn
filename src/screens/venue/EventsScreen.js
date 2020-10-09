@@ -114,17 +114,12 @@ const VenueEventsScreen = () => {
                 ></FlatList>
           </>
         }
-
-
-
-
       </ScrollView>
       <FAB
         style={styles.fab}
         icon="plus"
-        onPress={() => console.log('Pressed')}
+        onPress={() => navigation.navigate('VenueEventForm')}
       />
-
     </ScrollView>
   )
 }

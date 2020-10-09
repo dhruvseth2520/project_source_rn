@@ -1,5 +1,6 @@
 import { Text, View, StyleSheet, Image, SafeAreaView, TouchableOpacity, StatusBar } from "react-native";
 import React from "react";
+import { FAB } from 'react-native-paper';
 
 const LoginVenueOrPromoterScreen = ({ navigation, route }) => {
     const handlePromoter = () => {
@@ -18,23 +19,30 @@ const LoginVenueOrPromoterScreen = ({ navigation, route }) => {
         <View style={styles.screen}>
             <StatusBar barStyle={'dark-content'} />
             <SafeAreaView style={styles.safeArea}>
-                <View style={styles.heroText}>
-                  <Text style={styles.title}>Welcome to Source</Text>
-                  <Text style={styles.info}>The new way to promote</Text>
+                <View style={styles.heroImage}>
+                  <Image style={styles.image} source={{uri: 'https://www.arystonwebsolution.com/assets/images/Digital/banner.png'}}/>
                 </View>
 
                 <View style={styles.buttonArea}>
                     <Text style={styles.captionText}>Are you a</Text>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.defaultButton} onPress={handlePromoter}>
-                            <Text style={styles.buttonText}>Promoter</Text>
-                        </TouchableOpacity>
+                      <FAB
+                          style={styles.fab}
+                          color="white"
+                          label="Promoter"
+                          icon="account"
+                          onPress={handlePromoter}
+                        />
                     </View>
                     <Text style={styles.captionText}>or a</Text>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.defaultButton} onPress={handleVenue}>
-                            <Text style={styles.buttonText}>Venue</Text>
-                        </TouchableOpacity>
+                        <FAB
+                            style={styles.fab}
+                            color="white"
+                            label="Venue"
+                            icon="map-marker"
+                            onPress={handleVenue}
+                          />
                     </View>
                 </View>
             </SafeAreaView>
@@ -50,55 +58,43 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
     safeArea: {
-        flex: 1,
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: 'stretch',
-        backgroundColor: 'white'
+      flex: 1,
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: 'stretch',
+      backgroundColor: 'white'
     },
-    heroText: {
-      marginTop: 50,
+    fab: {
+      right: 0,
+      bottom: 0,
+      width: 250,
+      marginLeft: 40,
+      backgroundColor: '#19C4C0'
+    },
+    heroImage: {
+      top: 180,
       marginLeft: 30,
       padding: 15,
+
     },
-    title: {
-      color: '#1EC5D6',
-      fontSize: 60,
-      fontFamily: 'Arial Rounded MT Bold'
-    },
-    info: {
-      fontFamily: 'Avenir',
-      marginTop: 10,
-      fontSize: 16,
-      fontWeight: '300'
+    image: {
+      width: '100%',
+      height: 270,
+      left: 0,
+      position: 'absolute',
+      opacity: 0.9
+
     },
     buttonArea: {
       flex: 1,
       justifyContent: 'flex-start',
       alignItems: "center",
-      marginTop: 300
+      marginTop: 500
     },
     buttonContainer: {
-        width: '80%',
-        height: 50,
-        margin: 10,
-    },
-    defaultButton: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: "center",
-        borderRadius: 5,
-        borderColor: '#1AA2B0',
-        backgroundColor: '#1AA2B0',
-        borderWidth: 0.3
-    },
-    buttonText: {
-        flex: 6,
-        color: 'white',
-        textAlign: 'center',
-        fontFamily: 'Avenir',
-        fontSize: 16
+      width: '80%',
+      height: 50,
+      margin: 10,
     },
     captionText: {
       marginBottom: 5,

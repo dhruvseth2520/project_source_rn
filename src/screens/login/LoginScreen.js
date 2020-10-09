@@ -1,8 +1,11 @@
-import { Text, View, StyleSheet, Image, SafeAreaView, TouchableOpacity, StatusBar } from "react-native";
+import { Text, View, StyleSheet, Image, ImageBackground, SafeAreaView, TouchableOpacity, StatusBar } from "react-native";
 import React from "react";
 import * as Google from "expo-google-app-auth";
+import * as Facebook from "expo-facebook";
 import { storeData } from '../../utils/localStorage';
 import env from  "../../utils/environment";
+import { FAB } from 'react-native-paper';
+
 
 const LoginScreen = ({ navigation }) => {
   async function signInWithGoogleAsync() {
@@ -14,7 +17,7 @@ const LoginScreen = ({ navigation }) => {
       });
 
       if (result.type === 'success') {
-        return result;
+        return result.user;
       } else {
         return {
           cancelled: true
@@ -27,43 +30,65 @@ const LoginScreen = ({ navigation }) => {
     }
   }
 
-  const handleGoogle = () => {
+  async function signInWithFacebookAsync() {
+    Facebook.initializeAsync('667100777242989', 'Source')
+    const { type, token } = await Facebook.logInWithReadPermissionsAsync('667100777242989', {
+      permissions: ['public_profile'],
+    });
+    if (type === 'success') {
+      const result = await fetch(
+        `https://graph.facebook.com/me?access_token=${token}`
+      )
 
-    signInWithGoogleAsync().then(response => {
-      fetch(`${env.API_URL}/api/auth/user`, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          userId: response.user.id
-        })
-      }).then(response => response.json()).then(data => {
-        if (!data.registered) {
-          storeData('@userId', data.id).then(() => {
-            navigation.navigate('VoP');
-          });
-        } else {
-          if (data.type === "Promoter") {
-            fetch(`${env.API_URL}/api/promoter/${data.id}`)
-            .then(response => response.json())
-            .then(data => {
-                storeData('@promoterFormData', data).then(() => {
-                  navigation.navigate('PromoterTab');
-                });
-            })
-          } else if (data.type === "Venue") {
-            fetch(`${env.API_URL}/api/venue/${data.id}`)
-            .then(response => response.json())
-            .then(data => {
-                storeData('@venueFormData', data).then(() => {
-                  navigation.navigate('VenueTab');
-                });
-            })
+      return await result.json();
+
+    } else {
+      return {
+        cancelled: true
+      };
+    }
+  }
+
+  const handleLogin = (callback) => {
+    callback().then(response => {
+      if (!response.cancelled) {
+        fetch(`${env.API_URL}/api/auth/user`, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            userId: response.id
+          })
+        }).then(response => response.json()).then(data => {
+          if (!data.registered) {
+            storeData('@userId', data.id).then(() => {
+              navigation.navigate('VoP');
+            });
+          } else {
+            if (data.type === "Promoter") {
+              fetch(`${env.API_URL}/api/promoter/${data.id}`)
+              .then(response => response.json())
+              .then(data => {
+                  storeData('@promoterFormData', data).then(() => {
+                    navigation.navigate('PromoterTab');
+                  });
+              })
+            } else if (data.type === "Venue") {
+              fetch(`${env.API_URL}/api/venue/${data.id}`)
+              .then(response => response.json())
+              .then(data => {
+                  storeData('@venueFormData', data).then(() => {
+                    navigation.navigate('VenueTab');
+                  });
+              })
+            }
           }
-        }
-      })
+        })
+
+      }
+
     });
   }
 
@@ -75,32 +100,29 @@ const LoginScreen = ({ navigation }) => {
     <View style={styles.screen}>
       <StatusBar barStyle={'dark-content'} />
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.logoArea}>
-          <Image style={styles.logoImage} source={require("../../assets/sourceLogo.png")} />
-        </View>
+        <Image style={styles.banner} source={{uri: "https://cdn.dribbble.com/users/66052/screenshots/10007568/social-media-marketing.png"}}></Image>
         <View style={styles.buttonArea}>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={[styles.defaultButton, styles.googleLoginButton]} onPress={handleGoogle}>
-              <Image
-                source={{ uri: "https://avatars1.githubusercontent.com/u/7328930?v=4&s=80" }}
-                style={styles.LoginLogo}
+              <FAB
+                style={[styles.fab, styles.googleLoginButton]}
+                icon="google"
+                label="Sign In with Google"
+                onPress={() => handleLogin(signInWithGoogleAsync)}
+                color="#DB4437"
               />
-              <Text style={styles.googleLoginText}>Sign-in with Google</Text>
-              <View style={{ flex: 1 }} />
-            </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={[styles.defaultButton, styles.facebookLoginButton]} onPress={handleFacebook}>
-              <Image
-                source={{ uri: "https://logodix.com/logo/1185546.png" }}
-                style={styles.LoginLogo}
-              />
-              <Text style={styles.facebookLoginText}>Sign-in with Facebook</Text>
-              <View style={{ flex: 1 }} />
-            </TouchableOpacity>
+            <FAB
+              style={[styles.fab, styles.facebookLoginButton]}
+              icon="facebook"
+              label="Sign In with Facebook"
+              onPress={() => handleLogin(signInWithFacebookAsync)}
+              color="white"
+            />
           </View>
         </View>
       </SafeAreaView>
+
     </View>
   );
 };
@@ -110,12 +132,15 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#fff",
+    flexDirection: 'column',
+    backgroundColor: 'white'
   },
-  backgroundImage: {
+  banner: {
+    width: '100%',
+    height: 350,
     position: 'absolute',
-    height: '100%',
-    width: '100%'
+    top: 150,
+
   },
   safeArea: {
     flex: 1,
@@ -124,53 +149,39 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
   },
   logoArea: {
-    flex: 2,
+    position: 'absolute',
     alignSelf: 'center',
+    top: 150,
   },
-  logoImage: {
-    width: 150,
-    resizeMode: "contain",
-    marginTop: 150
+  title: {
+    fontSize: 64,
+    fontFamily: 'Avenir',
+    fontWeight: '500',
+    color: '#1AA2B0'
   },
   buttonArea: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: "center",
+    top: 580
   },
   buttonContainer: {
     width: '70%',
     height: 50,
-    margin: 10,
-  },
-  defaultButton: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: "center",
-    borderRadius: 2,
-    borderColor: 'black',
-    borderWidth: 0.3,
+    marginVertical: 10
   },
   googleLoginButton: {
-    backgroundColor: 'white',
+    backgroundColor: 'white'
   },
-  LoginLogo: {
-    flex: 1,
-    resizeMode: "contain",
-    padding: 15,
-  },
-  googleLoginText: {
-    flex: 6,
-    color: 'grey',
-    textAlign: 'center'
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    width: 250,
+    right: 0,
+    bottom: 0,
   },
   facebookLoginButton: {
     backgroundColor: '#3b5998',
     borderColor: '#3b5998'
-  },
-  facebookLoginText: {
-    flex: 6,
-    color: 'white',
-    textAlign: 'center'
-  },
+  }
 });
