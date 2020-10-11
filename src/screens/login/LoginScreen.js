@@ -92,10 +92,6 @@ const LoginScreen = ({ navigation }) => {
     });
   }
 
-  const handleFacebook = () => {
-    alert("Not ready")
-  }
-
   return (
     <View style={styles.screen}>
       <StatusBar barStyle={'dark-content'} />

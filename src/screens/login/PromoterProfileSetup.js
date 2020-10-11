@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Picker, KeyboardAvoidingView, ScrollView, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { storeData, getData } from '../../utils/localStorage';
+import { TextInput } from 'react-native-paper';
 import env from "../../utils/environment";
 
 
@@ -62,43 +63,53 @@ const PromoterProfileSetup = ({ route }) => {
     <View style={styles.background}>
             <Text style={styles.title}>Finish setting up your profile</Text>
 
-            <Swiper style={styles.wrapper} loop={false} paginationStyle={{top: 100}} dot={dot} activeDot={activeDot}>
+            <Swiper style={styles.wrapper} loop={false} paginationStyle={{top: 0}} dot={dot} activeDot={activeDot}>
               <View style={styles.slide}>
                 <View style={styles.formCard}>
                   <Text style={styles.sectionTitle}>Profile Info</Text>
-                  <View style={[styles.row, {marginTop: 15}]}>
-                    <View style={styles.column}>
-                      <Text style={styles.inputLabel}>Images</Text>
 
-                    </View>
-                    <View style={styles.column}>
-                      <TextInput style={styles.formInput} value={images} onChangeText={(val) => setImages(val)} />
-                      <Text style={[styles.inputDisclaimer, {top: 12, marginBottom: 10}]}>Upload any images you would like to display on your profile</Text>
+                  <TextInput mode='outlined'
+                    label='Images'
+                    theme={{colors: {primary: '#19C2BD', underlineColor: 'transparent'}}}
+                    selectionColor="#1AA2B0"
+                    style={styles.formInput} value={images} onChangeText={(val) => setImages(val)} />
+                  <Text style={styles.inputDisclaimer}>Upload any images you would like to display on your profile</Text>
 
-                    </View>
-                  </View>
-                  <View style={styles.row}>
-                    <View style={styles.column}>
-                      <Text style={styles.inputLabel}>Profile Bio</Text>
-                    </View>
-                    <View style={styles.column}>
-                      <TextInput autoCapitalize="sentences" style={styles.formInput} value={bio} onChangeText={(val) => setBio(val)} />
-                    </View>
-                  </View>
+                  <TextInput mode='outlined'
+                    label='Profile Bio'
+                    theme={{colors: {primary: '#19C2BD', underlineColor: 'transparent'}}}
+                    selectionColor="#1AA2B0"
+                    style={styles.formInput} value={bio} onChangeText={(val) => setBio(val)} />
                 </View>
               </View>
               <View style={styles.slide}>
                 <View style={styles.formCard}>
                   <Text style={styles.sectionTitle}>Personal Details</Text>
 
-                  <View style={[styles.row, {marginTop: 15}]}>
-                    <View style={styles.column}>
-                      <Text style={styles.inputLabel}>Occupation</Text>
-                    </View>
-                    <View style={styles.column}>
-                      <TextInput autoCapitalize="words" style={styles.formInput} value={occupation} onChangeText={(val) => setOccupation(val)} placeholder="eg. Student, Business Associate"/>
-                    </View>
-                  </View>
+                  <TextInput mode='outlined'
+                    label='Occupation'
+                    theme={{colors: {primary: '#19C2BD', underlineColor: 'transparent'}}}
+                    selectionColor="#1AA2B0"
+                    style={styles.formInput}
+                    placeholder="eg. Student, Business Associate"
+                    value={occupation} onChangeText={(val) => setOccupation(val)} />
+
+                    <Text style={styles.label}>Furthest level of Education</Text>
+                    <Picker style={styles.formSelector}>
+                      <Picker.Item label="High School" value="high school" />
+                      <Picker.Item label="Bachelors" value="bachelors" />
+                      <Picker.Item label="Masters" value="masters" />
+                    </Picker>
+
+                    <TextInput mode='outlined'
+                      label='Furthest Level of Education'
+                      theme={{colors: {primary: '#19C2BD', underlineColor: 'transparent'}}}
+                      selectionColor="#1AA2B0"
+                      style={styles.formInput}
+                      placeholder="High School, Bachelor's or Master's"
+                      value={occupation} onChangeText={(val) => setOccupation(val)} />
+
+
                   <View style={styles.row}>
                     <View style={styles.column}>
                       <Text style={styles.inputLabel}>Education</Text>
@@ -165,9 +176,7 @@ const PromoterProfileSetup = ({ route }) => {
                       <View style={{flexDirection: 'row', width: 190}}>
                         <TextInput style={[styles.formInput, {width: '30%'}]} keyboardType="numeric" value={rate} onChangeText={(val) => setRate(val)} />
                         <TextInput style={[styles.formInput, {width: '70%', marginLeft: 10}]} placeholder="MMK per head" editable={false} />
-
                       </View>
-
                     </View>
                   </View>
                 </View>
@@ -208,42 +217,23 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 19,
     fontFamily: 'Gill Sans',
-    fontWeight: '300'
-  },
-  column: {
-    width: '33%'
-  },
-  row: {
-    flexDirection: 'row',
-    marginBottom: 12
-  },
-  inputLabel: {
-    fontFamily: 'Avenir',
     fontWeight: '300',
-    top: 10,
-    marginLeft: 10
   },
+
   formInput: {
-    width: 200,
-    borderBottomWidth: 0.5,
-    borderColor: 'black',
-    padding: 5,
-    top: 1,
+    backgroundColor: '#FFFFFF',
     fontFamily: 'Avenir',
     fontSize: 13,
-    color: '#424242'
-  },
-  wrapper: {
+    marginTop: 10,
+    height: 50,
+    padding: 4,
+    width: '95%'
   },
   slide: {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text: {
-    color: '#fff',
-    fontSize: 30,
-    fontWeight: 'bold'
-  },
+
   submit: {
     top: 20,
     left: -12,
@@ -263,8 +253,9 @@ const styles = StyleSheet.create({
   inputDisclaimer: {
     fontSize: 12,
     color: 'gray',
-    width: 230,
-    top: 50
+    width: '95%',
+    left: 5,
+    marginTop: 6,
   }
 })
 
