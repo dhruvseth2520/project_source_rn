@@ -9,14 +9,6 @@ import { getData } from "../../utils/localStorage";
 import { FAB } from 'react-native-paper';
 
 
-/*
-<TouchableOpacity style={styles.addBtn} onPress={() => navigation.navigate('VenueEventForm')}>
-  <FontAwesome5 name="plus" style={{alignSelf: 'center', fontSize: 16, marginTop: 19, color: 'white'}} color="black" />
-</TouchableOpacity>
-
-*/
-
-
 const VenueEventsScreen = () => {
   const [events, setEvents] = useState([]);
   const [upcomingEvents, setUpcomingEvents] = useState([]);
