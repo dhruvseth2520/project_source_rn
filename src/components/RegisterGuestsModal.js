@@ -14,6 +14,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Searchbar } from 'react-native-paper';
 import NumericInput from 'react-native-numeric-input'
 import { getData } from "../utils/localStorage";
+import { FAB } from 'react-native-paper';
 import env from '../utils/environment';
 
 
@@ -23,14 +24,11 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
   const [count, setCount] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
 
-
   useEffect(() => {
     fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
       setPromoters(data);
     })
-
   }, []);
-
 
   const handleSubmit = () => {
     setErrorMessage("");
@@ -48,7 +46,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
               const attendance = {
                 venueName: response.venueName,
                 promoterId: promoter._id,
-                promoterName: promoter.firstName + " " + promoter.lastName,
+                promoterName: promoter.firstName + " (" + promoter.promoterCode + ")",
                 eventId: event._id,
                 eventName: event.eventName,
                 guestCount: count,
@@ -62,11 +60,13 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
                     'Content-Type': 'application/json'
                   },
                   body: JSON.stringify(attendance)
+              }).then(response => response.json()).then(data => {
+                if (data.status === "Success") {
+                  setQuery("");
+                  setCount(1);
+                  setModalVisible(!modalVisible);
+                }
               })
-
-              setQuery("");
-              setCount(1);
-              setModalVisible(!modalVisible);
             })
             return null;
         }
@@ -84,8 +84,6 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
           Alert.alert("Modal has been closed.");
         }}
       >
-
-
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
               <TouchableOpacity style={styles.closeButton} onPress={() => {
@@ -107,8 +105,8 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
                 placeholder="Promoter Name">
               </Searchbar>
 
-
               {query ?  <FlatList
+                           style={{maxHeight: 120}}
                            data={promoters}
                            keyExtractor={item => item.firstName}
                            extraData={query}
@@ -118,7 +116,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
                              if (display.toLowerCase().startsWith(query.toLowerCase())) {
                                return <TouchableOpacity onPress={() => setQuery(display)}>
                                  <View style={styles.listItem}>
-                                   <Text style={{marginLeft: 10}}>{display}</Text>
+                                   <Text style={{marginLeft: 10, top: 2}}>{display}</Text>
                                  </View>
                               </TouchableOpacity>
                              }
@@ -132,7 +130,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
                   onChange={value => setCount(value)}
                   containerStyle={styles.numericInput}
                   totalWidth={220}
-                  totalHeight={42}
+                  totalHeight={45}
                   minValue={1}
                   step={1}
                   valueType='real'
@@ -140,18 +138,19 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
                   textColor='#525252'
                   iconStyle={{ color: 'white' }}
                   borderColor='white'
-                  rightButtonBackgroundColor='#5ACDF6'
-                  leftButtonBackgroundColor='#5ACBD6'
+                  rightButtonBackgroundColor='#79DBFE'
+                  leftButtonBackgroundColor='#DBDBDB'
               />
 
               {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : <></>}
 
-              <TouchableHighlight
-                style={{ ...styles.openButton, backgroundColor: "#1AA2B0" }}
+              <FAB
+                style={styles.submitButton}
+                label="Submit"
+                color="white"
+                icon="check"
                 onPress={handleSubmit}
-              >
-                <Text style={styles.textStyle}>Submit</Text>
-              </TouchableHighlight>
+              />
           </View>
         </View>
       </Modal>
@@ -184,13 +183,11 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5
   },
-  openButton: {
-
-    borderRadius: 20,
-    padding: 10,
+  submitButton: {
+    marginTop: 15,
+    left: 3,
     elevation: 2,
-    marginTop: 10,
-    marginLeft: 5
+    backgroundColor: '#25BDCC'
   },
   textStyle: {
     color: "white",
@@ -208,12 +205,13 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 10,
     marginBottom: 15,
-    width: '100%'
+    width: '100%',
+    elevation: 2
   },
   listItem: {
     borderBottomColor: '#26a69a',
     borderBottomWidth: 1,
-    paddingBottom: 12,
+    paddingBottom: 16,
     width: 220,
     marginTop: 10
   },
@@ -244,8 +242,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
   }
-
-
 });
 
 export default RegisterGuestsModal;

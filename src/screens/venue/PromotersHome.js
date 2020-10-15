@@ -69,7 +69,9 @@ const VenuePromotersHome = () => {
         const availabilityMatch = promoter.promoterProfile.availability >= availability.filterValue;
         const connectionsMatch = promoter.promoterProfile.numConnections >= connections.filterValue;
 
-        const promoterGuestCount = (promoter.ledger.map(entry => entry.guestCount)).reduce((acc, curr) => acc + curr, 0);
+        // const promoterGuestCount = (promoter.ledger.map(entry => entry.guestCount)).reduce((acc, curr) => acc + curr, 0);
+
+        const promoterGuestCount = 55;
         const clientsMatch = promoterGuestCount >= clients.filterValue;
 
         let languagesMatch = true;

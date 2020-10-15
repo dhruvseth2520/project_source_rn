@@ -2,6 +2,7 @@ import React from "react";
 import {
   Alert,
   Modal,
+  Image,
   StyleSheet,
   Text,
   TouchableHighlight,
@@ -33,7 +34,7 @@ const ErrorModal = ({ modalVisible, setModalVisible, errorMessage }) => {
               </TouchableOpacity>
               <View style={{flexDirection: 'row', marginLeft: -10}}>
                 <Text style={styles.title}>We're Sorry</Text>
-                <FontAwesome5 name="sad-cry" style={{color: '#ffcb4c', alignSelf: 'center', fontSize: 18, left: 5, top: -8}} />
+                <Image source={{uri: "https://www.communicateonline.me/wp-content/uploads/2018/03/Sad-emoji.jpg"}} style={{alignSelf: 'center', width: 24, height: 24, left: 5, top: -9}} />
               </View>
               <Text style={styles.message}>{errorMessage}</Text>
             </View>

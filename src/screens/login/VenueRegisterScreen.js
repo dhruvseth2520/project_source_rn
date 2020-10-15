@@ -55,7 +55,7 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
       }).then(response => response.json()).then(data => {
         if (data.status === "Success") {
           setErrorMessage("");
-          storeData('@venueFormData', venueData).then(() => {
+          storeData('@venueFormData', data.venue).then(() => {
             navigation.navigate('VenueTab');
           });
         }

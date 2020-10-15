@@ -7,14 +7,6 @@ KeyboardAvoidingView } from 'react-native';
 import { storeData, getData } from '../../utils/localStorage';
 
 const LoginPromoterRegisterScreen = ({ navigation }) => {
-
-
-    /* const handlerRegister = () => {
-        navigation.reset({
-            routes: [{ name: 'PromoterTab' }]
-        })
-    } */
-
     const handleSubmit = () => {
       const formData = {
         firstName,

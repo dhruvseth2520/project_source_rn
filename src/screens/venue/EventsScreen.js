@@ -30,7 +30,7 @@ const VenueEventsScreen = () => {
 
   const fetchData = () => {
     getData('@venueFormData').then(response => {
-      fetch(`${env.API_URL}/api/events/${response.venueId}`).then(response => response.json()).then(data => {
+      fetch(`${env.API_URL}/api/events/${response._id}`).then(response => response.json()).then(data => {
         const currentDate = new Date();
         let upcomingArr = [];
         let pastArr = [];
@@ -45,14 +45,10 @@ const VenueEventsScreen = () => {
         setUpcoming(true);
         setPast(false);
         setUpcomingEvents(upcomingArr);
-
         setEvents(upcomingArr);
         setPastEvents(pastArr);
       })
-
     })
-
-
   }
 
   const handlePress = (btn) => {
@@ -69,10 +65,7 @@ const VenueEventsScreen = () => {
         setEvents(pastEvents);
       }
     }
-
   }
-
-
 
   return (
     <ScrollView style={styles.background} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always">
@@ -191,12 +184,11 @@ const styles = StyleSheet.create({
     height: 56,
     marginTop: 25,
     marginBottom: 60,
+    elevation: 5,
+    left: 5,
     right: 5,
     alignSelf: 'center'
-
   }
-
-
 })
 
 export default VenueEventsScreen;

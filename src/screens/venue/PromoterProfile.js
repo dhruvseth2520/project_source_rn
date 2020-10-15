@@ -13,7 +13,6 @@ const VenuePromoterProfile = ({ route }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
 
-  const guestCount = (promoter.ledger.map(entry => entry.guestCount)).reduce((acc, curr) => acc + curr, 0);
 
   return (
     <ScrollView style={styles.background}>
@@ -37,7 +36,6 @@ const VenuePromoterProfile = ({ route }) => {
       />
 
       <View style={styles.profileHeader}>
-
             <Text style={styles.name}>{promoter.firstName + ", " + promoter.age}</Text>
             <Text style={styles.role}>{promoterProfile.occupation}</Text>
             {promoter.badge ? (
@@ -59,7 +57,7 @@ const VenuePromoterProfile = ({ route }) => {
         <View style={styles.profileStats}>
           <View style={styles.stat}>
             <View style={{flexDirection: 'row'}}>
-                <Text style={styles.statNumber}>{guestCount}</Text>
+                <Text style={styles.statNumber}>{promoter.promoterProfile.guestCount}</Text>
                 <FontAwesome5 style={styles.statIcon} name="briefcase"></FontAwesome5>
             </View>
             <Text style={styles.statCaption}>Clients Sourced</Text>

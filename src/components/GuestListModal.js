@@ -12,7 +12,6 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 
-
 const GuestListModal = ({ modalVisible, setModalVisible, event, guests, setGuests }) => {
     const navigation = useNavigation();
 
@@ -32,7 +31,6 @@ const GuestListModal = ({ modalVisible, setModalVisible, event, guests, setGuest
                 <FontAwesome5 name="times" style={{color: 'gray', alignSelf: 'center', fontSize: 15, top: 8}} />
               </TouchableOpacity>
               <Text style={styles.title}>Guest List for {event.eventName}</Text>
-
                 <View style={styles.tableHeader}>
                   <View style={{width: '45%'}}>
                     <Text style={styles.tableHeaderText}>Promoter</Text>
@@ -63,7 +61,6 @@ const GuestListModal = ({ modalVisible, setModalVisible, event, guests, setGuest
                             </View>
                           </View>
                         </>
-
                     )}
                     >
                   </FlatList>
@@ -80,6 +77,7 @@ const GuestListModal = ({ modalVisible, setModalVisible, event, guests, setGuest
                   <View style={{width: '30%'}}>
                     <Text style={styles.tableHeaderText}>{guests.reduce((sum, guest) => sum + guest.payable, 0)}</Text>
                   </View>
+
                 </View>
             </View>
           </View>

@@ -20,7 +20,7 @@ const LoginVenueOrPromoterScreen = ({ navigation, route }) => {
             <StatusBar barStyle={'dark-content'} />
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.heroImage}>
-                  <Image style={styles.image} source={{uri: 'https://www.arystonwebsolution.com/assets/images/Digital/banner.png'}}/>
+                  <Image style={styles.image} source={require('../../assets/vopbanner.png')}/>
                 </View>
 
                 <View style={styles.buttonArea}>

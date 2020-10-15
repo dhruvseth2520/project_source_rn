@@ -39,9 +39,7 @@ const LoginScreen = ({ navigation }) => {
       const result = await fetch(
         `https://graph.facebook.com/me?access_token=${token}`
       )
-
       return await result.json();
-
     } else {
       return {
         cancelled: true
@@ -86,9 +84,7 @@ const LoginScreen = ({ navigation }) => {
             }
           }
         })
-
       }
-
     });
   }
 

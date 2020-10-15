@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { FAB } from 'react-native-paper';
 import RegisterGuestsModal from "./RegisterGuestsModal";
 import GuestListModal from "./GuestListModal";
 import ErrorModal from "./ErrorModal";
@@ -20,7 +21,7 @@ const EventCard = ({ event, refreshEvents }) => {
     fetchData();
   }, [guestListVisible, modalVisible]);
 
-  const fetchData = (type) => {
+  const fetchData = () => {
     fetch(`${env.API_URL}/api/events/attendance/event/${event._id}`)
     .then(response => response.json())
     .then(data => {
@@ -37,7 +38,8 @@ const EventCard = ({ event, refreshEvents }) => {
 
   const deleteEvent = () => {
     const currentDate = new Date();
-    const difference = new Date(event.date).getDate() - currentDate.getDate();
+    const difference = (new Date(event.date).getTime() - currentDate.getTime()) / (1000 * 3600 * 24);
+
     if (difference >= 0 && difference <= 3) {
       setErrorMessage("Events can't be deleted within 3 days of the event date");
       setErrorModalVisible(true);
@@ -54,8 +56,6 @@ const EventCard = ({ event, refreshEvents }) => {
         }
       })
     }
-
-
   }
 
   const viewEvent = () => {
@@ -72,18 +72,18 @@ const EventCard = ({ event, refreshEvents }) => {
             <Text style={styles.eventName}>{event.eventName}</Text>
             <Text style={styles.eventDate}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
 
-            <View style={{flexDirection: 'row', marginBottom: 15}}>
+            <View style={{flexDirection: 'row', marginTop: 5, marginBottom: 5, marginLeft: -8}}>
               <TouchableOpacity style={styles.registerBtn} onPress={() => setModalVisible(true)}>
                 <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.btnText}>Register Guests</Text>
                   <FontAwesome5 style={styles.btnIcon} name="edit"></FontAwesome5>
+                  <Text style={styles.btnText}>Register Guests</Text>
                 </View>
               </TouchableOpacity>
-              {guests.length !== 0 ? (
+              {guests.length > 0 ? (
                 <TouchableOpacity style={[styles.registerBtn, { marginLeft: 8, width: 125, borderColor: '#1A7DB0'}]} onPress={() => setGuestListVisible(true)}>
                     <View style={{flexDirection: 'row'}}>
-                      <Text style={[styles.btnText, {color: '#1A7DB0'}]}>View Guest List</Text>
-                      <FontAwesome5 style={[styles.btnIcon, { top: 5, right: 6, color: '#1A7DB0'}]} name="receipt"></FontAwesome5>
+                      <FontAwesome5 style={[styles.btnIcon, { top: 5, color: '#1A7DB0'}]} name="receipt"></FontAwesome5>
+                      <Text style={[styles.btnText, {left: 19, color: '#1A7DB0'}]}>View Guest List</Text>
                     </View>
                 </TouchableOpacity>
               ) : <></>}
@@ -171,7 +171,6 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     flexDirection: 'row',
-    marginBottom: 13,
     marginTop: 3
   },
   circularBtn: {
@@ -182,27 +181,25 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   registerBtn: {
-    width: 130,
-    height: 35,
-    borderColor: '#218A95',
-    borderWidth: 1,
-    borderRadius: 6,
-    marginTop: 10
+    width: 120,
+    height: 40,
+    marginRight: 7
   },
   btnText: {
     fontFamily: 'Avenir',
     alignSelf: 'flex-start',
+    fontSize: 15,
     top: 7,
-    left: 6,
+    left: 16,
     fontWeight: '300',
     color: '#218A95'
   },
   btnIcon: {
     alignSelf: 'flex-end',
-    fontSize: 17,
+    fontSize: 18,
     color: '#218A95',
-    top: 5,
-    left: 11
+    top: 4,
+    left: 12
   }
 })
 

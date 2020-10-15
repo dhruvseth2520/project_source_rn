@@ -5,6 +5,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { View, ScrollView, Text, StyleSheet, TextInput, Picker, TouchableOpacity,
 KeyboardAvoidingView } from 'react-native';
 import { getData } from '../../utils/localStorage';
+import { FAB } from 'react-native-paper';
 import env from '../../utils/environment';
 
 const VenueNewEventForm = ({ route }) => {
@@ -29,7 +30,7 @@ const VenueNewEventForm = ({ route }) => {
   const handleSubmit = () => {
       getData('@venueFormData').then(response => {
         const eventForm = {
-          venueId: response.venueId,
+          venueId: response._id,
           eventName: eventName.trim(),
           category,
           description,
@@ -155,22 +156,21 @@ const VenueNewEventForm = ({ route }) => {
           </View>
 
           <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[styles.submitButton, { backgroundColor: '#DA0000', borderColor: '#DA0000' }]}
-                title="Cancel"
-                onPress={() => navigation.navigate('VenueEventsHome')}>
-                 <Text style={styles.buttonText}>
-                   Cancel
-                 </Text>
-                 <FontAwesome5 name="times" style={[styles.check, { marginLeft: 45}]}/>
-              </TouchableOpacity>
+              <FAB
+                style={[styles.submitButton, {backgroundColor: '#DFDFDF', borderColor: '#DFDFDF'}]}
+                label="Cancel"
+                icon="cancel"
+                onPress={() => navigation.navigate('VenueEventsHome')}
+              />
 
-              <TouchableOpacity style={styles.submitButton} title="Submit" onPress={handleSubmit}>
-                 <Text style={styles.buttonText}>
-                   {action}
-                 </Text>
-                 <FontAwesome5 name="plus" style={styles.check}/>
-              </TouchableOpacity>
+              <FAB
+                style={styles.submitButton}
+                label="Submit"
+                icon="check"
+                color="white"
+                onPress={handleSubmit}
+              />
+
           </View>
 
         </ScrollView>
@@ -263,10 +263,9 @@ const styles = StyleSheet.create({
   submitButton: {
     height: 50,
     width: 160,
-    backgroundColor: '#1AA2B0',
-    borderColor: '#1AA2B0',
+    backgroundColor: '#22C2D2',
+    borderColor: '#22C2D2',
     borderWidth: 1,
-    borderRadius: 4,
     marginTop: 15,
     alignSelf: 'center',
     marginRight: 10
