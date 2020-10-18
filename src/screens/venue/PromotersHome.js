@@ -4,6 +4,7 @@ import PromoterCard from "../../components/PromoterCard";
 import Header from "../../components/Header";
 import { getData } from "../../utils/localStorage";
 import { FontAwesome5 } from '@expo/vector-icons';
+import { Searchbar } from 'react-native-paper';
 import { Button } from 'react-native-paper';
 import env from "../../utils/environment";
 import FilterGrid from "../../components/FilterGrid";
@@ -42,8 +43,6 @@ const VenuePromotersHome = () => {
     filterValue: 0
   });
 
-
-
   useEffect(() => {
     fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
       setPromoterData(data);
@@ -68,11 +67,7 @@ const VenuePromotersHome = () => {
         const priceMatch = promoter.promoterProfile.expectedRate <= price.filterValue;
         const availabilityMatch = promoter.promoterProfile.availability >= availability.filterValue;
         const connectionsMatch = promoter.promoterProfile.numConnections >= connections.filterValue;
-
-        // const promoterGuestCount = (promoter.ledger.map(entry => entry.guestCount)).reduce((acc, curr) => acc + curr, 0);
-
-        const promoterGuestCount = 55;
-        const clientsMatch = promoterGuestCount >= clients.filterValue;
+        const clientsMatch = promoter.promoterProfile.guestCount >= clients.filterValue;
 
         let languagesMatch = true;
         const filteredLanguages = languages.filterValue.map(lang => lang.value);
@@ -97,17 +92,16 @@ const VenuePromotersHome = () => {
                   <Text style={styles.description}>Our network of young promoters will use their social media influence and personal network to get your {venue.venueCategory} the traffic you seek</Text>
 
                   <Text style={styles.subTitle}>Top Promoters in the area</Text>
-                  <View style={styles.searchBar}>
-                    <Image source={require('../../assets/searchIcon.png')} style={styles.searchIcon}/>
 
-                    <TextInput
-                      style={styles.searchInput}
-                      placeholder="Search Promoters"
-                      autoCorrect={false}
-                      value={query}
-                      onChangeText={(val) => setQuery(val)}>
-                    </TextInput>
-                  </View>
+                  <Searchbar
+                    style={styles.searchInput}
+                    inputStyle={styles.inputText}
+                    placeholder="Search Promoters"
+                    value={query}
+                    iconColor="#1AA2B0"
+                    selectionColor="#1AA2B0"
+                    onChangeText={(val) => setQuery(val)}
+                  />
 
                   <FilterGrid
                     price={price} setPrice={setPrice}
@@ -172,18 +166,19 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 5,
     borderRadius: 20,
-    borderWidth: 0.5,
+    elevation: 2,
     flexDirection: 'row'
   },
   searchInput: {
-    left: 14,
-    top: 8,
-    width: '80%',
-    height: 30,
-    fontSize: 16,
-    fontFamily: 'Avenir',
-    padding: 5,
-    fontWeight: '300'
+    width: '84%',
+    marginVertical: 15,
+    top: 5,
+    left: 33,
+    elevation: 3,
+    borderRadius: 25
+  },
+  inputText: {
+    fontSize: 16
   },
   searchIcon: {
     top: 10,

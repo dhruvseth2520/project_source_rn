@@ -88,24 +88,24 @@ const EventCard = ({ event, refreshEvents }) => {
                 </TouchableOpacity>
               ) : <></>}
             </View>
-
-
           </View>
+
+
           <View style={styles.rightCol}>
             <View style={styles.btnContainer}>
                 <TouchableOpacity onPress={viewEvent}>
-                  <View style={[styles.circularBtn, {borderColor: '#1AA2B0'}]}>
-                    <FontAwesome5 name="book-open" style={{alignSelf: 'center', marginTop: 11, color: '#1AA2B0'}}/>
+                  <View style={styles.circularBtn}>
+                    <FontAwesome5 name="book-open" style={styles.cardIcon}/>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={editEvent}>
-                  <View style={[styles.circularBtn, {borderColor: '#1AA2B0'}]}>
-                    <FontAwesome5 name="pen" style={{alignSelf: 'center', marginTop: 11, color: '#1AA2B0'}}/>
+                  <View style={styles.circularBtn}>
+                    <FontAwesome5 name="pen" style={styles.cardIcon}/>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={deleteEvent}>
-                  <View style={[styles.circularBtn, {borderColor: '#1AA2B0'}]}>
-                    <FontAwesome5 name="trash" style={{alignSelf: 'center', marginTop: 11, color: '#1AA2B0'}}/>
+                  <View style={styles.circularBtn}>
+                    <FontAwesome5 name="trash" style={styles.cardIcon}/>
                   </View>
                 </TouchableOpacity>
             </View>
@@ -134,27 +134,28 @@ const EventCard = ({ event, refreshEvents }) => {
 const styles = StyleSheet.create({
   card: {
     marginTop: 10,
-    borderBottomWidth: 0.5,
-    borderColor: 'gray',
     width: 350,
-    marginBottom: 10
+    marginBottom: 10,
+    borderBottomWidth: 0.5,
+    borderBottomColor: 'gray'
   },
   cardContent: {
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   leftCol: {
-    marginTop: 8,
+    marginTop: 12,
     width: '60%'
   },
   rightCol: {
-    marginTop: 8
+    marginTop: 12
   },
   eventImage: {
     width: 350,
-    height: 190
+    height: 190,
+    left: 1,
   },
   eventName: {
     fontFamily: 'Avenir',
@@ -178,7 +179,9 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 36,
-    marginRight: 10
+    borderColor: '#1AA2B0',
+    marginRight: 10,
+    borderColor: '#2395A0'
   },
   registerBtn: {
     width: 120,
@@ -194,10 +197,15 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     color: '#218A95'
   },
+  cardIcon: {
+    alignSelf: 'center',
+    marginTop: 11,
+    color: '#2395A0'
+  },
   btnIcon: {
     alignSelf: 'flex-end',
     fontSize: 18,
-    color: '#218A95',
+    color: '#2395A0',
     top: 4,
     left: 12
   }

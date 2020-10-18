@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { ScrollView, SafeAreaView, Image, View, Text, StyleSheet, TouchableOpacity, TouchableHighlight, FlatList } from 'react-native';
+import { ScrollView, ActivityIndicator, SafeAreaView, Image, View, Text, StyleSheet, TouchableOpacity, TouchableHighlight, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import EventCard from "../../components/EventCard";
 import Header from "../../components/Header";
@@ -10,21 +10,18 @@ import { FAB } from 'react-native-paper';
 
 
 const VenueEventsScreen = () => {
-  const [events, setEvents] = useState([]);
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
-
+  const [isLoading, setLoading] = useState(true);
   const [isUpcoming, setUpcoming] = useState(true);
   const [isPast, setPast] = useState(false);
   const navigation = useNavigation();
 
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      setUpcoming(true);
-      setPast(false);
       fetchData();
     });
-
     return unsubscribe;
   }, [])
 
@@ -42,11 +39,9 @@ const VenueEventsScreen = () => {
             pastArr.push(event);
           }
         })
-        setUpcoming(true);
-        setPast(false);
         setUpcomingEvents(upcomingArr);
-        setEvents(upcomingArr);
         setPastEvents(pastArr);
+        setLoading(false);
       })
     })
   }
@@ -56,13 +51,11 @@ const VenueEventsScreen = () => {
       if (!isUpcoming) {
         setUpcoming(true);
         setPast(false);
-        setEvents(upcomingEvents);
       }
     } else if (btn === 'Past') {
       if (!isPast) {
         setUpcoming(false);
         setPast(true);
-        setEvents(pastEvents);
       }
     }
   }
@@ -75,30 +68,31 @@ const VenueEventsScreen = () => {
       <Text style={styles.subTitle}>Your Events</Text>
 
       <ScrollView style={styles.eventContainer}>
+        {isLoading ? (<ActivityIndicator size="large" style={{alignSelf: 'center', left: -11, marginTop: 20, marginBottom: 20}}></ActivityIndicator>) : (<>
+          {upcomingEvents.length === 0 && pastEvents.length === 0
+            ? <Text style={{fontFamily: "Avenir", fontWeight: '300', marginTop: 5}}>You have no events to show yet. Add your first now!</Text>
+            :
+            <>
+                <View style={styles.btnContainer}>
+                  <TouchableOpacity style={styles.tabButton} onPress={() => handlePress('Upcoming')}>
+                    <Text style={isUpcoming ? styles.active : styles.btnText}>Upcoming</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.tabButton} onPress={() => handlePress('Past')}>
+                    <Text style={isPast ? styles.active : styles.btnText}>Past</Text>
+                  </TouchableOpacity>
+                </View>
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={isUpcoming ? upcomingEvents : pastEvents}
+                    keyExtractor={event => event.eventName}
+                    renderItem={({ item }) => {
+                      // Only render events that are occuring today or in the future here
+                      return <EventCard event={item} refreshEvents={fetchData} />
+                    }}
+                  ></FlatList>
+            </>}
+        </>)}
 
-        {upcomingEvents.length === 0
-          ? <Text style={{fontFamily: "Avenir", fontWeight: '300', marginTop: 5}}>You have no events to show yet. Add your first now!</Text>
-          :
-          <>
-              <View style={styles.btnContainer}>
-                <TouchableOpacity style={styles.tabButton} onPress={() => handlePress('Upcoming')}>
-                  <Text style={isUpcoming ? styles.active : styles.btnText}>Upcoming</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.tabButton} onPress={() => handlePress('Past')}>
-                  <Text style={isPast ? styles.active : styles.btnText}>Past</Text>
-                </TouchableOpacity>
-              </View>
-              <FlatList
-                  showsVerticalScrollIndicator={false}
-                  data={events}
-                  keyExtractor={event => event.eventName}
-                  renderItem={({ item }) => {
-                    // Only render events that are occuring today or in the future here
-                    return <EventCard event={item} refreshEvents={fetchData} />
-                  }}
-                ></FlatList>
-          </>
-        }
       </ScrollView>
       <FAB
         style={styles.fab}

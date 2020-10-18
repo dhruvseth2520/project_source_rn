@@ -122,7 +122,8 @@ const styles = StyleSheet.create({
   profileHeader: {
     marginLeft: 18,
     marginTop: 18,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    paddingVertical: 0
   },
   profileContent: {
     marginTop: 25,
@@ -142,7 +143,8 @@ const styles = StyleSheet.create({
     width: 360,
     marginTop: 5,
     borderColor: 'gray',
-    borderBottomWidth: 0.5
+    borderBottomWidth: 0.5,
+    paddingVertical: 0
   },
   contentCol: {
     marginTop: 15,

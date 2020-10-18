@@ -36,8 +36,6 @@ const PromoterCard = ({ promoter }) => {
                 </View>
             </View>
         </TouchableOpacity>
-
-
     </>
   )
 }
@@ -46,7 +44,7 @@ const styles = StyleSheet.create({
   card: {
     height: 320,
     width: 190,
-    marginRight: 8,
+    marginRight: 5,
     flexDirection: 'column',
   },
   profileImg: {

@@ -17,7 +17,6 @@ import { getData } from "../utils/localStorage";
 import { FAB } from 'react-native-paper';
 import env from '../utils/environment';
 
-
 const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
   const [query, setQuery] = useState("");
   const [promoters, setPromoters] = useState([]);
@@ -44,7 +43,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
         if (promoterUser.toLowerCase() === query.toLowerCase()) {
             getData('@venueFormData').then(response => {
               const attendance = {
-                venueName: response.venueName,
+                venueId: response._id,
                 promoterId: promoter._id,
                 promoterName: promoter.firstName + " (" + promoter.promoterCode + ")",
                 eventId: event._id,
@@ -102,6 +101,8 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
                 value={query}
                 style={styles.promoterSearch}
                 fontSize={15}
+                selectionColor="#1AA2B0"
+                iconColor="#1AA2B0"
                 placeholder="Promoter Name">
               </Searchbar>
 
@@ -138,7 +139,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
                   textColor='#525252'
                   iconStyle={{ color: 'white' }}
                   borderColor='white'
-                  rightButtonBackgroundColor='#79DBFE'
+                  rightButtonBackgroundColor='#A4A4A4'
                   leftButtonBackgroundColor='#DBDBDB'
               />
 
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     left: 3,
     elevation: 2,
-    backgroundColor: '#25BDCC'
+    backgroundColor: '#22C2D2'
   },
   textStyle: {
     color: "white",
@@ -206,7 +207,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 15,
     width: '100%',
-    elevation: 2
+    elevation: 2,
+    borderRadius: 24
   },
   listItem: {
     borderBottomColor: '#26a69a',
