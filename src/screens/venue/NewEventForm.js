@@ -141,7 +141,7 @@ const VenueNewEventForm = ({ route }) => {
             </View>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Promoter Fees</Text>
-              <Text style={styles.comment}>The per head fee promoters will get for promoting this event. This incentivizes promoters to share your event with their network</Text>
+              <Text style={styles.comment}>The per head fee promoters will get for bringing guests to your event. This incentivizes promoters to share your event with their network</Text>
               <View style={{flexDirection: 'row'}}>
                   <TextInput
                     onChangeText={(val) => setFees(val)}
@@ -151,6 +151,7 @@ const VenueNewEventForm = ({ route }) => {
                   />
                   <TextInput style={[styles.input, { width: '25%', marginLeft: 18}]} autoCapitalize="none" value="MMK" editable={false}/>
               </View>
+              <Text style={[styles.comment, {marginTop: 15, color: '#FFB600'}]}>10% of this fee is a fixed charge for our services. The remaining 90% goes to the promoter</Text>
             </View>
 
           </View>

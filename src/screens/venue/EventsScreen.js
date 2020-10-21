@@ -32,8 +32,9 @@ const VenueEventsScreen = () => {
         let upcomingArr = [];
         let pastArr = [];
         data.forEach(event => {
-          const difference = new Date(event.date).getDate() - currentDate.getDate();
-          if (difference >= 0) {
+          const difference = new Date(event.date) - currentDate;
+
+          if (difference >= 1) {
             upcomingArr.push(event);
           } else {
             pastArr.push(event);
@@ -81,15 +82,19 @@ const VenueEventsScreen = () => {
                     <Text style={isPast ? styles.active : styles.btnText}>Past</Text>
                   </TouchableOpacity>
                 </View>
-                <FlatList
-                    showsVerticalScrollIndicator={false}
-                    data={isUpcoming ? upcomingEvents : pastEvents}
-                    keyExtractor={event => event.eventName}
-                    renderItem={({ item }) => {
-                      // Only render events that are occuring today or in the future here
-                      return <EventCard event={item} refreshEvents={fetchData} />
-                    }}
+
+                {isUpcoming && upcomingEvents.length === 0 ? (
+                  <Text style={{fontFamily: "Avenir", fontWeight: '300', marginTop: 5}}>You have no upcoming events. Add one now!</Text>
+                ) : (
+                  <FlatList
+                      showsVerticalScrollIndicator={false}
+                      data={isUpcoming ? upcomingEvents : pastEvents}
+                      keyExtractor={event => event.eventName}
+                      renderItem={({ item }) => {
+                        return <EventCard event={item} refreshEvents={fetchData} />
+                      }}
                   ></FlatList>
+                )}
             </>}
         </>)}
 

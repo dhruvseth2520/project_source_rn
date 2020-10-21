@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Image, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
 import PromoterCard from "../../components/PromoterCard";
 import Header from "../../components/Header";
+import { useNavigation } from '@react-navigation/native';
+
 import { getData } from "../../utils/localStorage";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Searchbar } from 'react-native-paper';
@@ -43,11 +45,18 @@ const VenuePromotersHome = () => {
     filterValue: 0
   });
 
+  const navigation = useNavigation();
+
   useEffect(() => {
-    fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
-      setPromoterData(data);
-      setPromoters(data);
-    })
+    const unsubscribe = navigation.addListener('focus', () => {
+      setQuery("");
+      fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
+        setPromoterData(data);
+        setPromoters(data);
+      })
+    });
+    return unsubscribe;
+
   }, [])
 
   useEffect(() => {

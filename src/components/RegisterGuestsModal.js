@@ -46,10 +46,11 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
                 venueId: response._id,
                 promoterId: promoter._id,
                 promoterName: promoter.firstName + " (" + promoter.promoterCode + ")",
+                promoterAvatar: promoter.promoterProfile.images[0],
                 eventId: event._id,
                 eventName: event.eventName,
                 guestCount: count,
-                amount: event.fees * count
+                amount: (event.serviceFees + event.promoterFees) * count
               }
 
               fetch(`${env.API_URL}/api/events/attendance`, {
@@ -155,8 +156,6 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
           </View>
         </View>
       </Modal>
-
-
   );
 };
 

@@ -45,6 +45,7 @@ const GuestListModal = ({ modalVisible, setModalVisible, event, guests, setGuest
 
                 <View style={styles.tableContent}>
                   <FlatList
+                    showsVerticalScrollIndicator={false}
                     data={guests}
                     keyExtractor={guest => guest._id}
                     renderItem={({ item }) => (
@@ -57,7 +58,7 @@ const GuestListModal = ({ modalVisible, setModalVisible, event, guests, setGuest
                               <Text style={styles.tableData}>{item.guestCount}</Text>
                             </View>
                             <View style={{width: '30%'}}>
-                              <Text style={styles.tableData}>{item.payable}</Text>
+                              <Text style={styles.tableData}>{item.recievable}</Text>
                             </View>
                           </View>
                         </>

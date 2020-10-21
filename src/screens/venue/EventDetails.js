@@ -60,7 +60,7 @@ const EventDetails = ({ route }) => {
             <Text style={styles.venueName}>{venue.venueName}</Text>
             <Text style={styles.address}>{venue.venueAddress}</Text>
           </View>
-          
+
         </View>
       </View>
 
@@ -79,7 +79,7 @@ const EventDetails = ({ route }) => {
         </View>
         <View style={[styles.eventDetail, {marginBottom: 10}]}>
           <FontAwesome5 style={styles.detailIcon} name="money-bill-wave" />
-          <Text style={styles.detailText}>{event.fees} MMK per head promoter fees</Text>
+          <Text style={[styles.detailText, {width: '86%'}]}>{event.promoterFees} MMK per head promoter fees. {event.serviceFees} MMK per head service fees.</Text>
         </View>
       </View>
 
