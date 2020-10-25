@@ -72,7 +72,7 @@ const EventCard = ({ event, refreshEvents }) => {
             <Text style={styles.eventName}>{event.eventName}</Text>
             <Text style={styles.eventDate}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
 
-            <View style={{flexDirection: 'row', marginTop: 5, marginBottom: 5, marginLeft: -8}}>
+            <View style={{flexDirection: 'row', marginTop: 5, marginBottom: 5, marginLeft: -11}}>
               <TouchableOpacity style={styles.registerBtn} onPress={() => setModalVisible(true)}>
                 <View style={{flexDirection: 'row'}}>
                   <FontAwesome5 style={styles.btnIcon} name="edit"></FontAwesome5>
@@ -80,7 +80,7 @@ const EventCard = ({ event, refreshEvents }) => {
                 </View>
               </TouchableOpacity>
               {guests.length > 0 ? (
-                <TouchableOpacity style={[styles.registerBtn, { marginLeft: 8, width: 125, borderColor: '#1A7DB0'}]} onPress={() => setGuestListVisible(true)}>
+                <TouchableOpacity style={[styles.registerBtn, { marginLeft: 8, width: 125 }]} onPress={() => setGuestListVisible(true)}>
                     <View style={{flexDirection: 'row'}}>
                       <FontAwesome5 style={[styles.btnIcon, { top: 5, color: '#1A7DB0'}]} name="receipt"></FontAwesome5>
                       <Text style={[styles.btnText, {left: 19, color: '#1A7DB0'}]}>View Guest List</Text>
@@ -136,8 +136,16 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: 350,
     marginBottom: 10,
-    borderBottomWidth: 0.5,
-    borderBottomColor: 'gray'
+    shadowColor: "#000",
+    shadowOffset: {
+    	width: 0,
+    	height: 5,
+    },
+    shadowOpacity: 0.20,
+    elevation: 8,
+    backgroundColor: 'white',
+    left: 1,
+    borderRadius: 28
   },
   cardContent: {
     flex: 1,
@@ -147,15 +155,19 @@ const styles = StyleSheet.create({
   },
   leftCol: {
     marginTop: 12,
-    width: '60%'
+    width: '60%',
+    left: 15
   },
   rightCol: {
-    marginTop: 12
+    marginTop: 12,
+    right: 5
   },
   eventImage: {
     width: 350,
     height: 190,
-    left: 1,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    
   },
   eventName: {
     fontFamily: 'Avenir',

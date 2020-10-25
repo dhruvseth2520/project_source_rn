@@ -2,7 +2,7 @@ import { Text, View, StyleSheet, Image, ImageBackground, SafeAreaView, Touchable
 import React from "react";
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
-import { storeData } from '../../utils/localStorage';
+import { storeData, removeData } from '../../utils/localStorage';
 import env from  "../../utils/environment";
 import { FAB } from 'react-native-paper';
 
@@ -46,7 +46,6 @@ const LoginScreen = ({ navigation }) => {
       };
     }
   }
-
   const handleLogin = (callback) => {
     callback().then(response => {
       if (!response.cancelled) {
@@ -70,7 +69,9 @@ const LoginScreen = ({ navigation }) => {
               .then(response => response.json())
               .then(data => {
                   storeData('@promoterFormData', data).then(() => {
-                    navigation.navigate('PromoterTab');
+                    removeData('@venueFormData').then(() => {
+                      navigation.navigate('PromoterTab');
+                    });
                   });
               })
             } else if (data.type === "Venue") {
@@ -78,7 +79,9 @@ const LoginScreen = ({ navigation }) => {
               .then(response => response.json())
               .then(data => {
                   storeData('@venueFormData', data).then(() => {
-                    navigation.navigate('VenueTab');
+                    removeData('@promoterFormData').then(() => {
+                      navigation.navigate('VenueTab');
+                    })
                   });
               })
             }
@@ -91,8 +94,15 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <StatusBar barStyle={'dark-content'} />
+      <ImageBackground
+        source={{uri: 'https://i.pinimg.com/736x/3e/b9/27/3eb92787b1b67241b99d19c27aa26f54.jpg'}}
+        style={{height: '100%'}}>
+
       <SafeAreaView style={styles.safeArea}>
-        <Image style={styles.banner} source={{uri: "https://cdn.dribbble.com/users/66052/screenshots/10007568/social-media-marketing.png"}}></Image>
+        <Text style={styles.title}>Source</Text>
+        <Image style={styles.banner} source={{uri: "https://795364.smushcdn.com/1538781/wp-content/uploads/10-Social-Media-Marketing.png?lossy=1&strip=1&webp=1"}}></Image>
+        <Text style={styles.slogan}>The new way to promote</Text>
+
         <View style={styles.buttonArea}>
           <View style={styles.buttonContainer}>
               <FAB
@@ -113,26 +123,26 @@ const LoginScreen = ({ navigation }) => {
             />
           </View>
         </View>
+
       </SafeAreaView>
+    </ImageBackground>
 
     </View>
   );
 };
 
-export default LoginScreen;
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'white'
+    flexDirection: 'column'
   },
   banner: {
-    width: '100%',
-    height: 350,
+    width: 280,
+    height: 280,
     position: 'absolute',
-    top: 150,
-
+    top: 200,
+    alignSelf: 'center'
   },
   safeArea: {
     flex: 1,
@@ -140,22 +150,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: 'stretch',
   },
-  logoArea: {
-    position: 'absolute',
-    alignSelf: 'center',
-    top: 150,
-  },
   title: {
-    fontSize: 64,
-    fontFamily: 'Avenir',
+    fontSize: 48,
+    fontFamily: 'Trebuchet MS',
+    fontWeight: '600',
+    color: 'white',
+    alignSelf: 'center',
+    top: 70,
+  },
+  slogan: {
+    fontSize: 30,
+    fontFamily: 'Trebuchet MS',
     fontWeight: '500',
-    color: '#1AA2B0'
+    color: 'white',
+    alignSelf: 'center',
+    width: '75%',
+    top: 420,
+    left: 50
   },
   buttonArea: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: "center",
-    top: 580
+    top: 480
   },
   buttonContainer: {
     width: '70%',
@@ -177,3 +194,5 @@ const styles = StyleSheet.create({
     borderColor: '#3b5998'
   }
 });
+
+export default LoginScreen;

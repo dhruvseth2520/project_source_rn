@@ -63,7 +63,7 @@ const VenueEventsScreen = () => {
 
   return (
     <ScrollView style={styles.background} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always">
-      <Header title="Events" dashboard={upcomingEvents.length + " events happening soon"}/>
+      <Text style={styles.title}>Events</Text>
       <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1558346489-19413928158b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'}} />
       <Text style={styles.description}>Create custom events with promotions for your target market and share them with our vast network of promoters and influencers</Text>
       <Text style={styles.subTitle}>Your Events</Text>
@@ -115,13 +115,15 @@ const styles = StyleSheet.create({
     flex: 1
   },
   title: {
-    fontSize: 24,
+    marginTop: 100,
+    left: 33,
     fontFamily: 'Gill Sans',
+    fontSize: 36,
     fontWeight: '400',
-    color: '#424242',
-    marginLeft: 33,
-    marginTop: 70
+    marginBottom: 20,
+    color: '#212121',
   },
+
   description: {
     fontFamily: 'Gill Sans',
     fontWeight: '300',

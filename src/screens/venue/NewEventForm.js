@@ -151,7 +151,7 @@ const VenueNewEventForm = ({ route }) => {
                   />
                   <TextInput style={[styles.input, { width: '25%', marginLeft: 18}]} autoCapitalize="none" value="MMK" editable={false}/>
               </View>
-              <Text style={[styles.comment, {marginTop: 15, color: '#FFB600'}]}>10% of this fee is a fixed charge for our services. The remaining 90% goes to the promoter</Text>
+              <Text style={[styles.comment, {marginTop: 15, color: 'gray'}]}>10% of this fee is a fixed charge for our services. The remaining 90% goes to the promoter</Text>
             </View>
 
           </View>

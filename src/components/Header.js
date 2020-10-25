@@ -2,9 +2,14 @@ import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 
 const Header = ({ title, dashboard }) => {
+  /*
+  require('../assets/canva-photo-editor.png')
+
+
+  */
   return (
     <View>
-      <Image style={styles.header} source={require('../assets/canva-photo-editor.png')}></Image>
+      <Image style={styles.header} source={{uri: 'https://htmlcolors.com/gradients-images/58-strong-green-gradient.jpg'}}></Image>
       <Text style={styles.title}>{title}</Text>
     </View>
   )

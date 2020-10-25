@@ -96,7 +96,7 @@ const VenuePromotersHome = () => {
   return (
           <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
             <ScrollView style={styles.background} showsVerticalScrollIndicator={false}>
-                  <Header title="Promoters" />
+                  <Text style={styles.title}>Promoters</Text>
                   <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1504270997636-07ddfbd48945?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80'}} />
                   <Text style={styles.description}>Our network of young promoters will use their social media influence and personal network to get your {venue.venueCategory} the traffic you seek</Text>
 
@@ -139,6 +139,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'column',
     flex: 1
+  },
+  title: {
+    marginTop: 100,
+    left: 33,
+    fontFamily: 'Gill Sans',
+    fontSize: 36,
+    fontWeight: '400',
+    marginBottom: 20,
+    color: '#212121',
   },
   subTitle: {
     fontSize: 24,

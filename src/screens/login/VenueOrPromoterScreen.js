@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image, SafeAreaView, TouchableOpacity, StatusBar } from "react-native";
+import { Text, View, StyleSheet, Image, ImageBackground, SafeAreaView, TouchableOpacity, StatusBar } from "react-native";
 import React from "react";
 import { FAB } from 'react-native-paper';
 
@@ -18,17 +18,19 @@ const LoginVenueOrPromoterScreen = ({ navigation, route }) => {
     return (
         <View style={styles.screen}>
             <StatusBar barStyle={'dark-content'} />
+            <ImageBackground
+              source={{uri: 'https://all-images.net/wp-content/uploads/2020/03/Iphone-wallpaper-minimalist-162.jpg'}}
+              style={{width: '100%', height: '100%'}}
+            >
             <SafeAreaView style={styles.safeArea}>
-                <View style={styles.heroImage}>
-                  <Image style={styles.image} source={require('../../assets/vopbanner.png')}/>
-                </View>
+                <Text style={styles.title}>Source</Text>
 
                 <View style={styles.buttonArea}>
                     <Text style={styles.captionText}>Are you a</Text>
                     <View style={styles.buttonContainer}>
                       <FAB
                           style={styles.fab}
-                          color="white"
+                          color="#1AA2B0"
                           label="Promoter"
                           icon="account"
                           onPress={handlePromoter}
@@ -38,7 +40,7 @@ const LoginVenueOrPromoterScreen = ({ navigation, route }) => {
                     <View style={styles.buttonContainer}>
                         <FAB
                             style={styles.fab}
-                            color="white"
+                            color="#1AA2B0"
                             label="Venue"
                             icon="map-marker"
                             onPress={handleVenue}
@@ -46,6 +48,7 @@ const LoginVenueOrPromoterScreen = ({ navigation, route }) => {
                     </View>
                 </View>
             </SafeAreaView>
+          </ImageBackground>
         </View>
     );
 };
@@ -54,53 +57,58 @@ export default LoginVenueOrPromoterScreen;
 
 const styles = StyleSheet.create({
     screen: {
-        flex: 1,
-        backgroundColor: "#fff",
+      flex: 1,
     },
     safeArea: {
       flex: 1,
       flexDirection: "column",
       justifyContent: "center",
-      alignItems: 'stretch',
-      backgroundColor: 'white'
+      alignItems: 'stretch'
+    },
+    title: {
+      fontSize: 48,
+      fontFamily: 'Trebuchet MS',
+      fontWeight: '600',
+      color: 'white',
+      alignSelf: 'center',
+      top: 70,
     },
     fab: {
       right: 0,
       bottom: 0,
       width: 250,
       marginLeft: 40,
-      backgroundColor: '#19C4C0'
+      backgroundColor: 'white'
     },
     heroImage: {
-      top: 180,
+      top: 200,
       marginLeft: 30,
       padding: 15,
-
     },
     image: {
       width: '100%',
-      height: 270,
+      height: 200,
       left: 0,
       position: 'absolute',
       opacity: 0.9
-
     },
     buttonArea: {
       flex: 1,
       justifyContent: 'flex-start',
       alignItems: "center",
-      marginTop: 500
+      marginTop: 450
     },
     buttonContainer: {
       width: '80%',
       height: 50,
-      margin: 10,
+      margin: 10
     },
     captionText: {
       marginBottom: 5,
       marginTop: 5,
       fontFamily: 'Avenir',
       fontSize: 15,
-      fontWeight: '300'
+      fontWeight: '400',
+      color: 'white'
     }
 });

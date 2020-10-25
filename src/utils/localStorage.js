@@ -20,4 +20,12 @@ const getData = async (key) => {
   }
 }
 
-export { getData, storeData };
+const removeData = async (key) => {
+  try {
+    await AsyncStorage.removeItem(key);
+  } catch (e) {
+
+  }
+}
+
+export { getData, storeData, removeData };
