@@ -3,7 +3,7 @@ const env = {
 }
 
 const online = {
-  API_URL: 'https://default:jeKEoqmZqFp4fRGUPjT9@projectsource.scheercousse.com'
+  API_URL: 'https://default:jeKEoqmZqFp4fRGUPjT9@api.projectsource.app'
 }
 
 export default env;
