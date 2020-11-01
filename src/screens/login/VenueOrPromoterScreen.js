@@ -19,12 +19,10 @@ const LoginVenueOrPromoterScreen = ({ navigation, route }) => {
         <View style={styles.screen}>
             <StatusBar barStyle={'dark-content'} />
             <ImageBackground
-              source={{uri: 'https://all-images.net/wp-content/uploads/2020/03/Iphone-wallpaper-minimalist-162.jpg'}}
-              style={{width: '100%', height: '100%'}}
-            >
+              style={{height: '100%'}}
+              source={{uri: 'https://cdn.shopify.com/s/files/1/0157/9972/files/EmilyLey_TurquoiseGradient_1280x2272.png?v=1572549679'}}>
             <SafeAreaView style={styles.safeArea}>
-                <Text style={styles.title}>Source</Text>
-
+                <Image source={require('../../assets/socialMedia.png')} style={{width: 360, height: 290, position: 'absolute', top: 140, left: 10}} />
                 <View style={styles.buttonArea}>
                     <Text style={styles.captionText}>Are you a</Text>
                     <View style={styles.buttonContainer}>
@@ -48,7 +46,8 @@ const LoginVenueOrPromoterScreen = ({ navigation, route }) => {
                     </View>
                 </View>
             </SafeAreaView>
-          </ImageBackground>
+            </ImageBackground>
+
         </View>
     );
 };
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
       flex: 1,
       flexDirection: "column",
       justifyContent: "center",
-      alignItems: 'stretch'
+      alignItems: 'stretch',
     },
     title: {
       fontSize: 48,
@@ -76,8 +75,8 @@ const styles = StyleSheet.create({
     fab: {
       right: 0,
       bottom: 0,
-      width: 250,
-      marginLeft: 40,
+      width: 240,
+      marginLeft: 48,
       backgroundColor: 'white'
     },
     heroImage: {
@@ -85,18 +84,11 @@ const styles = StyleSheet.create({
       marginLeft: 30,
       padding: 15,
     },
-    image: {
-      width: '100%',
-      height: 200,
-      left: 0,
-      position: 'absolute',
-      opacity: 0.9
-    },
     buttonArea: {
       flex: 1,
       justifyContent: 'flex-start',
       alignItems: "center",
-      marginTop: 450
+      marginTop: 500
     },
     buttonContainer: {
       width: '80%',
@@ -108,7 +100,7 @@ const styles = StyleSheet.create({
       marginTop: 5,
       fontFamily: 'Avenir',
       fontSize: 15,
-      fontWeight: '400',
+      fontWeight: '600',
       color: 'white'
     }
 });

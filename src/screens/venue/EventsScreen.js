@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesome5 } from '@expo/vector-icons';
 import { ScrollView, ActivityIndicator, SafeAreaView, Image, View, Text, StyleSheet, TouchableOpacity, TouchableHighlight, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import EventCard from "../../components/EventCard";

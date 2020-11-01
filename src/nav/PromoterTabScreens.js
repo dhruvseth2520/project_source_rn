@@ -18,7 +18,7 @@ const PromoterTabScreens = () => {
             inactiveTintColor: 'gray',
             style: {
                 height: 80,
-                marginTop: 6
+
             },
         }}>
             <PromoterTabNav.Screen
@@ -28,9 +28,19 @@ const PromoterTabScreens = () => {
                     {
                         title: "Events",
                         tabBarIcon: ({ focused, size, color }) => (
-                            <Ionicons name="ios-albums" size={size} color={focused ? theme.PRIMARY_COLOR : 'gray'} />
+                            <Ionicons name="ios-calendar" size={size} color={focused ? theme.PRIMARY_COLOR : 'gray'} />
                         ),
                     }} />
+            <PromoterTabNav.Screen
+                    name="PromoterSavedEvents"
+                    component={PromoterEventStackScreens}
+                    options={
+                            {
+                                title: "Saved",
+                                tabBarIcon: ({ focused, size, color }) => (
+                                    <Ionicons name="ios-bookmark" size={size} color={focused ? theme.PRIMARY_COLOR : 'gray'} />
+                                ),
+                            }} />
             <PromoterTabNav.Screen
                 name="PromoterInbox"
                 component={MessageStackScreens}

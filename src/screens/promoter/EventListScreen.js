@@ -1,53 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, SafeAreaView, StyleSheet, StatusBar, Image, ScrollView, Text } from 'react-native';
-import EventBanner from '../../components/EventBanner'
-import { getEvents } from '../../api/Events'
 
 const PromoterEventListScreen = ({ navigation }) => {
-    const tempEventsList = getEvents()
 
     return (
-        <View style={styles.screen}>
-            <StatusBar barStyle={'dark-content'} />
-            <SafeAreaView style={styles.safeArea}>
-                <ScrollView>
-                    <Text style={styles.listTitle}> Upcoming Events </Text>
-                    {
-                        tempEventsList.map((event) => (
-                            <EventBanner
-                                key={event.event_id}
-                                title={event.title}
-                                onPress={() => navigation.navigate('PromoterEventDetail', {
-                                    event_id: event.event_id,
-                                    title: event.title,
-                                    venueName: event.venueName,
-                                    image: event.image
-                                })}
-                                venueName={event.venueName}
-                                image={event.image} />
-                        ))
-                    }
-                </ScrollView>
-            </SafeAreaView>
-        </View>
+        <ScrollView style={styles.screen}>
+            <Text style={styles.title}>Events</Text>
+        </ScrollView>
     );
 }
 
-export default PromoterEventListScreen;
 
 const styles = StyleSheet.create({
     screen: {
-        flex: 1,
-        // backgroundColor: "#fff",
+      flex: 1,
+      backgroundColor: "white",
     },
-    safeArea: {
-        flex: 1
+    title: {
+      marginTop: 100,
+      left: 33,
+      fontFamily: 'Gill Sans',
+      fontSize: 36,
+      fontWeight: '400',
+      marginBottom: 20,
+      color: '#212121',
     },
-    listTitle: {
-        margin: 5,
-        marginTop: 10,
-        alignSelf: 'center',
-        fontWeight: 'bold'
-    }
+
 })
 
+export default PromoterEventListScreen;

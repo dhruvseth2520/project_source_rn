@@ -6,18 +6,24 @@ import { getData } from "../../utils/localStorage";
 
 const PromoterProfileScreen = () => {
     const [name, setName] = useState("");
+    const [promoter, setPromoter] = useState({});
     useEffect(() => {
       getData('@promoterFormData').then(data => {
         setName(data.firstName + " " + data.lastName);
+        setPromoter(data);
       })
     }, [])
 
     return (
         <SafeAreaView style={styles.rootContainer}>
             <View style={styles.profileContainer}>
-                <View style={styles.proileImageContainer}>
-                    <Image style={styles.profileImage} source={{ uri: "https://pbs.twimg.com/media/EelyvfWXkAA3GjQ?format=jpg&name=medium" }} />
-                </View>
+                {promoter && promoter.promoterProfile ? (
+                  <View style={styles.proileImageContainer}>
+                    <Image style={styles.profileImage} source={{uri: promoter.promoterProfile.images[0]}} />
+                  </View>
+
+                ) : <></>}
+
                 <Text style={styles.profileName}>{name}</Text>
             </View>
             <View style={styles.detailContainer}>

@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, StyleSheet, Picker, KeyboardAvoidingView, ScrollView, TouchableOpacity } from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { View, Text, Image, StyleSheet, FlatList, Picker, KeyboardAvoidingView, ScrollView, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { storeData, getData } from '../../utils/localStorage';
-import { TextInput } from 'react-native-paper';
+import { TextInput, FAB } from 'react-native-paper';
+import * as ImagePicker from 'expo-image-picker';
+
 import env from "../../utils/environment";
 
 
 const PromoterProfileSetup = ({ route }) => {
   const formData = route.params.formData;
   const navigation = useNavigation();
-  const [images, setImages] = useState("");
+  const [images, setImages] = useState([]);
   const [bio, setBio] = useState("");
   const [occupation, setOccupation] = useState("");
   const [education, setEducation] = useState("");
@@ -52,30 +55,79 @@ const PromoterProfileSetup = ({ route }) => {
                 storeData('@promoterFormData', data.promoter);
                 navigation.navigate('PromoterTab');
               }
-        })    
-    })
-  }
+        })
+      })
+    }
+
+    const pickImage = async () => {
+     if (images.length < 5) {
+       let result = await ImagePicker.launchImageLibraryAsync({
+         mediaTypes: ImagePicker.MediaTypeOptions.All,
+         allowsEditing: true,
+         aspect: [6, 3],
+         quality: 1,
+       });
+
+       if (!result.cancelled) {
+         setImages([...images, result.uri]);
+       }
+     } else {
+       alert("Only 5 images permitted per profile. Please remove an image before adding another");
+     }
+   };
+
+   const removeImage = (uri) => {
+     const tempImages = images.slice();
+     for (let i = 0; i < tempImages.length; i++) {
+       if (tempImages[i] === uri) {
+         tempImages.splice(i, 1);
+       }
+     }
+     setImages(tempImages);
+   }
+
 
   return (
     <View style={styles.background}>
             <Text style={styles.title}>Finish setting up your profile</Text>
-                  <Swiper style={styles.wrapper} loop={false} paginationStyle={{top: 420}} dot={dot} activeDot={activeDot}>
+                  <Swiper style={styles.wrapper} loop={false} paginationStyle={{top: 480}} dot={dot} activeDot={activeDot}>
                     <View style={styles.slide}>
                       <View style={styles.formCard}>
                         <Text style={styles.sectionTitle}>Profile Info</Text>
-
-                        <TextInput mode='outlined'
-                          label='Images'
-                          theme={{colors: {primary: '#19C2BD', underlineColor: 'transparent'}}}
-                          selectionColor="#1AA2B0"
-                          style={styles.formInput} value={images} onChangeText={(val) => setImages(val)} />
-                        <Text style={styles.inputDisclaimer}>Upload any images you would like to display on your profile</Text>
-
                         <TextInput mode='outlined'
                           label='Profile Bio'
                           theme={{colors: {primary: '#19C2BD', underlineColor: 'transparent'}}}
                           selectionColor="#1AA2B0"
                           style={styles.formInput} value={bio} onChangeText={(val) => setBio(val)} />
+
+                          <Text style={[styles.sectionTitle, {fontSize: 16, left: 5, marginTop: 15, fontWeight: '100'}]}>Profile Images</Text>
+
+                          <ScrollView>
+                            <FlatList
+                              keyExtractor={image => image.uri}
+                              data={images}
+                              showsHorizontalScrollIndicator={false}
+                              horizontal
+                              renderItem={({ item }) => (
+                                <View style={styles.imageHolder}>
+                                  <TouchableOpacity style={styles.closeButton} onPress={() => removeImage(item)}>
+                                    <FontAwesome5 name="times" style={{alignSelf: 'center', top: 5, fontSize: 10, color: 'white'}} />
+                                  </TouchableOpacity>
+                                  <Image source={{uri: item}} style={styles.profileImage} />
+                                </View>
+
+                              )}
+                            />
+                          </ScrollView>
+
+                          <FAB
+                            icon="image"
+                            label="Upload Images"
+                            style={styles.cameraButton}
+                            onPress={pickImage}
+                            color="white"
+                          />
+                          <Text style={styles.inputDisclaimer}>Upload up to 5 images to display on your profile</Text>
                       </View>
                     </View>
                     <View style={styles.slide}>
@@ -184,6 +236,46 @@ const styles = StyleSheet.create({
     width: '85%',
     marginLeft: 20,
     padding: 10,
+  },
+  cameraButton: {
+    width: '95%',
+    marginTop: 15,
+    marginBottom: 10,
+    backgroundColor: '#22C2D2'
+  },
+  closeButton: {
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    height: 21,
+    width: 21,
+    borderRadius: 10,
+    backgroundColor: '#22C2D2',
+    right: -7,
+    top: -10,
+    zIndex: 1,
+  },
+  imageHolder: {
+    marginTop: 15,
+    marginBottom: 10,
+    marginLeft: 3,
+    marginRight: 4,
+    shadowColor: "#000",
+    shadowOffset: {
+    	width: 0,
+    	height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3.84,
+    elevation: 8,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    borderWidth: 0.5,
+    borderColor: '#22C2D2'
+  },
+  profileImage: {
+    height: 320,
+    width: 180,
+    borderRadius: 10
   },
   sectionTitle: {
     fontSize: 19,

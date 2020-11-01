@@ -2,9 +2,11 @@ import React, {useState} from 'react';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { View, ScrollView, Text, StyleSheet, TextInput, Picker, TouchableOpacity,
+import { View, Image, ScrollView, Text, StyleSheet, TextInput, Picker, TouchableOpacity,
 KeyboardAvoidingView } from 'react-native';
 import { getData } from '../../utils/localStorage';
+import * as ImagePicker from 'expo-image-picker';
+
 import { FAB } from 'react-native-paper';
 import env from '../../utils/environment';
 
@@ -26,6 +28,19 @@ const VenueNewEventForm = ({ route }) => {
   const [promotion, setPromotion] = useState(event ? event.promotion : "");
   const [fees, setFees] = useState(event ? event.fees : "");
   const [date, setDate] = useState(event ? event.date : new Date());
+
+  const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [6, 3],
+        quality: 1,
+      });
+
+      if (!result.cancelled) {
+        setImageURL(result.uri);
+      }
+   };
 
   const handleSubmit = () => {
       getData('@venueFormData').then(response => {
@@ -68,7 +83,6 @@ const VenueNewEventForm = ({ route }) => {
           <View style={styles.header}>
             <Text style={styles.title}>New Event</Text>
             <FontAwesome5 name="calendar-alt" style={styles.headerIcon} size={24} />
-
           </View>
           <View style={styles.form}>
             <View style={styles.inputContainer}>
@@ -109,10 +123,19 @@ const VenueNewEventForm = ({ route }) => {
               <Text style={styles.label}>Event Image</Text>
               <Text style={styles.comment}>Banner or Poster for the event</Text>
 
-              <TextInput style={styles.input}
-                onChangeText={(val) => setImageURL(val)}
-                value={imageURL}
-                autoCapitalize="none"
+              {imageURL ? (
+                <Image
+                  source={{uri: imageURL}}
+                  style={styles.eventImage}
+                />
+              ) : (<></>)}
+
+              <FAB
+                icon="image"
+                label="Upload Image"
+                style={styles.cameraButton}
+                onPress={pickImage}
+                color="white"
               />
             </View>
 
@@ -190,6 +213,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: -5,
     width: '90%'
+  },
+  cameraButton: {
+    width: '92%',
+    marginTop: 18,
+    marginBottom: 10,
+    backgroundColor: '#22C2D2'
+  },
+  eventImage: {
+    width: 330,
+    height: 200,
+    left: 3,
+    marginTop: 10,
+    borderRadius: 5
   },
   header: {
     flexDirection: 'row',

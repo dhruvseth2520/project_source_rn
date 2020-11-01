@@ -48,8 +48,14 @@ const VenueLedgerScreen = () => {
           data.forEach(el => {
             const eventName = el.eventName + '';
             const index = eventIndex(tableData, eventName);
+
+            let visible = false;
+            if (index === 0) {
+              visible = true;
+            }
+
             if (index === -1) {
-              tableData.push({title: eventName, type: "Text", data: [{promoterName: el.promoterName, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable}]})
+              tableData.push({title: eventName, type: "Text", visible: visible, data: [{promoterName: el.promoterName, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable}]})
             } else {
               tableData[index].data.push({promoterName: el.promoterName, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable});
             }
@@ -79,7 +85,7 @@ const VenueLedgerScreen = () => {
         <Image style={styles.visaLogo} source={require('../../assets/visalogo.png')} />
         <View style={styles.cardContent}>
           <Text style={styles.label}>Amount Payable</Text>
-          <Text style={[styles.label, {fontSize: 53, left: -3}]}>{balance} MMK</Text>
+          <Text style={[styles.label, {fontSize: balance >= 100000 ? 46 : 54, left: -3}]}>{balance} MMK</Text>
           <Text style={[styles.label, {top: 15, fontSize: 21, fontFamily: 'Gill Sans', fontWeight: '400'}]}>{venueName}</Text>
         </View>
       </View>
@@ -129,6 +135,7 @@ const VenueLedgerScreen = () => {
       <Text style={[styles.subTitle, {marginTop: 15}]}>Ledger Details</Text>
       <SectionList
         sections={ledger}
+        style={styles.ledger}
         keyExtractor={(item, index) => item + index}
         renderItem={({ item, index, section }) => {
           if (index === section.data.length - 1) {
@@ -165,13 +172,8 @@ const VenueLedgerScreen = () => {
             </View>
           </View>
         )}
-        style={styles.ledger}
       />
-    </>
-    )}
-
-
-
+    </>)}
   </ScrollView>)
 }
 

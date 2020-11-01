@@ -48,14 +48,10 @@ const VenuePromotersHome = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      setQuery("");
-      fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
-        setPromoterData(data);
-        setPromoters(data);
-      })
-    });
-    return unsubscribe;
+    fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
+      setPromoterData(data);
+      setPromoters(data);
+    })
 
   }, [])
 

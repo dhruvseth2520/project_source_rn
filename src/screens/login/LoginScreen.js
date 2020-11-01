@@ -46,6 +46,7 @@ const LoginScreen = ({ navigation }) => {
       };
     }
   }
+
   const handleLogin = (callback) => {
     callback().then(response => {
       if (!response.cancelled) {
@@ -95,12 +96,12 @@ const LoginScreen = ({ navigation }) => {
     <View style={styles.screen}>
       <StatusBar barStyle={'dark-content'} />
       <ImageBackground
-        source={{uri: 'https://i.pinimg.com/736x/3e/b9/27/3eb92787b1b67241b99d19c27aa26f54.jpg'}}
+        source={{uri: 'https://images.unsplash.com/photo-1570872626485-d8ffea69f463?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=975&q=80'}}
         style={{height: '100%'}}>
 
       <SafeAreaView style={styles.safeArea}>
-        <Text style={styles.title}>Source</Text>
-        <Image style={styles.banner} source={{uri: "https://795364.smushcdn.com/1538781/wp-content/uploads/10-Social-Media-Marketing.png?lossy=1&strip=1&webp=1"}}></Image>
+
+        <Image source={require('../../assets/glowlight2.png')} style={styles.banner} />
         <Text style={styles.slogan}>The new way to promote</Text>
 
         <View style={styles.buttonArea}>
@@ -138,11 +139,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   banner: {
-    width: 280,
-    height: 280,
-    position: 'absolute',
-    top: 200,
-    alignSelf: 'center'
+    width: 300,
+    height: 300,
+    left: 65,
+    top: -20
   },
   safeArea: {
     flex: 1,
@@ -150,29 +150,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: 'stretch',
   },
-  title: {
-    fontSize: 48,
-    fontFamily: 'Trebuchet MS',
-    fontWeight: '600',
-    color: 'white',
-    alignSelf: 'center',
-    top: 70,
-  },
   slogan: {
-    fontSize: 30,
+    fontSize: 33,
     fontFamily: 'Trebuchet MS',
     fontWeight: '500',
     color: 'white',
     alignSelf: 'center',
     width: '75%',
-    top: 420,
-    left: 50
+    top: 180,
+    left: 42,
   },
   buttonArea: {
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: "center",
-    top: 480
+    top: 220
   },
   buttonContainer: {
     width: '70%',
