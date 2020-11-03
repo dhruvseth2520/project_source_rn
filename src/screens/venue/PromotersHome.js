@@ -3,16 +3,15 @@ import { ScrollView, View, Image, Text, StyleSheet, FlatList, TouchableOpacity, 
 import PromoterCard from "../../components/PromoterCard";
 import Header from "../../components/Header";
 import { useNavigation } from '@react-navigation/native';
+import Jumbotron from "../../components/Jumbotron";
 
 import { getData } from "../../utils/localStorage";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Searchbar } from 'react-native-paper';
 import { Button } from 'react-native-paper';
 import env from "../../utils/environment";
-import FilterGrid from "../../components/FilterGrid";
+import { PromotersFilterGrid } from "../../components/FilterGrid";
 
-// On press of hide advanced search all filters should be reset
-// Add filter for number of clients sourced, compute number of clients sourced from promoter ledger
 
 const VenuePromotersHome = () => {
   const [promoters, setPromoters] = useState([]);
@@ -48,11 +47,13 @@ const VenuePromotersHome = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
-      setPromoterData(data);
-      setPromoters(data);
-    })
-
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
+        setPromoterData(data);
+        setPromoters(data);
+      })
+    });
+    return unsubscribe;
   }, [])
 
   useEffect(() => {
@@ -93,11 +94,13 @@ const VenuePromotersHome = () => {
           <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
             <ScrollView style={styles.background} showsVerticalScrollIndicator={false}>
                   <Text style={styles.title}>Promoters</Text>
-                  <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1504270997636-07ddfbd48945?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80'}} />
-                  <Text style={styles.description}>Our network of young promoters will use their social media influence and personal network to get your {venue.venueCategory} the traffic you seek</Text>
+                  <Jumbotron
+                    title="Start Sourcing"
+                    caption={`Our promoters use their social media influence and network to get you the traffic you seek`}
+                    image="https://media.istockphoto.com/photos/young-woman-with-mask-at-mardi-gras-night-club-party-picture-id972174058?k=6&m=972174058&s=170667a&w=0&h=y4tA36T_srRh2qSrkMK2P9HtBjQUtAjYwiZcdQzmDqU="
+                  />
 
                   <Text style={styles.subTitle}>Top Promoters in the area</Text>
-
                   <Searchbar
                     style={styles.searchInput}
                     inputStyle={styles.inputText}
@@ -108,7 +111,7 @@ const VenuePromotersHome = () => {
                     onChangeText={(val) => setQuery(val)}
                   />
 
-                  <FilterGrid
+                  <PromotersFilterGrid
                     price={price} setPrice={setPrice}
                     availability={availability} setAvailability={setAvailability}
                     connections={connections} setConnections={setConnections}
@@ -143,49 +146,25 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: '400',
     marginBottom: 20,
-    color: '#212121',
+    color: '#2A2A2A',
   },
   subTitle: {
     fontSize: 24,
     fontFamily: 'Gill Sans',
     fontWeight: '400',
-    color: '#424242',
+    color: '#2A2A2A',
     marginLeft: 33,
     marginTop: 30
   },
-  description: {
-    fontFamily: 'Gill Sans',
-    fontWeight: '300',
-    color: '#424242',
-    marginLeft: 32,
-    marginTop: 15,
-    paddingRight: 25,
-    fontSize: 15
-  },
-  heroImage: {
-    width: 350,
-    height: 200,
-    marginTop: 20,
-    marginLeft: 32
-  },
   promoterList: {
     marginLeft: 32,
-    marginTop: 12,
+    marginTop: 10,
     marginBottom: 35
-  },
-  searchBar: {
-    width: 345,
-    height: 45,
-    left: 33,
-    marginTop: 15,
-    marginBottom: 5,
-    borderRadius: 20,
-    elevation: 2,
-    flexDirection: 'row'
   },
   searchInput: {
     width: '84%',
-    marginVertical: 15,
+    marginTop: 15,
+    marginBottom: 10,
     top: 5,
     left: 33,
     elevation: 3,
@@ -194,12 +173,6 @@ const styles = StyleSheet.create({
   inputText: {
     fontSize: 16
   },
-  searchIcon: {
-    top: 10,
-    left: 9,
-    width: 25,
-    height: 25
-  }
 })
 
 export default VenuePromotersHome;

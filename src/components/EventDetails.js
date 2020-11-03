@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { FontAwesome5, Entypo } from '@expo/vector-icons';
-import { getData } from "../../utils/localStorage";
+import { getData } from "../utils/localStorage";
 import { useNavigation } from "@react-navigation/native";
+import env from "../utils/environment";
 
 const EventDetails = ({ route }) => {
   const [venue, setVenue] = useState({});
   const [eventType, setEventType] = useState({});
+  const [isLoading, setLoading] = useState(true);
   const event = route.params.event;
+  const view = route.params.view;
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -34,13 +37,29 @@ const EventDetails = ({ route }) => {
   }, [])
 
   useEffect(() => {
-    getData('@venueFormData').then(data => setVenue(data));
+    if (view === "Venue") {
+      getData('@venueFormData').then(data => {
+        setVenue(data);
+        setLoading(false);
+      });
+    } else if (view === "Promoter") {
+      fetch(`${env.API_URL}/api/venue/detail/${event.venueId}`).then(response => response.json()).then(data => {
+        setVenue(data);
+        setLoading(false);
+      });
+    }
   }, [])
 
   return (
     <ScrollView style={styles.background}>
 
-      <TouchableOpacity style={styles.backArrow} onPress={() => navigation.navigate('VenueEventsHome')}>
+      <TouchableOpacity style={styles.backArrow} onPress={() => {
+        if (view === "Venue") {
+          navigation.navigate('VenueEventsHome');
+        } else if (view === "Promoter") {
+          navigation.navigate('PromoterEventHome');
+        }
+      }}>
         <Entypo name="chevron-small-left" size={34} color="black" />
       </TouchableOpacity>
       <Image source={{uri: event.imageURL}} style={styles.eventImage}></Image>
@@ -53,39 +72,46 @@ const EventDetails = ({ route }) => {
         </View>
       </View>
 
+      {isLoading ? <ActivityIndicator size="large" style={{top: 30}} /> : (
+        <>
+            <View style={styles.eventComponent}>
+              <View style={{flexDirection: "row"}}>
+                <View style={{width: "60%"}}>
+                  <Text style={styles.venueName}>{venue.venueName}</Text>
+                  <Text style={styles.address}>{venue.venueAddress}</Text>
+                </View>
+              </View>
+            </View>
 
-      <View style={styles.eventComponent}>
-        <View style={{flexDirection: "row"}}>
-          <View style={{width: "60%"}}>
-            <Text style={styles.venueName}>{venue.venueName}</Text>
-            <Text style={styles.address}>{venue.venueAddress}</Text>
-          </View>
+            <View style={styles.eventComponent}>
+              <View style={styles.eventDetail}>
+                <FontAwesome5 style={styles.detailIcon} name="calendar-alt" />
+                <Text style={[styles.detailText, {marginLeft: 21}]}>Occurs next on {new Date(event.date).toDateString()}</Text>
+              </View>
+              <View style={styles.eventDetail}>
+                <FontAwesome5 style={styles.detailIcon} name="clock" />
+                <Text style={[styles.detailText, {marginLeft: 19}]}>Starts at {new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
+              </View>
+              <View style={styles.eventDetail}>
+                <FontAwesome5 style={styles.detailIcon} name="glass-cheers" />
+                <Text style={[styles.detailText, {marginLeft: 13}]}>{event.promotion}</Text>
+              </View>
+              <View style={[styles.eventDetail, {marginBottom: 10}]}>
+                <FontAwesome5 style={styles.detailIcon} name="money-bill-wave" />
+                {(view === "Venue") ? (<Text style={[styles.detailText, {width: '86%'}]}>
+                    {event.promoterFees} MMK per head promoter fees. {event.serviceFees} MMK per head service fees.
+                </Text>) : (<Text style={[styles.detailText, {width: '86%'}]}>{event.promoterFees} MMK per head promoter fees</Text>)}
+              </View>
+            </View>
 
-        </View>
-      </View>
+            <View style={{marginLeft: 20, paddingHorizontal: 5, paddingVertical: 20, width: '88%', marginBottom: 20}}>
+              <Text style={styles.description}>{event.description}</Text>
+            </View>
+        </>
 
-      <View style={styles.eventComponent}>
-        <View style={styles.eventDetail}>
-          <FontAwesome5 style={styles.detailIcon} name="calendar-alt" />
-          <Text style={[styles.detailText, {marginLeft: 21}]}>Occurs next on {new Date(event.date).toDateString()}</Text>
-        </View>
-        <View style={styles.eventDetail}>
-          <FontAwesome5 style={styles.detailIcon} name="clock" />
-          <Text style={[styles.detailText, {marginLeft: 19}]}>Starts at {new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
-        </View>
-        <View style={styles.eventDetail}>
-          <FontAwesome5 style={styles.detailIcon} name="glass-cheers" />
-          <Text style={[styles.detailText, {marginLeft: 13}]}>{event.promotion}</Text>
-        </View>
-        <View style={[styles.eventDetail, {marginBottom: 10}]}>
-          <FontAwesome5 style={styles.detailIcon} name="money-bill-wave" />
-          <Text style={[styles.detailText, {width: '86%'}]}>{event.promoterFees} MMK per head promoter fees. {event.serviceFees} MMK per head service fees.</Text>
-        </View>
-      </View>
+      )}
 
-      <View style={{marginLeft: 20, paddingHorizontal: 5, paddingVertical: 20, width: '88%', marginBottom: 20}}>
-        <Text style={styles.description}>{event.description}</Text>
-      </View>
+
     </ScrollView>
   )
 }

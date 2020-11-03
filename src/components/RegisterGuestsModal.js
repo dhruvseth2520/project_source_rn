@@ -31,10 +31,9 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
 
   const handleSubmit = () => {
     setErrorMessage("");
-    const currentDate = new Date();
+    const difference = Math.floor((new Date(event.date) - new Date()) / 86400000);
 
-    if (currentDate.getDate() < new Date(event.date).getDate()) {
-      const difference = new Date(event.date).getDate() - currentDate.getDate();
+    if (difference >= 1) {
       setErrorMessage("This event doesn't occur for another " + difference + " days");
     } else {
       for (let i = 0; i < promoters.length; i++) {

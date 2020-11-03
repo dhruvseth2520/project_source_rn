@@ -1,12 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 import { Ionicons } from '@expo/vector-icons';
-
 import PromoterEventStackScreens from './PromoterEventStackScreens';
 import MessageStackScreens from './MessageStackScreens';
-
 import PromoterProfile from '../screens/promoter/ProfileScreen';
+import PromoterSavedEvents from "../screens/promoter/PromoterSavedEvents";
 import theme, { tabDefaults } from '../utils/theme.styles'
 
 const PromoterTabNav = createBottomTabNavigator();
@@ -33,7 +31,7 @@ const PromoterTabScreens = () => {
                     }} />
             <PromoterTabNav.Screen
                     name="PromoterSavedEvents"
-                    component={PromoterEventStackScreens}
+                    component={PromoterSavedEvents}
                     options={
                             {
                                 title: "Saved",

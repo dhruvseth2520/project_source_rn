@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, View, StyleSheet, Text, Image } from 'react-native';
+import { ScrollView, View, StyleSheet, SafeAreaView, Text, Image } from 'react-native';
 import { Chip } from 'react-native-paper';
 import Popover, { PopoverPlacement } from 'react-native-popover-view';
 import Slider from '@react-native-community/slider';
@@ -69,7 +69,7 @@ const FilterRange = ({ state, setState, title, icon, unit, step, min, max, label
 
 }
 
-const FilterSelect = ({ state, setState, icon, title, label }) => {
+const FilterSelect = ({ state, setState, icon, title, label, items, selectMultiple }) => {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -79,7 +79,6 @@ const FilterSelect = ({ state, setState, icon, title, label }) => {
         setVisible(false);
         setState({...state, displayValue: state.filterValue});
       }}
-      placement={PopoverPlacement.BOTTOM}
       arrowStyle={{backgroundColor: 'transparent'}}
       from={(
         <Chip icon={icon} compact={true} selectedColor={state.active ? 'white' : 'black'}
@@ -90,17 +89,23 @@ const FilterSelect = ({ state, setState, icon, title, label }) => {
           {title}
         </Chip>
       )}>
-      <View style={[styles.filterCard, {height: 177}]}>
+      <View style={styles.filterCard}>
         <Text style={styles.label}>{label}</Text>
 
-        <SelectMultiple
-          items={["English", "Burmese"]}
-          selectedItems={state.displayValue}
-          onSelectionsChange={(val) => setState({...state, displayValue: val})}
-          rowStyle={{borderBottomWidth: 0, marginBottom: -15}}
-          labelStyle={{fontFamily: 'Avenir', fontWeight: '300', top: 1, left: 3}}
-          style={{top: -5}}
-         />
+        <ScrollView>
+          <SelectMultiple
+            items={items}
+            maxSelect={selectMultiple === true ? items.length : 1}
+            selectedItems={state.displayValue}
+            checkboxSource={require('../assets/checkbox-unchecked.png')}
+            checkboxStyle={{width: 20, height: 20, marginLeft: -5}}
+            selectedCheckboxSource={require('../assets/checkbox-checked.png')}
+            onSelectionsChange={(val) => setState({...state, displayValue: val})}
+            rowStyle={{borderBottomWidth: 0, marginBottom: -15}}
+            labelStyle={{fontFamily: 'Avenir', fontWeight: '300', top: 1, left: 5}}
+            style={{top: -5}}
+           />
+        </ScrollView>
 
 
         <View style={{flexDirection: 'row', marginLeft: 20, top: 5}}>
@@ -128,8 +133,7 @@ const FilterSelect = ({ state, setState, icon, title, label }) => {
 }
 
 
-const FilterGrid = ({ price, setPrice, clients, setClients, availability, setAvailability, connections, setConnections, languages, setLanguages }) => {
-
+const PromotersFilterGrid = ({ price, setPrice, clients, setClients, availability, setAvailability, connections, setConnections, languages, setLanguages }) => {
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterGrid}>
       <FilterRange setState={setPrice} state={price} maxOrMin="max"
@@ -146,7 +150,6 @@ const FilterGrid = ({ price, setPrice, clients, setClients, availability, setAva
                min={0} max={100} step={1}
         />
 
-
        <FilterRange setState={setAvailability} state={availability} maxOrMin="min"
                icon="clock" title="Availability"
                label="Minimum Weekly Availability"
@@ -162,12 +165,31 @@ const FilterGrid = ({ price, setPrice, clients, setClients, availability, setAva
          />
 
          <FilterSelect state={languages} setState={setLanguages}
+           items={["English", "Burmese"]}
+           selectMultiple={true}
            icon="alphabetical" title="Languages" label="Preferred Languages" />
-
-
-
     </ScrollView>
   )
+
+}
+
+const EventsFilterGrid = ({ price, setPrice, category, setCategory, date, setDate }) => {
+  return (
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterGrid}>
+        <FilterRange setState={setPrice} state={price} maxOrMin="min"
+                icon="currency-usd" title="Promoter Fees"
+                label="Minimum Promoter Fees"
+                unit="MMK"
+                min={0} max={5000} step={100}
+         />
+         <FilterSelect state={date} setState={setDate}
+           selectMultiple={false}
+           icon="calendar" title="Event Date" label="Occcuring In" items={["Next 3 days", "This Week", "This Month"]}/>
+         <FilterSelect state={category} setState={setCategory}
+           selectMultiple={true}
+           icon="buffer" title="Event Category" label="Event Category" items={["Show", "Night Out", "Themed Event", "Couples Event", "Activity"]}/>
+
+    </ScrollView>)
 
 }
 
@@ -184,7 +206,6 @@ const styles = StyleSheet.create({
   filterCard: {
     padding: 25,
     width: 255,
-    height: 150
   },
   label: {
     fontFamily: 'Avenir',
@@ -192,4 +213,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default FilterGrid;
+export { PromotersFilterGrid, EventsFilterGrid };

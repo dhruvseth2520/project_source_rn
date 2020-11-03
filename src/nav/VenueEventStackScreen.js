@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import EventsScreen from "../screens/venue/EventsScreen";
-import EventDetails from "../screens/venue/EventDetails";
+import VenueEventsScreen from "../screens/venue/VenueEventsScreen";
+import EventDetails from "../components/EventDetails";
 import NewEventForm from "../screens/venue/NewEventForm";
 
 const Stack = createStackNavigator();
@@ -13,7 +13,7 @@ const VenueEventStackScreen = ({ route }) => {
     <Stack.Screen
       name="VenueEventsHome"
       options={{ headerShown: false }}
-      component={EventsScreen}
+      component={VenueEventsScreen}
     />
     <Stack.Screen
       name="VenueEventForm"

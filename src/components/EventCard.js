@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faBookmark, farBookmark } from '@fortawesome/free-solid-svg-icons';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { FAB } from 'react-native-paper';
 import RegisterGuestsModal from "./RegisterGuestsModal";
@@ -8,8 +10,7 @@ import GuestListModal from "./GuestListModal";
 import ErrorModal from "./ErrorModal";
 import env from "../utils/environment";
 
-
-const EventCard = ({ event, refreshEvents }) => {
+const EventCard = ({ event, refreshEvents, view }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [guestListVisible, setGuestListVisible] = useState(false);
@@ -36,6 +37,9 @@ const EventCard = ({ event, refreshEvents }) => {
     })
   }
 
+  // <FontAwesomeIcon icon={faBookmark} style={styles.cardIcon} />
+
+
   const deleteEvent = () => {
     const currentDate = new Date();
     const difference = (new Date(event.date).getTime() - currentDate.getTime()) / (1000 * 3600 * 24);
@@ -59,76 +63,112 @@ const EventCard = ({ event, refreshEvents }) => {
   }
 
   const viewEvent = () => {
-    navigation.navigate('VenueEventPage', {
-      event
-    })
+    if (view === "Venue") {
+      navigation.navigate('VenueEventPage', {
+        event,
+        view
+      })
+    } else {
+      navigation.navigate('PromoterEventDetail', {
+        event,
+        view
+      })
+    }
   }
 
-  return (
-    <View style={styles.card}>
-      <Image style={styles.eventImage} source={{uri: event.imageURL}}></Image>
-      <View style={styles.cardContent}>
-          <View style={styles.leftCol}>
-            <Text style={styles.eventName}>{event.eventName}</Text>
-            <Text style={styles.eventDate}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
+  if (view === "Venue") {
+    return (
+        <>
+          <TouchableOpacity onPress={viewEvent} activeOpacity={0.7}>
+              <View style={styles.card}>
+                <Image style={styles.eventImage} source={{uri: event.imageURL}}></Image>
+                <View style={styles.cardContent}>
+                    <View style={styles.leftCol}>
+                      <Text style={styles.eventName}>{event.eventName}</Text>
+                      <Text style={styles.eventDate}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
 
-            <View style={{flexDirection: 'row', marginTop: 5, marginBottom: 5, marginLeft: -11}}>
-              <TouchableOpacity style={styles.registerBtn} onPress={() => setModalVisible(true)}>
-                <View style={{flexDirection: 'row'}}>
-                  <FontAwesome5 style={styles.btnIcon} name="edit"></FontAwesome5>
-                  <Text style={styles.btnText}>Register Guests</Text>
-                </View>
-              </TouchableOpacity>
-              {guests.length > 0 ? (
-                <TouchableOpacity style={[styles.registerBtn, { marginLeft: 8, width: 125 }]} onPress={() => setGuestListVisible(true)}>
-                    <View style={{flexDirection: 'row'}}>
-                      <FontAwesome5 style={[styles.btnIcon, { top: 5, color: '#1A7DB0'}]} name="receipt"></FontAwesome5>
-                      <Text style={[styles.btnText, {left: 19, color: '#1A7DB0'}]}>View Guest List</Text>
+                      <View style={{flexDirection: 'row', marginTop: 5, marginBottom: 5, marginLeft: -11}}>
+                        <TouchableOpacity style={styles.registerBtn} onPress={() => setModalVisible(true)}>
+                          <View style={{flexDirection: 'row'}}>
+                            <FontAwesome5 style={styles.btnIcon} name="edit"></FontAwesome5>
+                            <Text style={styles.btnText}>Register Guests</Text>
+                          </View>
+                        </TouchableOpacity>
+                        {guests.length > 0 ? (
+                          <TouchableOpacity style={[styles.registerBtn, { marginLeft: 8, width: 125 }]} onPress={() => setGuestListVisible(true)}>
+                              <View style={{flexDirection: 'row'}}>
+                                <FontAwesome5 style={[styles.btnIcon, { top: 5, color: '#1A7DB0'}]} name="receipt"></FontAwesome5>
+                                <Text style={[styles.btnText, {left: 19, color: '#1A7DB0'}]}>View Guest List</Text>
+                              </View>
+                          </TouchableOpacity>
+                        ) : <></>}
+                      </View>
                     </View>
-                </TouchableOpacity>
-              ) : <></>}
+
+
+                    <View style={styles.rightCol}>
+                      <View style={styles.btnContainer}>
+                          <TouchableOpacity onPress={editEvent}>
+                            <View style={styles.circularBtn}>
+                              <FontAwesome5 name="pen-alt" style={styles.cardIcon}/>
+                            </View>
+                          </TouchableOpacity>
+                          <TouchableOpacity onPress={deleteEvent}>
+                            <View style={styles.circularBtn}>
+                              <FontAwesome5 name="trash" style={styles.cardIcon}/>
+                            </View>
+                          </TouchableOpacity>
+                      </View>
+                    </View>
+                </View>
+              </View>
+          </TouchableOpacity>
+
+          <RegisterGuestsModal
+            event={event}
+            modalVisible={modalVisible} setModalVisible={setModalVisible}
+          />
+
+          <GuestListModal
+            modalVisible={guestListVisible} setModalVisible={setGuestListVisible}
+            guests={guests} setGuests={setGuests}
+            event={event}
+          />
+
+          <ErrorModal
+            modalVisible={errorModalVisible}
+            setModalVisible={setErrorModalVisible}
+            errorMessage={errorMessage}
+          />
+        </>
+    )
+  } else if (view === "Promoter") {
+      return (
+            <TouchableOpacity onPress={viewEvent} activeOpacity={0.8}>
+            <View style={styles.card}>
+              <Image style={styles.eventImage} source={{uri: event.imageURL}}></Image>
+              <View style={styles.cardContent}>
+                  <View style={styles.leftCol}>
+                    <Text style={[styles.eventName, {fontSize: 20}]}>{event.eventName}</Text>
+                    <Text style={[styles.eventName, {fontSize: 15, marginTop: 0}]}>{event.venueName}</Text>
+                    <Text style={[styles.eventDate, {marginBottom: 18, marginTop: 3}]}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
+                  </View>
+
+                  <View style={styles.rightCol}>
+                    <View style={styles.btnContainer}>
+                        <TouchableOpacity>
+                          <View style={styles.circularBtn}>
+                            <FontAwesome5 name="bookmark" style={[styles.cardIcon, {top: 1}]}/>
+                          </View>
+                        </TouchableOpacity>
+                    </View>
+                  </View>
+              </View>
             </View>
-          </View>
+          </TouchableOpacity>
+  )}
 
 
-          <View style={styles.rightCol}>
-            <View style={styles.btnContainer}>
-                <TouchableOpacity onPress={viewEvent}>
-                  <View style={styles.circularBtn}>
-                    <FontAwesome5 name="book-open" style={styles.cardIcon}/>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={editEvent}>
-                  <View style={styles.circularBtn}>
-                    <FontAwesome5 name="pen" style={styles.cardIcon}/>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={deleteEvent}>
-                  <View style={styles.circularBtn}>
-                    <FontAwesome5 name="trash" style={styles.cardIcon}/>
-                  </View>
-                </TouchableOpacity>
-            </View>
-          </View>
-      </View>
-      <RegisterGuestsModal
-        event={event}
-        modalVisible={modalVisible} setModalVisible={setModalVisible}
-      />
-
-      <GuestListModal
-        modalVisible={guestListVisible} setModalVisible={setGuestListVisible}
-        guests={guests} setGuests={setGuests}
-        event={event}
-      />
-
-      <ErrorModal
-        modalVisible={errorModalVisible}
-        setModalVisible={setErrorModalVisible}
-        errorMessage={errorMessage}
-      />
-    </View>
-  )
 }
 
 const styles = StyleSheet.create({
@@ -159,7 +199,7 @@ const styles = StyleSheet.create({
     left: 15
   },
   rightCol: {
-    marginTop: 12,
+    marginTop: 10,
     right: 5
   },
   eventImage: {
@@ -167,7 +207,6 @@ const styles = StyleSheet.create({
     height: 190,
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
-    
   },
   eventName: {
     fontFamily: 'Avenir',
@@ -177,23 +216,25 @@ const styles = StyleSheet.create({
   },
   eventDate: {
     fontFamily: 'Avenir',
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '300',
     alignSelf: 'flex-start',
     marginBottom: 8
   },
   btnContainer: {
     flexDirection: 'row',
-    marginTop: 3
+    top: -4
   },
   circularBtn: {
-    borderWidth: 0.5,
-    width: 36,
-    height: 36,
-    borderRadius: 36,
-    borderColor: '#1AA2B0',
+    width: 30,
+    height: 30,
+    borderRadius: 24,
     marginRight: 10,
-    borderColor: '#2395A0'
+  },
+  saveButton: {
+    marginRight: 15,
+    marginLeft: 5,
+    top: 10
   },
   registerBtn: {
     width: 120,
@@ -211,12 +252,13 @@ const styles = StyleSheet.create({
   },
   cardIcon: {
     alignSelf: 'center',
+    fontSize: 17,
     marginTop: 11,
     color: '#2395A0'
   },
   btnIcon: {
     alignSelf: 'flex-end',
-    fontSize: 18,
+    fontSize: 16,
     color: '#2395A0',
     top: 4,
     left: 12

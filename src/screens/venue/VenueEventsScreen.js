@@ -5,6 +5,7 @@ import EventCard from "../../components/EventCard";
 import Header from "../../components/Header";
 import env from "../../utils/environment";
 import { getData } from "../../utils/localStorage";
+import Jumbotron from "../../components/Jumbotron";
 import { FAB } from 'react-native-paper';
 
 
@@ -16,13 +17,23 @@ const VenueEventsScreen = () => {
   const [isPast, setPast] = useState(false);
   const navigation = useNavigation();
 
-
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       fetchData();
     });
     return unsubscribe;
   }, [])
+
+  const sortByDate = (arr) => {
+    return arr.sort(function(a, b) {
+                        var keyA = new Date(a.date);
+                        var keyB = new Date(b.date);
+                        // Compare the 2 dates
+                        if (keyA < keyB) return -1;
+                        if (keyA > keyB) return 1;
+                        return 0;
+                    });
+  }
 
   const fetchData = () => {
     getData('@venueFormData').then(response => {
@@ -31,16 +42,15 @@ const VenueEventsScreen = () => {
         let upcomingArr = [];
         let pastArr = [];
         data.forEach(event => {
-          const difference = new Date(event.date) - currentDate;
-
-          if (difference >= 1) {
+          const difference = (new Date(event.date) - currentDate) / 86400000;
+          if (difference >= -0.5) {
             upcomingArr.push(event);
           } else {
             pastArr.push(event);
           }
         })
-        setUpcomingEvents(upcomingArr);
-        setPastEvents(pastArr);
+        setUpcomingEvents(sortByDate(upcomingArr));
+        setPastEvents(sortByDate(pastArr));
         setLoading(false);
       })
     })
@@ -62,9 +72,16 @@ const VenueEventsScreen = () => {
 
   return (
     <ScrollView style={styles.background} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always">
+
       <Text style={styles.title}>Events</Text>
-      <Image style={styles.heroImage} source={{uri: 'https://images.unsplash.com/photo-1558346489-19413928158b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'}} />
-      <Text style={styles.description}>Create custom events with promotions for your target market and share them with our vast network of promoters and influencers</Text>
+
+      <Jumbotron
+        title="Get Started"
+        caption="Create custom events for your target market and share them with our network of promoters"
+        image="https://lasvegasnightclubs.com/wp-content/uploads/2018/06/27067569_10155555444533043_9174124228487188550_n-min-2.jpg"
+      />
+
+
       <Text style={styles.subTitle}>Your Events</Text>
 
       <ScrollView style={styles.eventContainer}>
@@ -90,7 +107,7 @@ const VenueEventsScreen = () => {
                       data={isUpcoming ? upcomingEvents : pastEvents}
                       keyExtractor={event => event.eventName}
                       renderItem={({ item }) => {
-                        return <EventCard event={item} refreshEvents={fetchData} />
+                        return <EventCard event={item} refreshEvents={fetchData} view="Venue" />
                       }}
                   ></FlatList>
                 )}
@@ -120,29 +137,13 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: '400',
     marginBottom: 20,
-    color: '#212121',
-  },
-
-  description: {
-    fontFamily: 'Gill Sans',
-    fontWeight: '300',
-    color: '#424242',
-    marginLeft: 32,
-    marginTop: 15,
-    paddingRight: 25,
-    fontSize: 15
-  },
-  heroImage: {
-    width: 350,
-    height: 200,
-    marginTop: 20,
-    marginLeft: 32
+    color: '#2A2A2A',
   },
   subTitle: {
     fontSize: 24,
     fontFamily: 'Gill Sans',
     fontWeight: '400',
-    color: '#424242',
+    color: '#2A2A2A',
     marginLeft: 33,
     marginTop: 30
   },

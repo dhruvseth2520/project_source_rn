@@ -26,7 +26,7 @@ const VenueNewEventForm = ({ route }) => {
   const [imageURL, setImageURL] = useState(event ? event.imageURL : "");
   const [description, setDescription] = useState(event ? event.description : "");
   const [promotion, setPromotion] = useState(event ? event.promotion : "");
-  const [fees, setFees] = useState(event ? event.fees : "");
+  const [fees, setFees] = useState(event ? (event.promoterFees + event.serviceFees).toString() : "");
   const [date, setDate] = useState(event ? event.date : new Date());
 
   const pickImage = async () => {
@@ -46,6 +46,7 @@ const VenueNewEventForm = ({ route }) => {
       getData('@venueFormData').then(response => {
         const eventForm = {
           venueId: response._id,
+          venueName: response.venueName,
           eventName: eventName.trim(),
           category,
           description,
