@@ -59,7 +59,7 @@ const PromoterEventListScreen = ({ navigation }) => {
 
     useEffect(() => {
       setEvents(handleSearch());
-    }, [query, price, category])
+    }, [query, price.filterValue, category.filterValue, date.filterValue])
 
     const handleSearch = () => {
       const filteredEvents = [];
@@ -74,7 +74,21 @@ const PromoterEventListScreen = ({ navigation }) => {
           categoryMatch = categories.includes(event.category);
         }
 
-        if ((eventNameMatch || venueNameMatch) && priceMatch && categoryMatch) {
+        let dateMatch = true;
+        if (date.filterValue.length) {
+          const dateWindow = date.filterValue[0].value;
+          const currentDate = new Date();
+          let difference = (new Date(event.date) - currentDate) / 86400000;
+          if (dateWindow === "The Next 3 days") {
+            dateMatch = difference <= 3;
+          } else if (dateWindow === "The Next 7 days") {
+            dateMatch = difference <= 7;
+          } else if (dateWindow === "Current Month") {
+            dateMatch = new Date(event.date).getYear() === currentDate.getYear() && new Date(event.date).getMonth() === currentDate.getMonth();
+          }
+        }
+
+        if ((eventNameMatch || venueNameMatch) && priceMatch && categoryMatch && dateMatch) {
             filteredEvents.push(event);
         }
       })

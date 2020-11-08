@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
 const PromoterSavedEvents = () => {
@@ -8,7 +8,7 @@ const PromoterSavedEvents = () => {
 
       </ScrollView>
   )
-}
+};
 
 const styles = StyleSheet.create({
     screen: {
@@ -24,6 +24,6 @@ const styles = StyleSheet.create({
       marginBottom: 20,
       color: '#2A2A2A',
     }
-})
+}); 
 
 export default PromoterSavedEvents;

@@ -23,7 +23,7 @@ const VenueNewEventForm = ({ route }) => {
 
   const [eventName, setEventName] = useState(event ? event.eventName : "");
   const [category, setCategory] = useState(event ? event.category : "Show");
-  const [imageURL, setImageURL] = useState(event ? event.imageURL : "");
+  const [image, setImage] = useState(event ? {uri: event.imageURL} : null);
   const [description, setDescription] = useState(event ? event.description : "");
   const [promotion, setPromotion] = useState(event ? event.promotion : "");
   const [fees, setFees] = useState(event ? (event.promoterFees + event.serviceFees).toString() : "");
@@ -33,12 +33,13 @@ const VenueNewEventForm = ({ route }) => {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
+        base64: true,
         aspect: [6, 3],
         quality: 1,
       });
 
       if (!result.cancelled) {
-        setImageURL(result.uri);
+        setImage(result);
       }
    };
 
@@ -50,7 +51,7 @@ const VenueNewEventForm = ({ route }) => {
           eventName: eventName.trim(),
           category,
           description,
-          imageURL,
+          image,
           promotion,
           fees,
           date
@@ -124,9 +125,9 @@ const VenueNewEventForm = ({ route }) => {
               <Text style={styles.label}>Event Image</Text>
               <Text style={styles.comment}>Banner or Poster for the event</Text>
 
-              {imageURL ? (
+              {image ? (
                 <Image
-                  source={{uri: imageURL}}
+                  source={{uri: image.uri}}
                   style={styles.eventImage}
                 />
               ) : (<></>)}

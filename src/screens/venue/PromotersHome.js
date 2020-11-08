@@ -62,7 +62,7 @@ const VenuePromotersHome = () => {
 
   useEffect(() => {
     setPromoters(handleSearch());
-  }, [query, price, availability, connections, languages, clients])
+  }, [query, price.filterValue, availability.filterValue, connections.filterValue, languages.filterValue, clients.filterValue])
 
 
 
@@ -95,7 +95,7 @@ const VenuePromotersHome = () => {
             <ScrollView style={styles.background} showsVerticalScrollIndicator={false}>
                   <Text style={styles.title}>Promoters</Text>
                   <Jumbotron
-                    title="Start Sourcing"
+                    title="Find the best fit"
                     caption={`Our promoters use their social media influence and network to get you the traffic you seek`}
                     image="https://media.istockphoto.com/photos/young-woman-with-mask-at-mardi-gras-night-club-party-picture-id972174058?k=6&m=972174058&s=170667a&w=0&h=y4tA36T_srRh2qSrkMK2P9HtBjQUtAjYwiZcdQzmDqU="
                   />

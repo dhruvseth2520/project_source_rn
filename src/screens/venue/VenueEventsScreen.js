@@ -37,7 +37,7 @@ const VenueEventsScreen = () => {
 
   const fetchData = () => {
     getData('@venueFormData').then(response => {
-      fetch(`${env.API_URL}/api/events/${response._id}`).then(response => response.json()).then(data => {
+      fetch(`${env.API_URL}/api/events/venue/${response._id}`).then(response => response.json()).then(data => {
         const currentDate = new Date();
         let upcomingArr = [];
         let pastArr = [];

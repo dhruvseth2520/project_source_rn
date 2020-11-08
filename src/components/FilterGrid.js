@@ -184,7 +184,7 @@ const EventsFilterGrid = ({ price, setPrice, category, setCategory, date, setDat
          />
          <FilterSelect state={date} setState={setDate}
            selectMultiple={false}
-           icon="calendar" title="Event Date" label="Occcuring In" items={["Next 3 days", "This Week", "This Month"]}/>
+           icon="calendar" title="Event Date" label="Occuring In" items={["The Next 3 days", "The Next 7 days", "Current Month"]}/>
          <FilterSelect state={category} setState={setCategory}
            selectMultiple={true}
            icon="buffer" title="Event Category" label="Event Category" items={["Show", "Night Out", "Themed Event", "Couples Event", "Activity"]}/>

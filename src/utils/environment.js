@@ -1,5 +1,5 @@
 const env = {
-  API_URL: 'http://192.168.1.42:3000'
+  API_URL: 'http://192.168.1.171:3000'
 }
 
 const online = {

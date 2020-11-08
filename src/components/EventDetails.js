@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator, Share, Linking } from 'react-native';
 import { FontAwesome5, Entypo } from '@expo/vector-icons';
 import { getData } from "../utils/localStorage";
 import { useNavigation } from "@react-navigation/native";
+import { FAB } from 'react-native-paper';
 import env from "../utils/environment";
+
 
 const EventDetails = ({ route }) => {
   const [venue, setVenue] = useState({});
@@ -12,6 +14,57 @@ const EventDetails = ({ route }) => {
   const event = route.params.event;
   const view = route.params.view;
   const navigation = useNavigation();
+
+  const shareEvent = async () => {
+    try {
+      const result = await Share.share({
+        title: 'A framework for building native apps using React',
+        url: 'https://github.com'
+      })
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const facebookShare = () => {
+    let facebookParameters = [];
+    facebookParameters.push('quote=' + encodeURI(event.description));
+    facebookParameters.push('u=' + encodeURI('https://aboutreact.com'));
+
+    const url = 'https://www.facebook.com/sharer/sharer.php?' + facebookParameters.join('&');
+    Linking.openURL(url)
+      .then(() => {
+
+      })
+      .catch(() => {
+        alert('Something went wrong');
+      });
+  }
+
+  const postTweet = () => {
+    let twitterParameters = [];
+    twitterParameters.push('url=' + encodeURI('https://aboutreact.com'));
+    twitterParameters.push('text=' + encodeURI(event.description));
+
+    const url = 'https://twitter.com/intent/tweet?' + twitterParameters.join('&');
+
+    Linking.openURL(url)
+      .then((data) => {
+
+      })
+      .catch(() => {
+        alert('Something went wrong');
+      });
+  }
 
   useEffect(() => {
     switch (event.category) {
@@ -33,7 +86,6 @@ const EventDetails = ({ route }) => {
       default:
           break;
     }
-
   }, [])
 
   useEffect(() => {
@@ -52,7 +104,6 @@ const EventDetails = ({ route }) => {
 
   return (
     <ScrollView style={styles.background}>
-
       <TouchableOpacity style={styles.backArrow} onPress={() => {
         if (view === "Venue") {
           navigation.navigate('VenueEventsHome');
@@ -104,14 +155,32 @@ const EventDetails = ({ route }) => {
               </View>
             </View>
 
-            <View style={{marginLeft: 20, paddingHorizontal: 5, paddingVertical: 20, width: '88%', marginBottom: 20}}>
+            <View style={{marginLeft: 20, paddingHorizontal: 5, paddingVertical: 20, width: '88%', marginBottom: 10}}>
               <Text style={styles.description}>{event.description}</Text>
             </View>
+
+            {view === "Promoter" ? (
+              <>
+                <View style={{flexDirection: 'row', marginBottom: 25, marginTop: 5, left: 10}}>
+                  <TouchableOpacity onPress={facebookShare} style={[styles.socialButton, {backgroundColor: '#3b5998'}]}>
+                    <FontAwesome5 style={styles.btnIcon} name="facebook-f" />
+                    <Text style={styles.btnText}>Share on Facebook</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={postTweet} style={[styles.socialButton, {backgroundColor: '#1DA1F2'}]}>
+                    <FontAwesome5 style={styles.btnIcon} name="twitter" />
+                    <Text style={styles.btnText}>Share on Twitter</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{flexDirection: 'row', marginBottom: 60, marginTop: 5, left: 10}}>
+                  <TouchableOpacity onPress={shareEvent} style={[styles.socialButton, {backgroundColor: 'white'}]}>
+                    <FontAwesome5 style={[styles.btnIcon, {fontSize: 14, top: 17, color: '#1AA2B0'}]} name="external-link-alt" />
+                    <Text style={[styles.btnText, {color: '#1AA2B0'}]}>Share with Contacts</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            ) : <></>}
         </>
-
       )}
-
-
     </ScrollView>
   )
 }
@@ -134,7 +203,7 @@ const styles = StyleSheet.create({
   },
   eventImage: {
     width: '100%',
-    height: 350,
+    height: 310,
     alignSelf: 'center'
   },
   eventComponent: {
@@ -186,20 +255,36 @@ const styles = StyleSheet.create({
     left: 10,
     zIndex: 1
   },
-  contactButton: {
+  socialButton: {
     flexDirection: 'row',
-    borderColor: '#1AA2B0',
-    borderWidth: 1,
-    paddingHorizontal: 7,
-    paddingVertical: 7,
-    width: 100,
+    width: 180,
+    borderRadius: 30,
     height: 50,
-    borderRadius: 6,
-    marginTop: 7,
-    marginBottom: 5,
-    marginLeft: 25
+    marginLeft: 10,
+    marginTop: -10,
+    shadowColor: "#000",
+    shadowOffset: {
+    	width: 0,
+    	height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
+  },
+  btnIcon: {
+    top: 14,
+    fontSize: 18,
+    left: 18,
+    color: 'white',
+    marginLeft: -2
+  },
+  btnText: {
+    top: 15,
+    fontSize: 15,
+    left: 27,
+    fontFamily: 'Avenir',
+    color: 'white'
   }
-
 })
 
 export default EventDetails;
