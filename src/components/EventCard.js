@@ -9,10 +9,13 @@ import RegisterGuestsModal from "./RegisterGuestsModal";
 import GuestListModal from "./GuestListModal";
 import ErrorModal from "./ErrorModal";
 import env from "../utils/environment";
+import FlipCard from 'react-native-flip-card'
+import ShareButtons from './ShareButtons';
 
 const EventCard = ({ event, refreshEvents, view }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
+  const [isFlipped, setFlipped] = useState(false);
   const [guestListVisible, setGuestListVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -21,6 +24,13 @@ const EventCard = ({ event, refreshEvents, view }) => {
   useEffect(() => {
     fetchData();
   }, [guestListVisible, modalVisible]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setFlipped(false);
+    });
+    return unsubscribe;
+  }, [])
 
   const fetchData = () => {
     fetch(`${env.API_URL}/api/events/attendance/event/${event._id}`)
@@ -38,7 +48,6 @@ const EventCard = ({ event, refreshEvents, view }) => {
   }
 
   // <FontAwesomeIcon icon={faBookmark} style={styles.cardIcon} />
-
 
   const deleteEvent = () => {
     const currentDate = new Date();
@@ -144,31 +153,47 @@ const EventCard = ({ event, refreshEvents, view }) => {
     )
   } else if (view === "Promoter") {
       return (
-            <TouchableOpacity onPress={viewEvent} activeOpacity={0.8}>
-            <View style={styles.card}>
-              <Image style={styles.eventImage} source={{uri: event.imageURL}}></Image>
-              <View style={styles.cardContent}>
-                  <View style={styles.leftCol}>
-                    <Text style={[styles.eventName, {fontSize: 20}]}>{event.eventName}</Text>
-                    <Text style={[styles.eventName, {fontSize: 15, marginTop: 0}]}>{event.venueName}</Text>
-                    <Text style={[styles.eventDate, {marginBottom: 18, marginTop: 3}]}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
-                  </View>
-
-                  <View style={styles.rightCol}>
-                    <View style={styles.btnContainer}>
-                        <TouchableOpacity>
-                          <View style={styles.circularBtn}>
-                            <FontAwesome5 name="bookmark" style={[styles.cardIcon, {top: 1}]}/>
+              <FlipCard flip={isFlipped}>
+                <TouchableOpacity onPress={viewEvent} onLongPress={() => setFlipped(!isFlipped)} activeOpacity={0.8}>
+                    <View style={styles.card}>
+                      <Image style={styles.eventImage} source={{uri: event.imageURL}}></Image>
+                      <View style={styles.cardContent}>
+                          <View style={styles.leftCol}>
+                            <Text style={[styles.eventName, {fontSize: 20}]}>{event.eventName}</Text>
+                            <Text style={[styles.eventName, {fontSize: 15, marginTop: 0}]}>{event.venueName}</Text>
+                            <Text style={[styles.eventDate, {marginBottom: 18, marginTop: 3}]}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
                           </View>
-                        </TouchableOpacity>
+
+                          <View style={styles.rightCol}>
+                            <View style={styles.btnContainer}>
+                                <TouchableOpacity>
+                                  <View style={styles.circularBtn}>
+                                    <FontAwesome5 name="bookmark" style={[styles.cardIcon, {top: 1}]}/>
+                                  </View>
+                                </TouchableOpacity>
+                            </View>
+                          </View>
+                      </View>
                     </View>
-                  </View>
-              </View>
-            </View>
-          </TouchableOpacity>
+                </TouchableOpacity>
+                <CardFlipSide event={event} />
+            </FlipCard>
   )}
+}
 
 
+const CardFlipSide = ({ event }) => {
+  return (<View style={styles.card}>
+    <View style={styles.cardBack}>
+      <Text style={[styles.label, {marginTop: 22}]}>Description</Text>
+      <Text style={styles.value}>{event.description}</Text>
+      <Text style={styles.label}>Promotion</Text>
+      <Text style={styles.value}>{event.promotion}</Text>
+      <Text style={styles.label}>Promoter Fees</Text>
+      <Text style={[styles.value, {marginBottom: 15}]}>{event.promoterFees + " MMK per head"}</Text>
+      <ShareButtons event={event} view="Card" />
+    </View>
+  </View>)
 }
 
 const styles = StyleSheet.create({
@@ -262,6 +287,22 @@ const styles = StyleSheet.create({
     color: '#2395A0',
     top: 4,
     left: 12
+  },
+  cardBack: {
+    height: 285,
+  },
+  label: {
+    paddingHorizontal: 25,
+    fontSize: 16,
+    fontFamily: 'Gill Sans',
+    fontWeight: '400',
+    marginTop: 5
+  },
+  value: {
+    fontFamily: 'Gill Sans',
+    fontWeight: '300',
+    paddingHorizontal: 25,
+    paddingVertical: 10
   }
 })
 

@@ -55,7 +55,7 @@ const VenueTabScreens = () => {
       <VenueTabNav.Screen name="VenueLedger"
         options={{
           tabBarIcon: ({ focused, size, color }) => (
-            <Ionicons name="ios-pricetags" size={size} color={focused ? '#1AA2B0' : 'gray'} style={{"marginTop": 6}}/>
+            <Ionicons name="ios-wallet" size={size} color={focused ? '#1AA2B0' : 'gray'} style={{"marginTop": 6}}/>
           ),
           headerShown: false,
           title: "Ledger"

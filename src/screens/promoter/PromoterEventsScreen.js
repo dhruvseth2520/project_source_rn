@@ -126,7 +126,7 @@ const PromoterEventListScreen = ({ navigation }) => {
                 data={events}
                 renderItem={({ item }) => {
                   return (
-                    <EventCard event={item} refreshEvents={fetchData} view="Promoter" />
+                      <EventCard event={item} refreshEvents={fetchData} view="Promoter" />
                   )
                 }}
             />

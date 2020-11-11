@@ -96,8 +96,8 @@ const LoginScreen = ({ navigation }) => {
     <View style={styles.screen}>
       <StatusBar barStyle={'dark-content'} />
       <ImageBackground
-        source={{uri: 'https://images.unsplash.com/photo-1570872626485-d8ffea69f463?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=975&q=80'}}
-        style={{height: '100%'}}>
+        source={require('../../assets/loginScreenBackground.jpg')}
+        style={{height: '100%', width: '100%'}}>
 
       <SafeAreaView style={styles.safeArea}>
 

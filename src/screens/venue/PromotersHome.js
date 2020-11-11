@@ -51,6 +51,7 @@ const VenuePromotersHome = () => {
       fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
         setPromoterData(data);
         setPromoters(data);
+        setQuery("");
       })
     });
     return unsubscribe;
@@ -63,8 +64,6 @@ const VenuePromotersHome = () => {
   useEffect(() => {
     setPromoters(handleSearch());
   }, [query, price.filterValue, availability.filterValue, connections.filterValue, languages.filterValue, clients.filterValue])
-
-
 
   const handleSearch = () => {
       let filteredPromoters = [];

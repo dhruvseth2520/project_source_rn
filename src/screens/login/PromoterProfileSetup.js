@@ -56,7 +56,7 @@ const PromoterProfileSetup = ({ route }) => {
                 storeData('@promoterFormData', data.promoter);
                 navigation.navigate('PromoterTab');
               }
-        })
+            })
       })
     }
 
@@ -87,12 +87,11 @@ const PromoterProfileSetup = ({ route }) => {
      setImages(tempImages);
    }
 
-
   return (
     <View style={styles.background}>
             {isLoading ? (
               <View style={styles.loadingContainer}>
-                <Text style={styles.loadingText}>Please wait while we finish setting up your profile</Text>
+                <Text style={styles.loadingText}>Please wait a moment while we finish setting up your profile</Text>
                 <ActivityIndicator size="large" color="#1AA2B0" style={{top: 30}}></ActivityIndicator>
               </View>
             ) : (<>
@@ -122,7 +121,6 @@ const PromoterProfileSetup = ({ route }) => {
                                     </TouchableOpacity>
                                     <Image source={{uri: item.uri}} style={styles.profileImage} />
                                   </View>
-
                                 )}
                               />
                             </ScrollView>
