@@ -1,5 +1,5 @@
-import { Text, View, StyleSheet, Image, ImageBackground, SafeAreaView, TouchableOpacity, StatusBar } from "react-native";
-import React from "react";
+import { Text, View, StyleSheet, Image, ImageBackground, SafeAreaView, TouchableOpacity, StatusBar, ActivityIndicator } from "react-native";
+import React, { useState } from "react";
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
 import { storeData, removeData } from '../../utils/localStorage';
@@ -8,6 +8,7 @@ import { FAB } from 'react-native-paper';
 
 
 const LoginScreen = ({ navigation }) => {
+  const [isLoading, setLoading] = useState(false);
   async function signInWithGoogleAsync() {
     try {
       const result = await Google.logInAsync({
@@ -50,6 +51,7 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = (callback) => {
     callback().then(response => {
       if (!response.cancelled) {
+        setLoading(true);
         fetch(`${env.API_URL}/api/auth/user`, {
           method: 'POST',
           mode: 'cors',
@@ -95,37 +97,44 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <StatusBar barStyle={'dark-content'} />
+
       <ImageBackground
         source={require('../../assets/loginScreenBackground.jpg')}
         style={{height: '100%', width: '100%'}}>
 
-      <SafeAreaView style={styles.safeArea}>
+        {isLoading ? <>
+          <ActivityIndicator size="large" color="white" style={{top: 370}} />
+          <Text style={styles.loadingText}>Welcome Back</Text>
+        </> : (
+          <SafeAreaView style={styles.safeArea}>
+            <Image source={require('../../assets/glowlight2.png')} style={styles.banner} />
+            <Text style={styles.slogan}>The new way to promote</Text>
 
-        <Image source={require('../../assets/glowlight2.png')} style={styles.banner} />
-        <Text style={styles.slogan}>The new way to promote</Text>
+            <View style={styles.buttonArea}>
+              <View style={styles.buttonContainer}>
+                  <FAB
+                    style={[styles.fab, styles.googleLoginButton]}
+                    icon="google"
+                    label="Sign In with Google"
+                    onPress={() => handleLogin(signInWithGoogleAsync)}
+                    color="#DB4437"
+                  />
+              </View>
+              <View style={styles.buttonContainer}>
+                <FAB
+                  style={[styles.fab, styles.facebookLoginButton]}
+                  icon="facebook"
+                  label="Sign In with Facebook"
+                  onPress={() => handleLogin(signInWithFacebookAsync)}
+                  color="white"
+                />
+              </View>
+            </View>
 
-        <View style={styles.buttonArea}>
-          <View style={styles.buttonContainer}>
-              <FAB
-                style={[styles.fab, styles.googleLoginButton]}
-                icon="google"
-                label="Sign In with Google"
-                onPress={() => handleLogin(signInWithGoogleAsync)}
-                color="#DB4437"
-              />
-          </View>
-          <View style={styles.buttonContainer}>
-            <FAB
-              style={[styles.fab, styles.facebookLoginButton]}
-              icon="facebook"
-              label="Sign In with Facebook"
-              onPress={() => handleLogin(signInWithFacebookAsync)}
-              color="white"
-            />
-          </View>
-        </View>
+          </SafeAreaView>
+        )}
 
-      </SafeAreaView>
+
     </ImageBackground>
 
     </View>
@@ -180,6 +189,14 @@ const styles = StyleSheet.create({
     width: 250,
     right: 0,
     bottom: 0,
+  },
+  loadingText: {
+    color: 'white',
+    fontFamily: 'Avenir',
+    fontSize: 32,
+    fontWeight: '600',
+    alignSelf: 'center',
+    top: 400
   },
   facebookLoginButton: {
     backgroundColor: '#3b5998',

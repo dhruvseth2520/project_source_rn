@@ -38,19 +38,23 @@ const PromoterEventListScreen = ({ navigation }) => {
     }
 
     const fetchData = () => {
-      fetch(`${env.API_URL}/api/events`).then(response => response.json()).then(data => {
-        const upcomingEvents = [];
-        const currentDate = new Date();
-        data.forEach(event => {
-          const difference = (currentDate - new Date(event.date)) / 86400000;
-          if (difference <= 0.5) {
-            upcomingEvents.push(event);
-          }
+      const unsubscribe = navigation.addListener('focus', () => {
+        fetch(`${env.API_URL}/api/events`).then(response => response.json()).then(data => {
+          const upcomingEvents = [];
+          const currentDate = new Date();
+          data.forEach(event => {
+            const difference = (currentDate - new Date(event.date)) / 86400000;
+            if (difference <= 0.5) {
+              upcomingEvents.push(event);
+            }
+          })
+          const sortedEvents = sortByDate(upcomingEvents);
+          setEvents(sortedEvents);
+          setEventData(sortedEvents);
         })
-        const sortedEvents = sortByDate(upcomingEvents);
-        setEvents(sortedEvents);
-        setEventData(sortedEvents);
-      })
+      });
+      return unsubscribe;
+
     }
 
     useEffect(() => {
@@ -143,14 +147,14 @@ const styles = StyleSheet.create({
     title: {
       marginTop: 100,
       left: 33,
-      fontFamily: 'Gill Sans',
-      fontSize: 36,
+      fontFamily: 'Futura',
+      fontSize: 35,
       fontWeight: '400',
       marginBottom: 20,
-      color: '#2A2A2A',
+      color: '#343434',
     },
     subTitle: {
-      fontSize: 24,
+      fontSize: 27,
       fontFamily: 'Gill Sans',
       fontWeight: '400',
       color: '#2A2A2A',

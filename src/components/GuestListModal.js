@@ -76,7 +76,7 @@ const GuestListModal = ({ modalVisible, setModalVisible, event, guests, setGuest
                     <Text style={styles.tableHeaderText}>{guests.reduce((sum, guest) => sum + guest.guestCount, 0)}</Text>
                   </View>
                   <View style={{width: '30%'}}>
-                    <Text style={styles.tableHeaderText}>{guests.reduce((sum, guest) => sum + guest.payable, 0)}</Text>
+                    <Text style={styles.tableHeaderText}>{guests.reduce((sum, guest) => sum + guest.recievable, 0)}</Text>
                   </View>
 
                 </View>

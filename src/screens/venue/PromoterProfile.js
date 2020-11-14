@@ -13,7 +13,6 @@ const VenuePromoterProfile = ({ route }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
 
-
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity style={styles.backArrow} onPress={() => navigation.navigate('VenuePromotersHome')}>

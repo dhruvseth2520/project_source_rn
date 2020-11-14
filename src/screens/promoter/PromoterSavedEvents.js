@@ -1,10 +1,54 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { getData } from '../../utils/localStorage';
+import EventCard from "../../components/EventCard";
+import env from "../../utils/environment";
 
 const PromoterSavedEvents = () => {
+  const navigation = useNavigation();
+  const [savedEvents, setSavedEvents] = useState([]);
+
+  const fetchData = () => {
+    getData('@promoterFormData').then(response => {
+      fetch(`${env.API_URL}/api/promoters/saved/${response._id}`).then(response => response.json()).then(data => {
+        setSavedEvents(sortByDate(data));
+      })
+    })
+  }
+
+  const sortByDate = (arr) => {
+    return arr.sort(function(a, b) {
+                        var keyA = new Date(a.date);
+                        var keyB = new Date(b.date);
+                        // Compare the 2 dates
+                        if (keyA < keyB) return -1;
+                        if (keyA > keyB) return 1;
+                        return 0;
+                    });
+  }
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchData();
+    });
+    return unsubscribe;
+  }, [])
+
   return (
       <ScrollView style={styles.screen}>
           <Text style={styles.title}>Saved</Text>
+          <Text style={styles.label}>You have {savedEvents.length} saved event(s)</Text>
+          <FlatList
+              style={styles.eventContainer}
+              keyExtractor={event => event._id}
+              data={savedEvents}
+              renderItem={({ item }) => {
+                return (
+                    <EventCard event={item} refreshEvents={fetchData} view="Promoter" />
+                )
+              }}
+          />
 
       </ScrollView>
   )
@@ -18,12 +62,23 @@ const styles = StyleSheet.create({
     title: {
       marginTop: 100,
       left: 33,
-      fontFamily: 'Gill Sans',
-      fontSize: 36,
+      fontFamily: 'Futura',
+      fontSize: 35,
       fontWeight: '400',
-      marginBottom: 20,
-      color: '#2A2A2A',
-    }
-}); 
+      marginBottom: 10,
+      color: '#343434',
+    },
+    label: {
+      fontFamily: 'Avenir',
+      fontSize: 15,
+      fontWeight: '400',
+      marginLeft: 35,
+    },
+    eventContainer: {
+      marginLeft: 35,
+      marginBottom: 80,
+      marginTop: 5
+    },
+});
 
 export default PromoterSavedEvents;

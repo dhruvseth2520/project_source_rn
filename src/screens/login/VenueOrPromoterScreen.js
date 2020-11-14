@@ -25,14 +25,14 @@ const LoginVenueOrPromoterScreen = ({ navigation, route }) => {
                         <Text style={styles.captionText}>Are you a</Text>
                         <View style={styles.buttonContainer}>
                           <TouchableOpacity style={styles.loginButton} onPress={handlePromoter}>
-                            <FontAwesome5 style={[styles.btnIcon, {marginLeft: 20}]} name="user" />
+                            <FontAwesome5 style={[styles.btnIcon, {marginLeft: 30}]} name="user" />
                             <Text style={styles.btnText}>Promoter</Text>
                           </TouchableOpacity>
                         </View>
                         <Text style={styles.captionText}>or a</Text>
                         <View style={styles.buttonContainer}>
                           <TouchableOpacity style={styles.loginButton} onPress={handleVenue}>
-                            <FontAwesome5 style={[styles.btnIcon, {marginLeft: 30}]} name="map-marker-alt" />
+                            <FontAwesome5 style={[styles.btnIcon, {marginLeft: 40}]} name="map-marker-alt" />
                             <Text style={styles.btnText}>Venue</Text>
                           </TouchableOpacity>
                         </View>
@@ -89,19 +89,18 @@ const styles = StyleSheet.create({
     },
     loginButton: {
       flexDirection: 'row',
-      width: 170,
+      width: 190,
       borderRadius: 30,
       borderColor: '#323232',
       borderWidth: 1,
       height: 50,
-      marginLeft: 82
+      marginLeft: 75
     },
     btnIcon: {
       top: 14,
       fontSize: 18,
       left: 18,
-      color: '#323232',
-      marginLeft: 0
+      color: '#323232'
     },
     btnText: {
       top: 15,

@@ -87,9 +87,9 @@ const ShareButtons = ({ event, view }) => {
         </>
       ) : (
         <View style={{flexDirection: 'row', marginBottom: 60, marginTop: 5, left: 10}}>
-          <TouchableOpacity onPress={shareEvent} style={[styles.socialButton, {backgroundColor: 'white'}]}>
-            <FontAwesome5 style={[styles.btnIcon, {fontSize: 14, top: 17, color: '#1AA2B0'}]} name="user" />
-            <Text style={[styles.btnText, {color: '#1AA2B0'}]}>Share with Contacts</Text>
+          <TouchableOpacity onPress={shareEvent} style={[styles.socialButton, {backgroundColor: 'white', width: 160, height: 45, shadowOpacity: 0.1}]}>
+            <FontAwesome5 style={[styles.btnIcon, {fontSize: 12, top: 17, color: '#1AA2B0'}]} name="user" />
+            <Text style={[styles.btnText, {color: '#1AA2B0', fontSize: 13}]}>Share with Contacts</Text>
           </TouchableOpacity>
         </View>
 

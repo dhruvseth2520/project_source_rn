@@ -1,5 +1,4 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import VenueEventsScreen from "../screens/venue/VenueEventsScreen";
 import EventDetails from "../components/EventDetails";
@@ -29,8 +28,7 @@ const VenueEventStackScreen = ({ route }) => {
   </Stack.Navigator>
 }
 
-const styles = StyleSheet.create({
 
-});
+
 
 export default VenueEventStackScreen;

@@ -47,14 +47,10 @@ const VenuePromotersHome = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
       fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
         setPromoterData(data);
         setPromoters(data);
-        setQuery("");
       })
-    });
-    return unsubscribe;
   }, [])
 
   useEffect(() => {
@@ -141,14 +137,14 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 100,
     left: 33,
-    fontFamily: 'Gill Sans',
-    fontSize: 36,
+    fontFamily: 'Futura',
+    fontSize: 35,
     fontWeight: '400',
     marginBottom: 20,
-    color: '#2A2A2A',
+    color: '#343434',
   },
   subTitle: {
-    fontSize: 24,
+    fontSize: 27,
     fontFamily: 'Gill Sans',
     fontWeight: '400',
     color: '#2A2A2A',

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faBookmark, farBookmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { FAB } from 'react-native-paper';
 import RegisterGuestsModal from "./RegisterGuestsModal";
@@ -11,22 +9,63 @@ import ErrorModal from "./ErrorModal";
 import env from "../utils/environment";
 import FlipCard from 'react-native-flip-card'
 import ShareButtons from './ShareButtons';
+import { getData } from '../utils/localStorage';
 
 const EventCard = ({ event, refreshEvents, view }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [isFlipped, setFlipped] = useState(false);
   const [guestListVisible, setGuestListVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [guests, setGuests] = useState([]);
 
+  const saveEvent = () => {
+    getData('@promoterFormData').then(response => {
+      fetch(`${env.API_URL}/api/promoters/saved`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({promoterId: response._id, eventId: event._id})
+      }).then(response => response.json()).then(data => {
+        if (data.status === "Success") {
+          setSaved(!saved);
+          refreshEvents();
+        }
+      })
+    })
+  }
+
+  const refreshSavedStatus = () => {
+    getData('@promoterFormData').then(response => {
+      fetch(`${env.API_URL}/api/promoters/saved/${response._id}`).then(response => response.json()).then(data => {
+        for (let i = 0; i < data.length; i++) {
+          const savedEvent = data[i];
+          if (event._id === savedEvent._id) {
+            setSaved(true);
+            return;
+          }
+        }
+        setSaved(false);
+      })
+    })
+  }
+
   useEffect(() => {
     fetchData();
   }, [guestListVisible, modalVisible]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    if (view === "Promoter") {
+      refreshSavedStatus();
+    }
+  }, [event])
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
       setFlipped(false);
     });
     return unsubscribe;
@@ -46,8 +85,6 @@ const EventCard = ({ event, refreshEvents, view }) => {
       event
     })
   }
-
-  // <FontAwesomeIcon icon={faBookmark} style={styles.cardIcon} />
 
   const deleteEvent = () => {
     const currentDate = new Date();
@@ -166,9 +203,11 @@ const EventCard = ({ event, refreshEvents, view }) => {
 
                           <View style={styles.rightCol}>
                             <View style={styles.btnContainer}>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={saveEvent}>
                                   <View style={styles.circularBtn}>
-                                    <FontAwesome5 name="bookmark" style={[styles.cardIcon, {top: 1}]}/>
+                                    {saved ? (<FontAwesome name="bookmark" style={styles.cardIcon}  />) : (
+                                      <FontAwesome name="bookmark-o" style={styles.cardIcon}  />
+                                    )}
                                   </View>
                                 </TouchableOpacity>
                             </View>
@@ -185,7 +224,7 @@ const EventCard = ({ event, refreshEvents, view }) => {
 const CardFlipSide = ({ event }) => {
   return (<View style={styles.card}>
     <View style={styles.cardBack}>
-      <Text style={[styles.label, {marginTop: 22}]}>Description</Text>
+      <Text style={[styles.label, {marginTop: 27}]}>Description</Text>
       <Text style={styles.value}>{event.description}</Text>
       <Text style={styles.label}>Promotion</Text>
       <Text style={styles.value}>{event.promotion}</Text>
@@ -277,8 +316,8 @@ const styles = StyleSheet.create({
   },
   cardIcon: {
     alignSelf: 'center',
-    fontSize: 17,
-    marginTop: 11,
+    fontSize: 20,
+    marginTop: 10,
     color: '#2395A0'
   },
   btnIcon: {

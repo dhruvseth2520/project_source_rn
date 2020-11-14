@@ -186,14 +186,14 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 100,
     left: 33,
-    fontFamily: 'Gill Sans',
-    fontSize: 36,
+    fontFamily: 'Futura',
+    fontSize: 35,
     fontWeight: '400',
     marginBottom: 20,
-    color: '#212121',
+    color: '#343434',
   },
   card: {
-    marginTop: 20,
+    marginTop: 10,
     marginLeft: 30,
     marginBottom: 10,
     width: '84%',
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     right: 15
   },
   subTitle: {
-    fontSize: 24,
+    fontSize: 27,
     fontFamily: 'Gill Sans',
     fontWeight: '400',
     color: '#424242',

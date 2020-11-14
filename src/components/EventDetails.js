@@ -55,11 +55,7 @@ const EventDetails = ({ route }) => {
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity style={styles.backArrow} onPress={() => {
-        if (view === "Venue") {
-          navigation.navigate('VenueEventsHome');
-        } else if (view === "Promoter") {
-          navigation.navigate('PromoterEventHome');
-        }
+        navigation.goBack();
       }}>
         <Entypo name="chevron-small-left" size={34} color="black" />
       </TouchableOpacity>
