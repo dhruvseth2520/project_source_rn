@@ -16,90 +16,67 @@ const VenuePromoterProfile = ({ route }) => {
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity style={styles.backArrow} onPress={() => navigation.navigate('VenuePromotersHome')}>
-        <Entypo name="chevron-small-left" size={34} color="black" />
+        <Entypo name="chevron-small-left" size={44} color="white" />
       </TouchableOpacity>
-      <SliderBox
-        sliderBoxHeight={450}
-        images={promoterProfile.images}
-        dotColor="white"
-        inactiveDotColor="#90A4AE"
-        dotStyle={{
-          width: 8,
-          height: 8,
-          borderRadius: 8,
-          marginHorizontal: 10,
-          marginBottom: 15,
-          padding: 0,
-          margin: 0
-        }}
-      />
 
-      <View style={styles.profileHeader}>
-            <Text style={styles.name}>{promoter.firstName + ", " + promoter.age}</Text>
-            <Text style={styles.role}>{promoterProfile.occupation}</Text>
-            {promoter.badge ? (
-              <>
-                <TouchableOpacity style={styles.badgeBtn} onPress={() => setModalVisible(true)}>
-                  <FontAwesome5 style={[styles.badgeIcon, {color: promoter.badge.color}]} name={promoter.badge.iconName}></FontAwesome5>
-                </TouchableOpacity>
-                <BadgeModal promoter={promoter} modalVisible={modalVisible} setModalVisible={setModalVisible} />
-              </>
-            ) : <></>}
-
-
+      <View style={styles.headerContainer}>
+        <Image style={styles.headerBackground} source={require('../../assets/canva-photo-editor.png')}></Image>
+        <Image style={styles.profileImage} source={{uri: promoterProfile.images[0]}} />
+        <Text style={styles.headerTitle}>{promoter.firstName + ", " + promoter.age}</Text>
+        <Text style={styles.headerSubtitle}>{promoterProfile.occupation}</Text>
+        <View style={styles.headerCard}>
+          <View>
+            <Text style={styles.headerValue}>{promoterProfile.guestCount}</Text>
+            <Text style={styles.headerLabel}>Clients Sourced</Text>
+          </View>
+          <View style={{marginLeft: 27}}>
+            <Text style={styles.headerValue}>11</Text>
+            <Text style={styles.headerLabel}>Positive Reviews</Text>
+          </View>
+          <View style={{marginLeft: 27}}>
+            <Text style={styles.headerValue}>{promoterProfile.numConnections}</Text>
+            <Text style={styles.headerLabel}>Total Connections</Text>
+          </View>
+        </View>
       </View>
 
       <View style={styles.profileContent}>
-        <View style={styles.profileComponent}>
-          <Text style={styles.profileBio}>{promoterProfile.bio}</Text>
-        </View>
-        <View style={styles.profileStats}>
-          <View style={styles.stat}>
-            <View style={{flexDirection: 'row'}}>
-                <Text style={styles.statNumber}>{promoter.promoterProfile.guestCount}</Text>
-                <FontAwesome5 style={styles.statIcon} name="briefcase"></FontAwesome5>
-            </View>
-            <Text style={styles.statCaption}>Clients Sourced</Text>
+        <Text style={styles.subTitle}>Bio</Text>
+        <Text style={styles.bio}>{promoterProfile.bio}</Text>
+        <Text style={styles.subTitle}>Profile Details</Text>
+        <View style={{flexDirection: 'row', marginTop: -15}}>
+          <View style={styles.contentCol}>
+            <Text style={styles.label}>Active Since</Text>
+            <Text style={styles.value}>{promoterProfile.activeSinceDate}</Text>
+            <Text style={styles.label}>Availability</Text>
+            <Text style={styles.value}>{promoterProfile.availability} hours/week</Text>
+            <Text style={styles.label}>Expected rate</Text>
+            <Text style={styles.value}>{promoterProfile.expectedRate} MMK per head</Text>
           </View>
 
-          <View style={styles.stat}>
-            <View style={{flexDirection: 'row'}}>
-                <Text style={styles.statNumber}>11</Text>
-                <FontAwesome5 style={[styles.statIcon, {left: 2}]} name="star"></FontAwesome5>
-            </View>
-            <Text style={styles.statCaption}>Positive Reviews</Text>
+          <View style={styles.contentCol}>
+            <Text style={styles.label}>Languages</Text>
+            <Text style={styles.value}>{promoterProfile.languages}</Text>
+            <Text style={styles.label}>Education</Text>
+            <Text style={styles.value}>{promoterProfile.education}</Text>
           </View>
 
-          <View style={styles.stat}>
-            <View style={{flexDirection: 'row'}}>
-                <Text style={styles.statNumber}>{promoterProfile.numConnections}</Text>
-                <FontAwesome5 style={styles.statIcon} name="network-wired"></FontAwesome5>
-            </View>
-            <Text style={styles.statCaption}>Total Connections</Text>
+          <View style={styles.contentCol}>
+            <Text style={styles.label}>Hobbies</Text>
+            <Text style={styles.value}>{promoterProfile.hobbies}</Text>
+            <Text style={styles.label}>Favorite Drink</Text>
+            <Text style={styles.value}>{promoterProfile.favoriteDrink}</Text>
           </View>
         </View>
-
-        <View style={styles.contentCol}>
-          <Text style={styles.label}>Active Since</Text>
-          <Text style={styles.value}>{promoterProfile.activeSinceDate}</Text>
-          <Text style={styles.label}>Availability</Text>
-          <Text style={styles.value}>{promoterProfile.availability} hours/week</Text>
-          <Text style={styles.label}>Expected rate</Text>
-          <Text style={styles.value}>{promoterProfile.expectedRate} MMK per head</Text>
+        <Text style={styles.subTitle}>Gallery</Text>
+        <View style={styles.imageContainer}>
+          <Image source={{uri: promoterProfile.images[0]}} style={styles.galleryImage} />
+          <Image source={{uri: promoterProfile.images[1]}} style={styles.galleryImage} />
+          <Image source={{uri: promoterProfile.images[2]}} style={styles.galleryImage} />
         </View>
-
-        <View style={styles.contentCol}>
-          <Text style={styles.label}>Languages</Text>
-          <Text style={styles.value}>{promoterProfile.languages}</Text>
-          <Text style={styles.label}>Education</Text>
-          <Text style={styles.value}>{promoterProfile.education}</Text>
-        </View>
-
-        <View style={styles.contentCol}>
-          <Text style={styles.label}>Hobbies</Text>
-          <Text style={styles.value}>{promoterProfile.hobbies}</Text>
-          <Text style={styles.label}>Favorite Drink</Text>
-          <Text style={styles.value}>{promoterProfile.favoriteDrink}</Text>
+        <View style={[styles.imageContainer, {marginTop: 50, marginBottom: 50}]}>
+          <Image source={{uri: promoterProfile.images[3]}} style={styles.galleryImage} />
+          <Image source={{uri: promoterProfile.images[4]}} style={styles.galleryImage} />
         </View>
       </View>
     </ScrollView>
@@ -112,59 +89,109 @@ const styles = StyleSheet.create({
     flex: 1,
     zIndex: 2
   },
+  headerContainer: {
+    height: 420,
+  },
+  headerBackground: {
+    height: 420,
+    left: -220,
+    position: 'absolute',
+    opacity: 1
+  },
+  profileImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    borderWidth: 4,
+    borderColor: 'white',
+    alignSelf: 'center',
+    top: 100
+  },
+  headerTitle: {
+    fontFamily: 'Futura',
+    fontWeight: '400',
+    fontSize: 35,
+    color: 'white',
+    alignSelf: 'center',
+    top: 120
+  },
+  subTitle: {
+    fontSize: 22,
+    fontFamily: 'Avenir',
+    fontWeight: '500',
+    color: '#2A2A2A',
+    marginTop: 5
+  },
+  headerSubtitle: {
+    fontSize: 17,
+    top: 130,
+    fontFamily: 'Avenir',
+    color: 'white',
+    alignSelf: 'center',
+  },
   backArrow: {
     marginTop: 50,
     marginLeft: 10,
     zIndex: 1,
     position: 'absolute'
   },
-  profileHeader: {
-    marginLeft: 18,
-    marginTop: 18,
+  headerValue: {
+    fontSize: 30,
+    fontFamily: 'Avenir',
+    fontWeight: '500',
+    color: '#474747',
+    alignSelf: 'center'
+  },
+  headerLabel: {
+    fontFamily: 'Avenir',
+    top: 3,
+    color: '#474747'
+  },
+  headerCard: {
     flexDirection: 'row',
-    paddingVertical: 0
+    width: '90%',
+    padding: 13,
+    top: 164,
+    backgroundColor: 'white',
+    alignSelf: 'center',
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+    	width: 0,
+    	height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
   },
   profileContent: {
-    marginTop: 25,
-    paddingHorizontal: 19,
-    flexDirection: 'row',
+    width: '90%',
+    padding: 20,
+    backgroundColor: 'white',
+    alignSelf: 'center',
+    marginTop: 55,
+    marginBottom: 60,
     alignItems: 'flex-start',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    shadowColor: "#000",
+    shadowOffset: {
+    	width: 0,
+    	height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+    borderRadius: 8,
   },
-  profileBio: {
-    fontSize: 16,
-    fontFamily: 'Gill Sans',
-    fontWeight: '300',
-    marginTop: 5,
-    marginBottom: 20
-  },
-  profileComponent: {
-    width: 360,
-    marginTop: 5,
-    borderColor: 'gray',
-    borderBottomWidth: 0.5,
-    paddingVertical: 0
+  bio: {
+    fontFamily: 'Avenir',
+    marginTop: 10,
+    marginBottom: 10
   },
   contentCol: {
-    marginTop: 15,
-    marginLeft: 1,
-    marginRight: 15,
-    marginBottom: 30,
-    width: '29%'
-  },
-  name: {
-    fontSize: 26,
-    fontFamily: 'Gill Sans',
-    fontWeight: '300'
-  },
-  role: {
-    fontSize: 13,
-    marginTop: 3,
-    fontFamily: 'Gill Sans',
-    fontWeight: '300',
-    position: 'absolute',
-    top: 30,
-    color: '#3B3B3B'
+    marginTop: 25,
+    marginLeft: 0,
+    width: '33%'
   },
   badgeIcon: {
     fontSize: 22,
@@ -173,15 +200,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   label: {
-    fontSize: 16,
+    fontSize: 17,
     fontFamily: 'Avenir',
     fontWeight: '400',
     marginBottom: 2
   },
   value: {
     fontFamily: 'Avenir',
+    fontSize: 13,
     color: '#3B3B3B',
     marginBottom: 6,
+    marginTop: 3,
     fontWeight: '300'
   },
   badgeBtn: {
@@ -191,40 +220,16 @@ const styles = StyleSheet.create({
     marginTop: -8,
     marginBottom: -15
   },
-  profileStats: {
+  imageContainer: {
     flexDirection: 'row',
-    marginLeft: -10,
-    padding: 10,
-    marginTop: 5
+    height: 140,
+    marginTop: 15
   },
-  stat: {
-    marginRight: 18,
-    width: '29%'
-  },
-  statIcon: {
-    fontSize: 18,
-    top: 15,
-    left: 8
-  },
-  statNumber: {
-    fontSize: 40,
-    fontFamily: 'Avenir',
-    fontWeight: '100'
-  },
-  statCaption: {
-    fontSize: 13,
-    fontWeight: '300',
-    fontFamily: 'Avenir'
-  },
-  messageBtn: {
-    flexDirection: 'row',
-    borderColor: '#1AA2B0',
-    borderWidth: 1,
-    padding: 10,
-    width: 100,
-    height: 38,
-    marginLeft: 60,
-    borderRadius: 7
+  galleryImage: {
+    height: 180,
+    width: 108,
+    borderRadius: 6,
+    marginRight: 4
   }
 });
 
