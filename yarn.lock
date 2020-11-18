@@ -5830,6 +5830,11 @@ react-native-image-slider-box@^1.0.12:
   dependencies:
     react-native-snap-carousel "*"
 
+react-native-image-view@^2.1.9:
+  version "2.1.9"
+  resolved "https://registry.yarnpkg.com/react-native-image-view/-/react-native-image-view-2.1.9.tgz#635306360c42ad2479f364161c47d2557f9240fd"
+  integrity sha512-+DA/+tLM7KHaLs41Hdd+m5UpGX2qtEdMamMZCsXCsJ5J6RwWrqBXQrGVB9Op7dIkZW2DDRVKZTP/FuSNEGtzJg==
+
 react-native-ionicons@^4.6.5:
   version "4.6.5"
   resolved "https://registry.yarnpkg.com/react-native-ionicons/-/react-native-ionicons-4.6.5.tgz#b792ec8896381e67ff237eba955e38afe7ceb7a4"
@@ -5891,6 +5896,13 @@ react-native-popover-view@^3.0.3:
   dependencies:
     react-native-safe-area-view "0.14.9"
 
+react-native-radio-button-group@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-radio-button-group/-/react-native-radio-button-group-1.0.3.tgz#62a1c37b73adb6d3eb2bd819bc7749041cc94052"
+  integrity sha512-4zLOHi0sLjBOTBG+t+Rmx3syvS2P5AccRsnMljJn3kBLMm6vbIdxhYcmxb1IFikk1B/GnJTwdsHMJop8AxX4/A==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-reanimated@~1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.9.0.tgz#38676c99dd585504fdc7331efb45e5f48ec7339a"
@@ -5931,6 +5943,11 @@ react-native-select-multiple@^2.1.0:
   integrity sha512-sJepp/RNeLorR+/bEUVuWnVEX5klpyf0MHWKy0SN1MIty4vcKhL9ZhPM6Zydm5p6qHeFcvA7Q87FzO1JTdaqkw==
   dependencies:
     prop-types "^15.7.2"
+
+react-native-single-select@^1.8.4:
+  version "1.8.4"
+  resolved "https://registry.yarnpkg.com/react-native-single-select/-/react-native-single-select-1.8.4.tgz#5b1e71cc5050c845a80886b412275f681b30fa79"
+  integrity sha512-TSk45h2LOKmPyg9T1fsZFzohAxefFmC9noCjW1W4E2uYCHOsdcSwmyRSbr2+X1oDrDJOxflIst2/Hl6/mEgIMg==
 
 react-native-snap-carousel@*:
   version "3.9.1"

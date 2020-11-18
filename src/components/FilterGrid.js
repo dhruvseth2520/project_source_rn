@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { ScrollView, View, StyleSheet, SafeAreaView, Text, Image } from 'react-native';
+import { ScrollView, View, StyleSheet, SafeAreaView, Text, Image, TouchableOpacity } from 'react-native';
 import { Chip } from 'react-native-paper';
 import Popover, { PopoverPlacement } from 'react-native-popover-view';
 import Slider from '@react-native-community/slider';
-import { Button } from 'react-native-paper';
-import SelectMultiple from 'react-native-select-multiple'
-
+import { Button, RadioButton } from 'react-native-paper';
+import SelectMultiple from 'react-native-select-multiple';
 
 const FilterRange = ({ state, setState, title, icon, unit, step, min, max, label, maxOrMin }) => {
   const [visible, setVisible] = useState(false);
@@ -69,9 +68,8 @@ const FilterRange = ({ state, setState, title, icon, unit, step, min, max, label
 
 }
 
-const FilterSelect = ({ state, setState, icon, title, label, items, selectMultiple }) => {
+const FilterSelect = ({ state, setState, icon, title, label, items }) => {
   const [visible, setVisible] = useState(false);
-
   return (
     <Popover
       isVisible={visible}
@@ -92,19 +90,18 @@ const FilterSelect = ({ state, setState, icon, title, label, items, selectMultip
       <View style={styles.filterCard}>
         <Text style={styles.label}>{label}</Text>
 
-        <ScrollView>
-          <SelectMultiple
-            items={items}
-            maxSelect={selectMultiple === true ? items.length : 1}
-            selectedItems={state.displayValue}
-            checkboxSource={require('../assets/checkbox-unchecked.png')}
-            checkboxStyle={{width: 20, height: 20, marginLeft: -5}}
-            selectedCheckboxSource={require('../assets/checkbox-checked.png')}
-            onSelectionsChange={(val) => setState({...state, displayValue: val})}
-            rowStyle={{borderBottomWidth: 0, marginBottom: -15}}
-            labelStyle={{fontFamily: 'Avenir', fontWeight: '300', top: 1, left: 5}}
-            style={{top: -5}}
-           />
+        <ScrollView style={{marginTop: 3}}>
+            <SelectMultiple
+              items={items}
+              selectedItems={state.displayValue}
+              checkboxSource={require('../assets/checkbox-unchecked.png')}
+              checkboxStyle={{width: 20, height: 20, marginLeft: -5}}
+              selectedCheckboxSource={require('../assets/checkbox-checked.png')}
+              onSelectionsChange={(val) => setState({...state, displayValue: val})}
+              rowStyle={{borderBottomWidth: 0, marginBottom: -15}}
+              labelStyle={{fontFamily: 'Avenir', fontWeight: '300', top: 1, left: 5}}
+              style={{top: -5}}
+             />
         </ScrollView>
 
 
@@ -182,13 +179,10 @@ const EventsFilterGrid = ({ price, setPrice, category, setCategory, date, setDat
                 unit="MMK"
                 min={0} max={5000} step={100}
          />
-         <FilterSelect state={date} setState={setDate}
-           selectMultiple={false}
-           icon="calendar" title="Event Date" label="Occuring In" items={["The Next 3 days", "The Next 7 days", "Current Month"]}/>
+         <FilterRange state={date} setState={setDate} maxOrMin="max"
+           icon="calendar" title="Event Date" label="Occuring in the next" unit="Days" min={0} max={30} step={1}/>
          <FilterSelect state={category} setState={setCategory}
-           selectMultiple={true}
            icon="buffer" title="Event Category" label="Event Category" items={["Show", "Night Out", "Themed Event", "Couples Event", "Activity"]}/>
-
     </ScrollView>)
 
 }
@@ -209,8 +203,17 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: 'Avenir',
+    fontSize: 15,
     top: -5
-  }
+  },
+  radioLabel: {
+    fontFamily: 'Avenir',
+    fontWeight: '300',
+    fontSize: 14,
+    top: 10,
+    left: 5
+  },
+
 })
 
 export { PromotersFilterGrid, EventsFilterGrid };

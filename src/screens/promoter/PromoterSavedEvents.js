@@ -12,7 +12,15 @@ const PromoterSavedEvents = () => {
   const fetchData = () => {
     getData('@promoterFormData').then(response => {
       fetch(`${env.API_URL}/api/promoters/saved/${response._id}`).then(response => response.json()).then(data => {
-        setSavedEvents(sortByDate(data));
+        let upcomingEvents = [];
+        data.forEach(event => {
+          const currentDate = new Date();
+          const difference = (new Date(event.date) - currentDate) / 86400000;
+          if (difference >= -0.5) {
+            upcomingEvents.push(event);
+          }
+        })
+        setSavedEvents(sortByDate(upcomingEvents));
       })
     })
   }

@@ -1,7 +1,8 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { PromoterEventStackScreens, PromoterSavedEventStackScreens } from './PromoterEventStackScreens';
+import PromoterActivityScreen from "../screens/promoter/PromoterActivityScreen";
 import MessageStackScreens from './MessageStackScreens';
 import PromoterProfile from '../screens/promoter/ProfileScreen';
 import theme, { tabDefaults } from '../utils/theme.styles'
@@ -15,7 +16,6 @@ const PromoterTabScreens = () => {
             inactiveTintColor: 'gray',
             style: {
                 height: 80,
-
             },
         }}>
             <PromoterTabNav.Screen
@@ -48,6 +48,15 @@ const PromoterTabScreens = () => {
                             <Ionicons name="ios-chatboxes" size={size} color={focused ? theme.PRIMARY_COLOR : 'gray'} />
                         )
                     }} />
+            <PromoterTabNav.Screen
+                  name="PromoterActivity"
+                  component={PromoterActivityScreen}
+                  options={{
+                                title: "Activity",
+                                tabBarIcon: ({ focused, size, color }) => (
+                                    <FontAwesome5 name="chart-line" size={size} color={focused ? theme.PRIMARY_COLOR : 'gray'} />
+                                )
+                            }} />
             <PromoterTabNav.Screen
                 name="PromoterProfile"
                 component={PromoterProfile}

@@ -22,8 +22,8 @@ const PromoterEventListScreen = ({ navigation }) => {
     });
     const [date, setDate] = useState({
       active: false,
-      displayValue: [],
-      filterValue: []
+      displayValue: 30,
+      filterValue: 100
     });
 
     const sortByDate = (arr) => {
@@ -38,23 +38,19 @@ const PromoterEventListScreen = ({ navigation }) => {
     }
 
     const fetchData = () => {
-      const unsubscribe = navigation.addListener('focus', () => {
-        fetch(`${env.API_URL}/api/events`).then(response => response.json()).then(data => {
-          const upcomingEvents = [];
-          const currentDate = new Date();
-          data.forEach(event => {
-            const difference = (currentDate - new Date(event.date)) / 86400000;
-            if (difference <= 0.5) {
-              upcomingEvents.push(event);
-            }
-          })
-          const sortedEvents = sortByDate(upcomingEvents);
-          setEvents(sortedEvents);
-          setEventData(sortedEvents);
+      fetch(`${env.API_URL}/api/events`).then(response => response.json()).then(data => {
+        const upcomingEvents = [];
+        const currentDate = new Date();
+        data.forEach(event => {
+          const difference = (currentDate - new Date(event.date)) / 86400000;
+          if (difference <= 0.5) {
+            upcomingEvents.push(event);
+          }
         })
-      });
-      return unsubscribe;
-
+        const sortedEvents = sortByDate(upcomingEvents);
+        setEvents(sortedEvents);
+        setEventData(sortedEvents);
+      })
     }
 
     useEffect(() => {
@@ -72,24 +68,14 @@ const PromoterEventListScreen = ({ navigation }) => {
         const venueNameMatch = event.venueName.toLowerCase().trim().startsWith(query.toLowerCase().trim());
         const priceMatch = event.promoterFees >= price.filterValue;
 
+        const currentDate = new Date();
+        const difference = Math.round((new Date(event.date) - currentDate) / (86400000));
+        const dateMatch = difference <= date.filterValue;
+
         let categoryMatch = true;
         if (category.filterValue.length) {
           const categories = category.filterValue.map(el => el.value);
           categoryMatch = categories.includes(event.category);
-        }
-
-        let dateMatch = true;
-        if (date.filterValue.length) {
-          const dateWindow = date.filterValue[0].value;
-          const currentDate = new Date();
-          let difference = (new Date(event.date) - currentDate) / 86400000;
-          if (dateWindow === "The Next 3 days") {
-            dateMatch = difference <= 3;
-          } else if (dateWindow === "The Next 7 days") {
-            dateMatch = difference <= 7;
-          } else if (dateWindow === "Current Month") {
-            dateMatch = new Date(event.date).getYear() === currentDate.getYear() && new Date(event.date).getMonth() === currentDate.getMonth();
-          }
         }
 
         if ((eventNameMatch || venueNameMatch) && priceMatch && categoryMatch && dateMatch) {
