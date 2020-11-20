@@ -38,7 +38,7 @@ const VenuePromoterProfile = ({ route }) => {
       </TouchableOpacity>
 
       <View style={styles.profileHeader}>
-        <Image style={styles.headerImage} source={{uri: 'https://lh3.googleusercontent.com/proxy/GhCS9Pjba_X_yfUvXf137orze2vAzoAgRZjBSApnFnXWfV2x5P2-uNp-gRRNZrdGzUJXMjdBD4yfJ8KYijzCRW7A17InLqc-m8Pb11YF7F4J0ZFDqV7HBnzLiJTfLY9PC4VA3pPK8NMNnfykDs3xXdunt1i9cB3lqN__ynZGD-svOCqjAkqOF3aNYJtr'}}></Image>
+        <Image style={styles.headerImage} source={require('../../assets/profile-gradient.png')}></Image>
         <Image style={styles.profileImage} source={{uri: promoterProfile.images[0]}} />
         <Text style={styles.title}>{promoter.firstName + ", " + promoter.age}</Text>
         <Text style={[styles.title, {fontSize: 18, top: 30}]}>{promoterProfile.occupation}</Text>
@@ -77,28 +77,28 @@ const VenuePromoterProfile = ({ route }) => {
                 description={promoterProfile.activeSinceDate}
                 titleStyle={styles.listTitle}
                 descriptionStyle={styles.listDescription}
-                left={props => <List.Icon {...props} color="#606060" icon="calendar" />}
+                left={props => <List.Icon {...props} color="#4F4F4F" icon="calendar" />}
               />
               <List.Item
                 title="Availability"
                 description={promoterProfile.availability + " hours/week"}
                 titleStyle={styles.listTitle}
                 descriptionStyle={styles.listDescription}
-                left={props => <List.Icon {...props} color="#606060" icon="clock" />}
+                left={props => <List.Icon {...props} color="#4F4F4F" icon="clock" />}
               />
               <List.Item
                 title="Expected Rate"
                 description={promoterProfile.expectedRate + " MMK/head"}
                 titleStyle={styles.listTitle}
                 descriptionStyle={styles.listDescription}
-                left={props => <List.Icon {...props} color="#606060" icon="coin" />}
+                left={props => <List.Icon {...props} color="#4F4F4F" icon="coin" />}
               />
               <List.Item
                 title="Languages"
                 description={promoterProfile.languages}
                 titleStyle={styles.listTitle}
                 descriptionStyle={styles.listDescription}
-                left={props => <List.Icon {...props} color="#606060" icon="bullhorn" />}
+                left={props => <List.Icon {...props} color="#4F4F4F" icon="microphone" />}
               />
             </View>
             <View style={styles.col}>
@@ -107,21 +107,21 @@ const VenuePromoterProfile = ({ route }) => {
                 description={promoterProfile.education}
                 titleStyle={styles.listTitle}
                 descriptionStyle={styles.listDescription}
-                left={props => <List.Icon {...props} color="#606060" icon="school" />}
+                left={props => <List.Icon {...props} color="#4F4F4F" icon="school" />}
               />
               <List.Item
                 title="Hobbies"
                 description={promoterProfile.hobbies}
                 titleStyle={styles.listTitle}
                 descriptionStyle={styles.listDescription}
-                left={props => <List.Icon {...props} color="#606060" icon="run" />}
+                left={props => <List.Icon {...props} color="#4F4F4F" icon="run" />}
               />
               <List.Item
                 title="Favorite Drink"
                 description={promoterProfile.favoriteDrink}
                 titleStyle={styles.listTitle}
                 descriptionStyle={styles.listDescription}
-                left={props => <List.Icon {...props} icon="beer" color="#606060" />}
+                left={props => <List.Icon {...props} icon="beer" color="#4F4F4F" />}
               />
             </View>
 
@@ -134,7 +134,6 @@ const VenuePromoterProfile = ({ route }) => {
                 setImageModalVisible(true);
               }}>
                 <Image source={{uri: photo.source.uri}} style={styles.thumbnail}></Image>
-
               </TouchableOpacity>
             ))}
             <ImageView

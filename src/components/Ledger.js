@@ -2,10 +2,22 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Dimensions, SectionList } from 'react-native';
 import { LineChart } from "react-native-chart-kit";
 import { Chip, Avatar } from 'react-native-paper';
+import Timeline from 'react-native-timeline-flatlist';
 
-const Ledger = ({ balance, ledger, graphData }) => {
+const Ledger = ({ balance, ledger, graphData, timelineData }) => {
   const screenWidth = Dimensions.get("window").width;
   const [guestListVisible, setGuestListVisible] = useState(false);
+
+  const sortByDate = (arr) => {
+    return arr.sort(function(a, b) {
+                        var keyA = new Date(a.time);
+                        var keyB = new Date(b.time);
+                        // Compare the 2 dates
+                        if (keyA < keyB) return 1;
+                        if (keyA > keyB) return -1;
+                        return 0;
+                    });
+  }
 
   return <>
             <View style={styles.card}>
@@ -13,7 +25,7 @@ const Ledger = ({ balance, ledger, graphData }) => {
               <Image style={styles.visaLogo} source={require('../assets/visalogo.png')} />
               <View style={styles.cardContent}>
                 <Text style={styles.label}>Amount Payable</Text>
-                <Text style={[styles.label, {fontSize: balance >= 100000 ? 46 : 54, left: -3}]}>{balance} MMK</Text>
+                <Text style={[styles.label, {fontSize: balance >= 100000 ? 48 : 56, left: -3}]}>{balance} MMK</Text>
               </View>
             </View>
 
@@ -61,59 +73,71 @@ const Ledger = ({ balance, ledger, graphData }) => {
             </View>
             <Text style={[styles.subTitle, {marginTop: 15}]}>Details</Text>
             <View style={{flexDirection: 'row', marginTop: 17, left: 33, marginBottom: 5}}>
-
               <TouchableOpacity style={{marginRight: 10}} onPress={() => setGuestListVisible(false)}>
                 <Text style={guestListVisible ? styles.btnText : styles.active}>Payment History</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setGuestListVisible(true)}>
                 <Text style={!guestListVisible ? styles.btnText : styles.active}>Guest List</Text>
               </TouchableOpacity>
-
             </View>
 
             {guestListVisible ? (
-              <SectionList
-                sections={ledger}
-                style={styles.ledger}
-                keyExtractor={(item, index) => item + index}
-                renderItem={({ item, index, section }) => {
-                  if (index === section.data.length - 1) {
-                    const countArr = section.data.map(el => el.guestCount);
-                    const feesArr = section.data.map(el => el.payable);
-                    const totalCount = countArr.reduce((acc, item) => acc + item, 0);
-                    const totalFees = feesArr.reduce((acc, item) => acc + item, 0);
-                    return <>
-                      <View style={styles.tableRow}>
-                        <Chip avatar={<Avatar.Image size={24} source={{uri: item.promoterAvatar}} />} textStyle={{fontFamily: 'Avenir', top: 1, fontSize: 13}} style={styles.promoterChip}>{item.promoterName.split(" (")[0]}</Chip>
-                        <Text style={styles.tableCell}>{item.guestCount}</Text>
-                        <Text style={styles.tableCell}>{item.payable}</Text>
-                      </View>
-                      <View style={[styles.tableRow, {borderTopWidth: 0.5, paddingVertical: 12, width: '92%', marginTop: 10, marginBottom: 20}]}>
-                        <Text style={[styles.tableCell, {top: 0, left: 0, fontWeight: '500', width: '33%'}]}>Total</Text>
-                        <Text style={[styles.tableCell, {top: 0, left: 10, width: '35%', fontWeight: '500'}]}>{totalCount}</Text>
-                        <Text style={[styles.tableCell, {top: 0, left: 9, fontWeight: '500'}]}>{totalFees}</Text>
-                      </View>
-                    </>
-                  } else {
-                    return <View style={styles.tableRow}>
-                      <Chip avatar={<Avatar.Image size={24} source={{uri: item.promoterAvatar}} />} style={styles.promoterChip} textStyle={{fontFamily: 'Avenir', top: 1, fontSize: 13}}>{item.promoterName.split(" (")[0]}</Chip>
-                      <Text style={styles.tableCell}>{item.guestCount}</Text>
-                      <Text style={styles.tableCell}>{item.payable}</Text>
+              <View style={{marginBottom: 80}}>
+                {Object.keys(ledger).map(eventName => (
+                    <View style={styles.eventCard}>
+                        <View>
+                          <Text style={styles.header}>{eventName}</Text>
+                          <View style={{flexDirection: 'row', marginTop: 5}}>
+                            <Text style={[styles.subheader, {width: '41%'}]}>Promoter</Text>
+                            <Text style={styles.subheader}>Guest Count</Text>
+                            <Text style={styles.subheader}>Payable (MMK)</Text>
+                          </View>
+                        </View>
+                        <View>
+                          {ledger[eventName].map(item => (
+                            <View style={styles.tableRow}>
+                              <Chip avatar={<Avatar.Image size={24} source={{uri: item.promoterAvatar}} />} style={styles.promoterChip} textStyle={{fontFamily: 'Avenir', top: 1, fontSize: 13}}>{item.promoterName.split(" (")[0]}</Chip>
+                              <Text style={styles.tableCell}>{item.guestCount}</Text>
+                              <Text style={styles.tableCell}>{item.payable}</Text>
+                            </View>
+                          ))}
+                        </View>
+                        <View style={[styles.tableRow, {borderTopWidth: 0.5, paddingVertical: 12, width: '92%', marginTop: 10}]}>
+                          <Text style={[styles.tableCell, {top: 0, left: 0, fontWeight: '500', width: '33%'}]}>Total</Text>
+                          <Text style={[styles.tableCell, {top: 0, left: 34, width: '35%', fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.guestCount, 0)}</Text>
+                          <Text style={[styles.tableCell, {top: 0, left: 29, fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.payable, 0)}</Text>
+                        </View>
                     </View>
-                  }
-                }}
-                renderSectionHeader={({ section: { title } }) => (<View>
-                    <Text style={styles.header}>{title}</Text>
-                    <View style={{flexDirection: 'row', padding: 5}}>
-                      <Text style={[styles.subheader, {left: -4}]}>Promoter</Text>
-                      <Text style={styles.subheader}>Guest Count</Text>
-                      <Text style={[styles.subheader, {width: '28%'}]}>Payable (MMK)</Text>
-                    </View>
-                  </View>
-                )}
-              />
+                ))}
+              </View>
             ) : (
-              <></>
+              <View style={{flex: 1}}>
+                <Timeline
+                  data={sortByDate(timelineData)}
+                  innerCircle="dot"
+                  lineWidth={1}
+                  lineColor="#E3E3E3"
+                  circleSize={14}
+                  dotSize={8}
+                  circleColor="#34C056"
+                  style={{marginTop: 30, marginLeft: 30, marginBottom: 50}}
+                  titleStyle={{fontFamily: 'Avenir', fontWeight: '500', marginTop: 5, marginLeft: 5}}
+                  descriptionStyle={{fontFamily: 'Avenir', fontWeight: '400', marginLeft: 5}}
+                  eventDetailStyle={styles.eventDetailContainer}
+                  rowContainerStyle={{height: 150}}
+                  renderTime={(rowData, sectionID, rowID) => {
+                    const month = rowData.time.split(" ")[0];
+                    const day = rowData.time.split(" ")[1];
+                    const year = rowData.time.split(" ")[2];
+                    return (<View style={styles.timeContainer}>
+                      <Text style={styles.timeMonth}>{month}</Text>
+                      <Text style={styles.timeDay}>{day}</Text>
+                      <Text style={styles.timeYear}>{year}</Text>
+                    </View>)
+                  }}
+                />
+              </View>
+
             )}
         </>
 }
@@ -145,7 +169,7 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     top: 68,
-    left: 35
+    left: 25
   },
   label: {
     fontFamily: 'Avenir',
@@ -177,7 +201,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir',
     fontSize: 18,
     fontWeight: '400',
-    color: '#424242'
+    color: '#424242',
+    marginTop: 5
   },
   tableRow: {
     flexDirection: 'row',
@@ -186,7 +211,7 @@ const styles = StyleSheet.create({
     marginTop: 3
   },
   subheader: {
-    width: '32.5%',
+    width: '30%',
     fontWeight: '300',
     marginTop: 10,
     fontSize: 14,
@@ -194,15 +219,15 @@ const styles = StyleSheet.create({
     fontWeight: '400'
   },
   tableCell: {
-    left: 21,
+    left: 23,
     top: 8,
-    width: '32%',
+    width: '30.5%',
     fontFamily: 'Avenir',
     fontSize: 13,
     fontWeight: '300'
   },
   promoterChip: {
-    width: '27%',
+    width: '34%',
     left: -6,
     backgroundColor: '#F3F3F3'
   },
@@ -214,6 +239,63 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir',
     fontSize: 15,
     color: '#1AA2B0'
+  },
+  eventCard: {
+    width: '83%',
+    left: 33,
+    borderRadius: 5,
+    backgroundColor: 'white',
+    padding: 18,
+    marginTop: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+    	width: 0,
+    	height: 1,
+    },
+    shadowOpacity: 0.20,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  eventDetailContainer: {
+    left: 10,
+    backgroundColor: 'white',
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: {
+    	width: 0,
+    	height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+    elevation: 6,
+    width: '85%',
+    height: 95
+  },
+  timeContainer: {
+    top: -5,
+    marginLeft: 5
+  },
+  timeMonth: {
+    fontSize: 20,
+    fontFamily: 'Avenir',
+    fontWeight: '500',
+    color: '#1AA2B0'
+  },
+  timeDay: {
+    fontFamily: 'Avenir',
+    fontSize: 15,
+    fontWeight: '300',
+    textAlign: 'center'
+  },
+  timeYear: {
+    marginTop: 5,
+    fontFamily: 'Avenir',
+    fontWeight: '300',
+    fontSize: 12,
+    color: 'gray',
+    textAlign: 'center'
   }
 })
 

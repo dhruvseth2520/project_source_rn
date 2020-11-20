@@ -64,14 +64,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontFamily: 'Avenir',
     fontWeight: '700',
-    fontSize: 17,
+    fontSize: 21,
     color: 'white'
   },
   role: {
     fontFamily: 'Avenir',
     fontWeight: '500',
     color: 'white',
-    fontSize: 11,
+    fontSize: 12,
     marginLeft: 12
   },
   icon: {
