@@ -37,7 +37,7 @@ const ShareButtons = ({ event, view }) => {
 
   const facebookShare = () => {
     let facebookParameters = [];
-    facebookParameters.push('quote=' + encodeURI(`Come check out ${event.eventName} at ${event.venue} on ${new Date(event.date).toDateString()}. Say my name, ${promoterData.firstName} or use my code, ${promoter.promoterCode}, at the door to get a promotion`));
+    facebookParameters.push('quote=' + encodeURI(`Come check out ${event.eventName} at ${event.venue} on ${new Date(event.date).toDateString()}. Say my name, ${promoterData.firstName} or use my code, ${promoterData.promoterCode}, at the door to get a promotion`));
     facebookParameters.push('u=' + encodeURI(eventURL));
 
     const url = 'https://www.facebook.com/sharer/sharer.php?' + facebookParameters.join('&');
@@ -53,7 +53,7 @@ const ShareButtons = ({ event, view }) => {
   const postTweet = () => {
     let twitterParameters = [];
     twitterParameters.push('url=' + encodeURI(eventURL));
-    twitterParameters.push('text=' + encodeURI(`Come check out ${event.eventName} at ${event.venue} on ${new Date(event.date).toDateString()}. Say my name, ${promoterData.firstName} or use my code, ${promoter.promoterCode}, at the door to get a promotion`));
+    twitterParameters.push('text=' + encodeURI(`Come check out ${event.eventName} at ${event.venue} on ${new Date(event.date).toDateString()}. Say my name, ${promoterData.firstName} or use my code, ${promoterData.promoterCode}, at the door to get a promotion`));
 
     const url = 'https://twitter.com/intent/tweet?' + twitterParameters.join('&');
 

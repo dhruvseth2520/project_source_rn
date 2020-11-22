@@ -8,7 +8,6 @@ import Ledger from '../../components/Ledger';
 
 const MONTH_ARRAY = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-
 const VenueLedgerScreen = () => {
   const [balance, setBalance] = useState(0);
   const [ledger, setLedger] = useState({});
@@ -16,20 +15,6 @@ const VenueLedgerScreen = () => {
   const [graphData, setGraphData] = useState({'Jan': 0});
   const [timelineData, setTimelineData] = useState([]);
   const navigation = useNavigation();
-
-  const generateTimelineData = (timeline) => {
-    const temp = [];
-    for (let date in timeline) {
-      const previousMonth = new Date();
-      previousMonth.setMonth(new Date(date).getMonth() - 1);
-
-      const time = date;
-      const title = `Payment Due ${time.split(" ")[0]} ${time.split(" ")[1]}`;
-      const description = `${timeline[date]} MMK due for month of ${previousMonth.toLocaleString('default', { month: 'long' })}`;
-      temp.push({time: time, title: title, description: description, circleColor: '#CA3467'});
-    }
-    setTimelineData(temp);
-  }
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -42,9 +27,7 @@ const VenueLedgerScreen = () => {
       }
 
       getData('@venueFormData').then(response => {
-        fetch(`${env.API_URL}/api/events/attendance/venue/${response._id}`)
-        .then(response => response.json())
-        .then(data => {
+        fetch(`${env.API_URL}/api/events/attendance/venue/${response._id}`).then(response => response.json()).then(data => {
           let sum = 0;
           let tableData = {};
           let timeline = {};
@@ -74,11 +57,31 @@ const VenueLedgerScreen = () => {
 
             sum += el.recievable;
           })
-          generateTimelineData(timeline);
-          setGraphData(dateBalance);
-          setBalance(sum);
-          setLedger(tableData);
-          setLoading(false);
+
+          const temp = [];
+          for (let date in timeline) {
+            const previousMonth = new Date();
+            previousMonth.setMonth(new Date(date).getMonth() - 1);
+
+            const time = date;
+            const title = `Payment Due ${time.split(" ")[0]} ${time.split(" ")[1]}`;
+            const description = `${timeline[date]} MMK due for month of ${previousMonth.toLocaleString('default', { month: 'long' })}`;
+            temp.push({time: time, title: title, description: description, circleColor: '#CA3467'});
+          }
+
+          fetch(`${env.API_URL}/api/payments/${response._id}`).then(response => response.json()).then(data => {
+            data.forEach(transaction => {
+              const dateString = `${MONTH_ARRAY[new Date(transaction.date).getMonth()]} ${new Date(transaction.date).getDate()} ${new Date(transaction.date).getFullYear()}`
+              temp.push({time: dateString, title: 'Payment Received', description: `${transaction.amount} MMK received through wire transfer`});
+              sum -= transaction.amount;
+            })
+
+            setBalance(sum);
+            setTimelineData(temp);
+            setLoading(false);
+            setGraphData(dateBalance);
+            setLedger(tableData);
+          })
         })
       })
     });

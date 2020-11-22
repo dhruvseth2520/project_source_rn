@@ -8,15 +8,16 @@ const Ledger = ({ balance, ledger, graphData, timelineData }) => {
   const screenWidth = Dimensions.get("window").width;
   const [guestListVisible, setGuestListVisible] = useState(false);
 
+
   const sortByDate = (arr) => {
     return arr.sort(function(a, b) {
-                        var keyA = new Date(a.time);
-                        var keyB = new Date(b.time);
-                        // Compare the 2 dates
-                        if (keyA < keyB) return 1;
-                        if (keyA > keyB) return -1;
-                        return 0;
-                    });
+        var keyA = new Date(a.time);
+        var keyB = new Date(b.time);
+
+        if (keyA < keyB) return 1;
+        if (keyA > keyB) return -1;
+        return 0;
+    });
   }
 
   return <>
@@ -31,45 +32,47 @@ const Ledger = ({ balance, ledger, graphData, timelineData }) => {
 
             <Text style={styles.subTitle}>Monthly Breakdown</Text>
             <View>
-                <LineChart
-                  data={{
-                    labels: Object.keys(graphData),
-                    datasets: [
-                      {
-                        data: Object.values(graphData)
+                {Object.values(graphData).every(val => val === 0) ? (<Text style={styles.caption}>No activity yet. Start registering guests for events now to see your month to month growth</Text>) : (
+                  <LineChart
+                    data={{
+                      labels: Object.keys(graphData),
+                      datasets: [
+                        {
+                          data: Object.values(graphData)
+                        }
+                      ]
+                    }}
+                    width={0.93 * screenWidth}
+                    height={220}
+                    withOuterLines={false}
+                    withHorizontalLines={false}
+                    withVerticalLines={false}
+                    yAxisSuffix="k"
+                    yAxisInterval={1} // optional, defaults to 1
+                    chartConfig={{
+                      backgroundColor: "#FFFFFF",
+                      backgroundGradientFrom: "#FFFFFF",
+                      backgroundGradientTo: "#FFFFFF",
+                      decimalPlaces: 0, // optional, defaults to 2dp
+                      color: (opacity = 1) => `rgba(26, 162, 176, ${opacity})`,
+                      labelColor: (opacity = 1) => `rgba(56, 56, 56, ${opacity})`,
+                      style: {
+                        borderRadius: 16
+                      },
+                      propsForDots: {
+                        r: "3",
+                        strokeWidth: "2",
+                        stroke: "#1AA2B0"
                       }
-                    ]
-                  }}
-                  width={0.93 * screenWidth}
-                  height={220}
-                  withOuterLines={false}
-                  withHorizontalLines={false}
-                  withVerticalLines={false}
-                  yAxisSuffix="k"
-                  yAxisInterval={1} // optional, defaults to 1
-                  chartConfig={{
-                    backgroundColor: "#FFFFFF",
-                    backgroundGradientFrom: "#FFFFFF",
-                    backgroundGradientTo: "#FFFFFF",
-                    decimalPlaces: 0, // optional, defaults to 2dp
-                    color: (opacity = 1) => `rgba(26, 162, 176, ${opacity})`,
-                    labelColor: (opacity = 1) => `rgba(56, 56, 56, ${opacity})`,
-                    style: {
-                      borderRadius: 16
-                    },
-                    propsForDots: {
-                      r: "3",
-                      strokeWidth: "2",
-                      stroke: "#1AA2B0"
-                    }
-                  }}
-                  bezier
-                  style={{
-                    marginVertical: 8,
-                    left: 34,
-                    marginTop: 30
-                  }}
-                />
+                    }}
+                    bezier
+                    style={{
+                      marginVertical: 8,
+                      left: 34,
+                      marginTop: 30
+                    }}
+                  />
+                )}
             </View>
             <Text style={[styles.subTitle, {marginTop: 15}]}>Details</Text>
             <View style={{flexDirection: 'row', marginTop: 17, left: 33, marginBottom: 5}}>
@@ -83,59 +86,68 @@ const Ledger = ({ balance, ledger, graphData, timelineData }) => {
 
             {guestListVisible ? (
               <View style={{marginBottom: 80}}>
-                {Object.keys(ledger).map(eventName => (
-                    <View style={styles.eventCard}>
-                        <View>
-                          <Text style={styles.header}>{eventName}</Text>
-                          <View style={{flexDirection: 'row', marginTop: 5}}>
-                            <Text style={[styles.subheader, {width: '41%'}]}>Promoter</Text>
-                            <Text style={styles.subheader}>Guest Count</Text>
-                            <Text style={styles.subheader}>Payable (MMK)</Text>
+                {Object.keys(ledger).length !== 0 ? (
+                  <>
+                      {Object.keys(ledger).map(eventName => (
+                          <View style={styles.eventCard}>
+                              <View>
+                                <Text style={styles.header}>{eventName}</Text>
+                                <View style={{flexDirection: 'row', marginTop: 5}}>
+                                  <Text style={[styles.subheader, {width: '41%'}]}>Promoter</Text>
+                                  <Text style={styles.subheader}>Guest Count</Text>
+                                  <Text style={styles.subheader}>Payable (MMK)</Text>
+                                </View>
+                              </View>
+                              <View>
+                                {ledger[eventName].map(item => (
+                                  <View style={styles.tableRow}>
+                                    <Chip avatar={<Avatar.Image size={24} source={{uri: item.promoterAvatar}} />} style={styles.promoterChip} textStyle={{fontFamily: 'Avenir', top: 1, fontSize: 13}}>{item.promoterName.split(" (")[0]}</Chip>
+                                    <Text style={styles.tableCell}>{item.guestCount}</Text>
+                                    <Text style={styles.tableCell}>{item.payable}</Text>
+                                  </View>
+                                ))}
+                              </View>
+                              <View style={[styles.tableRow, {borderTopWidth: 0.5, paddingVertical: 12, width: '92%', marginTop: 10}]}>
+                                <Text style={[styles.tableCell, {top: 0, left: 0, fontWeight: '500', width: '33%'}]}>Total</Text>
+                                <Text style={[styles.tableCell, {top: 0, left: 34, width: '35%', fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.guestCount, 0)}</Text>
+                                <Text style={[styles.tableCell, {top: 0, left: 29, fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.payable, 0)}</Text>
+                              </View>
                           </View>
-                        </View>
-                        <View>
-                          {ledger[eventName].map(item => (
-                            <View style={styles.tableRow}>
-                              <Chip avatar={<Avatar.Image size={24} source={{uri: item.promoterAvatar}} />} style={styles.promoterChip} textStyle={{fontFamily: 'Avenir', top: 1, fontSize: 13}}>{item.promoterName.split(" (")[0]}</Chip>
-                              <Text style={styles.tableCell}>{item.guestCount}</Text>
-                              <Text style={styles.tableCell}>{item.payable}</Text>
-                            </View>
-                          ))}
-                        </View>
-                        <View style={[styles.tableRow, {borderTopWidth: 0.5, paddingVertical: 12, width: '92%', marginTop: 10}]}>
-                          <Text style={[styles.tableCell, {top: 0, left: 0, fontWeight: '500', width: '33%'}]}>Total</Text>
-                          <Text style={[styles.tableCell, {top: 0, left: 34, width: '35%', fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.guestCount, 0)}</Text>
-                          <Text style={[styles.tableCell, {top: 0, left: 29, fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.payable, 0)}</Text>
-                        </View>
-                    </View>
-                ))}
+                      ))}
+                  </>
+                ) : (<Text style={[styles.caption, {marginTop: 0}]}>No guests registered yet</Text>)}
+
               </View>
             ) : (
               <View style={{flex: 1}}>
-                <Timeline
-                  data={sortByDate(timelineData)}
-                  innerCircle="dot"
-                  lineWidth={1}
-                  lineColor="#E3E3E3"
-                  circleSize={14}
-                  dotSize={8}
-                  circleColor="#34C056"
-                  style={{marginTop: 30, marginLeft: 30, marginBottom: 50}}
-                  titleStyle={{fontFamily: 'Avenir', fontWeight: '500', marginTop: 5, marginLeft: 5}}
-                  descriptionStyle={{fontFamily: 'Avenir', fontWeight: '400', marginLeft: 5}}
-                  eventDetailStyle={styles.eventDetailContainer}
-                  rowContainerStyle={{height: 150}}
-                  renderTime={(rowData, sectionID, rowID) => {
-                    const month = rowData.time.split(" ")[0];
-                    const day = rowData.time.split(" ")[1];
-                    const year = rowData.time.split(" ")[2];
-                    return (<View style={styles.timeContainer}>
-                      <Text style={styles.timeMonth}>{month}</Text>
-                      <Text style={styles.timeDay}>{day}</Text>
-                      <Text style={styles.timeYear}>{year}</Text>
-                    </View>)
-                  }}
-                />
+                {timelineData.length !== 0 ? (
+                  <Timeline
+                    data={sortByDate(timelineData)}
+                    innerCircle="dot"
+                    lineWidth={1}
+                    lineColor="#E3E3E3"
+                    circleSize={14}
+                    dotSize={8}
+                    circleColor="#34C056"
+                    style={{marginTop: 30, marginLeft: 30, marginBottom: 50}}
+                    titleStyle={{fontFamily: 'Avenir', fontWeight: '500', marginTop: 5, marginLeft: 5}}
+                    descriptionStyle={{fontFamily: 'Avenir', fontWeight: '400', marginLeft: 5}}
+                    eventDetailStyle={styles.eventDetailContainer}
+                    rowContainerStyle={{height: 150}}
+                    renderTime={(rowData, sectionID, rowID) => {
+                      const month = rowData.time.split(" ")[0];
+                      const day = rowData.time.split(" ")[1];
+                      const year = rowData.time.split(" ")[2];
+                      return (<View style={styles.timeContainer}>
+                        <Text style={styles.timeMonth}>{month}</Text>
+                        <Text style={styles.timeDay}>{day}</Text>
+                        <Text style={styles.timeYear}>{year}</Text>
+                      </View>)
+                    }}
+                  />
+                ) : (
+                  <Text style={[styles.caption, {marginTop: 0}]}>No payment data yet</Text>
+                )}
               </View>
 
             )}
@@ -170,6 +182,14 @@ const styles = StyleSheet.create({
   cardContent: {
     top: 68,
     left: 25
+  },
+  caption: {
+    fontFamily: 'Avenir',
+    padding: 10,
+    width: '85%',
+    marginTop: 10,
+    marginLeft: 24,
+    color: '#424242'
   },
   label: {
     fontFamily: 'Avenir',
@@ -257,7 +277,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   eventDetailContainer: {
-    left: 10,
+    left: 15,
     backgroundColor: 'white',
     paddingVertical: 7,
     paddingHorizontal: 10,
@@ -290,7 +310,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   timeYear: {
-    marginTop: 5,
+    marginTop: 7,
     fontFamily: 'Avenir',
     fontWeight: '300',
     fontSize: 12,

@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     marginBottom: 15,
-    marginTop: 12,
+    marginTop: 18,
     fontFamily: 'Avenir',
     fontSize: 18
   },
