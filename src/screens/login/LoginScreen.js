@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image, ImageBackground, SafeAreaView, TouchableOpacity, StatusBar, ActivityIndicator } from "react-native";
+import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity, StatusBar, ActivityIndicator } from "react-native";
 import React, { useState } from "react";
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
@@ -97,44 +97,38 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <StatusBar barStyle={'dark-content'} />
-
       <ImageBackground
         source={require('../../assets/loginScreenBackground.jpg')}
         style={{height: '100%', width: '100%'}}>
-
-        {isLoading ? <>
-          <ActivityIndicator size="large" color="white" style={{top: 370}} />
+        {isLoading ? <View style={{alignItems: 'center', flex: 1, justifyContent: 'center'}}>
+          <ActivityIndicator size="large" color="white" />
           <Text style={styles.loadingText}>Welcome Back</Text>
-        </> : (
-          <SafeAreaView style={styles.safeArea}>
+        </View> : (
+        <>
+          <View style={{flex: 4}}>
             <Image source={require('../../assets/glowlight2.png')} style={styles.banner} />
+          </View>
+          <View style={{flex: 3, width: '90%', alignSelf:'center'}}>
             <Text style={styles.slogan}>The new way to promote</Text>
-
             <View style={styles.buttonArea}>
-              <View style={styles.buttonContainer}>
-                  <FAB
-                    style={[styles.fab, styles.googleLoginButton]}
-                    icon="google"
-                    label="Sign In with Google"
-                    onPress={() => handleLogin(signInWithGoogleAsync)}
-                    color="#DB4437"
-                  />
-              </View>
-              <View style={styles.buttonContainer}>
                 <FAB
-                  style={[styles.fab, styles.facebookLoginButton]}
+                  style={styles.googleLoginButton}
+                  icon="google"
+                  label="Sign In with Google"
+                  onPress={() => handleLogin(signInWithGoogleAsync)}
+                  color="#DB4437"
+                />
+                <FAB
+                  style={styles.facebookLoginButton}
                   icon="facebook"
                   label="Sign In with Facebook"
                   onPress={() => handleLogin(signInWithFacebookAsync)}
                   color="white"
                 />
-              </View>
             </View>
-
-          </SafeAreaView>
+          </View>
+        </>
         )}
-
-
     </ImageBackground>
 
     </View>
@@ -148,59 +142,42 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   banner: {
-    width: 300,
-    height: 300,
-    left: 65,
-    top: -20
-  },
-  safeArea: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: 'stretch',
+    width: '60%',
+    height: '60%',
+    alignSelf: 'center',
+    marginTop: 20
   },
   slogan: {
     fontSize: 33,
     fontFamily: 'Trebuchet MS',
     fontWeight: '500',
     color: 'white',
+    marginLeft: 25,
     alignSelf: 'center',
-    width: '75%',
-    top: 180,
-    left: 42,
+    width: '70%',
   },
   buttonArea: {
-    flex: 1,
     justifyContent: 'flex-start',
-    alignItems: "center",
-    top: 220
-  },
-  buttonContainer: {
-    width: '70%',
-    height: 50,
-    marginVertical: 10
+    alignSelf: "center",
+    height: 100,
+    marginTop: 10
   },
   googleLoginButton: {
-    backgroundColor: 'white'
-  },
-  fab: {
-    position: 'absolute',
-    margin: 16,
-    width: 250,
-    right: 0,
-    bottom: 0,
+    backgroundColor: 'white',
+    marginTop: 30
   },
   loadingText: {
     color: 'white',
     fontFamily: 'Avenir',
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: '600',
     alignSelf: 'center',
-    top: 400
+    marginTop: 20
   },
   facebookLoginButton: {
     backgroundColor: '#3b5998',
-    borderColor: '#3b5998'
+    borderColor: '#3b5998',
+    marginTop: 20
   }
 });
 

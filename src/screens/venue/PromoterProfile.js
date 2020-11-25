@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, YellowBox } from 'react-native';
+import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, YellowBox, Dimensions } from 'react-native';
 import { SliderBox } from "react-native-image-slider-box";
 import BadgeModal from "../../components/BadgeModal";
 import ImageView from 'react-native-image-view';
@@ -17,6 +17,8 @@ const VenuePromoterProfile = ({ route }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [profileVisible, setProfileVisible] = useState(true);
+
+  const windowWidth = Dimensions.get('window').width;
 
   console.disableYellowBox = true;
 
@@ -38,7 +40,7 @@ const VenuePromoterProfile = ({ route }) => {
       </TouchableOpacity>
 
       <View style={styles.profileHeader}>
-        <Image style={styles.headerImage} source={require('../../assets/profile-gradient.png')}></Image>
+        <Image style={{width: windowWidth, height: 420, position: 'absolute', top: -150}} source={require('../../assets/profile-gradient.png')}></Image>
         <Image style={styles.profileImage} source={{uri: promoterProfile.images[0]}} />
         <Text style={styles.title}>{promoter.firstName + ", " + promoter.age}</Text>
         <Text style={[styles.title, {fontSize: 18, top: 30}]}>{promoterProfile.occupation}</Text>
@@ -124,7 +126,6 @@ const VenuePromoterProfile = ({ route }) => {
                 left={props => <List.Icon {...props} icon="beer" color="#4F4F4F" />}
               />
             </View>
-
           </View>
         ) : (
           <View style={styles.imageContainer}>
@@ -133,7 +134,7 @@ const VenuePromoterProfile = ({ route }) => {
                 setImageIndex(index);
                 setImageModalVisible(true);
               }}>
-                <Image source={{uri: photo.source.uri}} style={styles.thumbnail}></Image>
+                <Image source={{uri: photo.source.uri}} style={[styles.thumbnail, {width: windowWidth * 0.27}]}></Image>
               </TouchableOpacity>
             ))}
             <ImageView
@@ -145,8 +146,6 @@ const VenuePromoterProfile = ({ route }) => {
             />
           </View>
         )}
-
-
       </View>
     </ScrollView>
   )
@@ -162,16 +161,9 @@ const styles = StyleSheet.create({
     left: 10,
     zIndex: 1
   },
-  headerImage: {
-    height: 420,
-    width: '100%',
-    left: -107,
-    top: -165,
-    position: 'absolute'
-  },
   profileHeader: {
     marginTop: 60,
-    alignSelf: 'center'
+    alignItems: 'center'
   },
   profileImage: {
     width: 200,
@@ -194,6 +186,7 @@ const styles = StyleSheet.create({
   statsBox: {
     alignItems: 'center',
     flex: 1,
+    paddingHorizontal: 10,
     borderRightWidth: 0.5
   },
   statValue: {
@@ -246,8 +239,8 @@ const styles = StyleSheet.create({
     marginBottom: 50
   },
   thumbnail: {
-    width: 116,
     height: 180,
+    width: 110,
     borderRadius: 3,
     marginRight: 5,
     marginBottom: 10

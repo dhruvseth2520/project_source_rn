@@ -161,14 +161,11 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    position: 'absolute',
-    justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    justifyContent: "center"
   },
   modalView: {
-    marginTop: 260,
-    marginLeft: 60,
-    width: 300,
+    width: '80%',
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,

@@ -8,7 +8,6 @@ const Ledger = ({ balance, ledger, graphData, timelineData }) => {
   const screenWidth = Dimensions.get("window").width;
   const [guestListVisible, setGuestListVisible] = useState(false);
 
-
   const sortByDate = (arr) => {
     return arr.sort(function(a, b) {
         var keyA = new Date(a.time);
@@ -26,7 +25,7 @@ const Ledger = ({ balance, ledger, graphData, timelineData }) => {
               <Image style={styles.visaLogo} source={require('../assets/visalogo.png')} />
               <View style={styles.cardContent}>
                 <Text style={styles.label}>Amount Payable</Text>
-                <Text style={[styles.label, {fontSize: balance >= 100000 ? 48 : 56, left: -3}]}>{balance} MMK</Text>
+                <Text style={[styles.label, {fontSize: balance >= 100000 ? 44 : 48, left: -3}]}>{balance} MMK</Text>
               </View>
             </View>
 
@@ -149,7 +148,6 @@ const Ledger = ({ balance, ledger, graphData, timelineData }) => {
                   <Text style={[styles.caption, {marginTop: 0}]}>No payment data yet</Text>
                 )}
               </View>
-
             )}
         </>
 }

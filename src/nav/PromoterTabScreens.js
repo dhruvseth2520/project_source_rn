@@ -14,9 +14,6 @@ const PromoterTabScreens = () => {
         <PromoterTabNav.Navigator tabBarOptions={{
             activeTintColor: '#313131',
             inactiveTintColor: 'gray',
-            style: {
-                height: 80,
-            },
         }}>
             <PromoterTabNav.Screen
                 name="PromoterEventList"

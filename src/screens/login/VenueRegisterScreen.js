@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     margin: 8
   },
   selectInput: {
-    width: 300,
+    width: '80%',
     height: 200,
     marginTop: -45,
     marginLeft: 15
@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
   disclaimer: {
     alignSelf: 'center',
     paddingHorizontal: 22,
+    width: '91%',
     marginTop: 25,
     marginLeft: 5,
     fontSize: 12,
@@ -198,12 +199,12 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     height: 50,
-    width: 340,
+    width: '80%',
     backgroundColor: '#1AA2B0',
     borderColor: '#1AA2B0',
     borderWidth: 1,
     borderRadius: 1,
-    marginTop: 15,
+    marginTop: 20,
     alignSelf: 'center'
   },
   buttonText: {
@@ -219,13 +220,13 @@ const styles = StyleSheet.create({
     color: 'white',
     alignSelf: 'center',
     marginTop: -19,
-    marginLeft: 125
+    marginLeft: 140
   },
   error: {
     paddingHorizontal: 22,
     marginTop: 15,
     fontWeight: '400',
-    marginBottom: 30,
+    marginBottom: 50,
     marginLeft: 17,
     fontSize: 13,
     color: '#DB0B0B'

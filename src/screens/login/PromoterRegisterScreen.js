@@ -124,12 +124,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     margin: 8
   },
-  selectInput: {
-    width: 300,
-    height: 200,
-    marginTop: -45,
-    marginLeft: 15
-  },
   input: {
     backgroundColor: 'white',
     borderColor: 'gray',
@@ -146,6 +140,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     marginTop: 25,
     marginLeft: 5,
+    width: '91%',
     fontSize: 12,
     color: '#424242'
   },
@@ -155,12 +150,12 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     height: 50,
-    width: 340,
+    width: '80%',
     backgroundColor: '#1AA2B0',
     borderColor: '#1AA2B0',
     borderWidth: 1,
     borderRadius: 1,
-    marginTop: 15,
+    marginTop: 20,
     alignSelf: 'center'
   },
   buttonText: {
@@ -176,7 +171,7 @@ const styles = StyleSheet.create({
     color: 'white',
     alignSelf: 'center',
     marginTop: -19,
-    marginLeft: 125
+    marginLeft: 140
   },
   error: {
     paddingHorizontal: 22,

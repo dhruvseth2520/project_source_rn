@@ -96,8 +96,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    marginTop: 10,
     backgroundColor: "white",
+    width: '80%',
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    width: 320
+
   },
   openButton: {
     backgroundColor: "#F194FF",

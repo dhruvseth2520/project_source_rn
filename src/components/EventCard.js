@@ -238,7 +238,7 @@ const CardFlipSide = ({ event }) => {
 const styles = StyleSheet.create({
   card: {
     marginTop: 10,
-    width: 350,
+    width: '90%',
     marginBottom: 10,
     shadowColor: "#000",
     shadowOffset: {
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     right: 5
   },
   eventImage: {
-    width: 350,
+    width: '100%',
     height: 190,
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,

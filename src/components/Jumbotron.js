@@ -1,13 +1,20 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
 
 const Jumbotron = ({ image, title, caption }) => {
+  const windowHeight = Dimensions.get('window').height;
+
+  let titleFontSize = 45;
+  if (windowHeight < 700) {
+    titleFontSize = 40;
+  }
+
   return (<View style={styles.container}>
       <Image
         source={{uri: image}}
         style={styles.image}>
       </Image>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={[styles.title, {fontSize: titleFontSize}]}>{title}</Text>
       <Text style={styles.caption}>{caption}</Text>
   </View>)
 }
@@ -26,7 +33,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.32,
     shadowRadius: 5.46,
-
     elevation: 9,
     marginVertical: 5
   },
@@ -40,17 +46,18 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Futura',
     fontWeight: '600',
-    fontSize: 45,
-    top: 225,
-    left: 20
+    left: 20,
+    width: '90%',
+    marginTop: 200
   },
   caption: {
     color: 'white',
     fontFamily: 'Avenir',
-    width: '80%',
-    fontWeight: '500',
-    top: 230,
-    left: 26
+    width: '90%',
+    fontWeight: '700',
+    left: 22,
+    fontSize: 15,
+    marginTop: 5
   }
 })
 

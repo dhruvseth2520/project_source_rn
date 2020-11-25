@@ -100,7 +100,7 @@ var styles = {
   skipButton: {
     alignSelf: 'flex-start',
     position: 'absolute',
-    top: 810,
+    bottom: 55,
     left: 40
   },
   btnText: {

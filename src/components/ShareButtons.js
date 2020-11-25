@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Linking, Share } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Linking, Share, Dimensions } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { getData } from "../utils/localStorage";
 
@@ -7,6 +7,13 @@ import { getData } from "../utils/localStorage";
 const ShareButtons = ({ event, view }) => {
   const [eventURL, setEventURL] = useState("");
   const [promoterData, setPromoterData] = useState(null);
+
+  const windowHeight = Dimensions.get('window').height;
+
+  let fontSize = 14;
+  if (windowHeight < 700) {
+    fontSize = 12;
+  }
 
   useEffect(() => {
     getData('@promoterFormData').then(response => {
@@ -73,25 +80,25 @@ const ShareButtons = ({ event, view }) => {
           <View style={{flexDirection: 'row', marginBottom: 25, marginTop: 5, left: 10}}>
             <TouchableOpacity onPress={facebookShare} style={[styles.socialButton, {backgroundColor: '#3b5998'}]}>
               <FontAwesome5 style={styles.btnIcon} name="facebook-f" />
-              <Text style={styles.btnText}>Share on Facebook</Text>
+              <Text style={[styles.btnText, {fontSize: fontSize}]}>Share on Facebook</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={postTweet} style={[styles.socialButton, {backgroundColor: '#1DA1F2'}]}>
               <FontAwesome5 style={styles.btnIcon} name="twitter" />
-              <Text style={styles.btnText}>Share on Twitter</Text>
+              <Text style={[styles.btnText, {fontSize: fontSize}]}>Share on Twitter</Text>
             </TouchableOpacity>
           </View>
           <View style={{flexDirection: 'row', marginBottom: 60, marginTop: 5, left: 10}}>
             <TouchableOpacity onPress={shareEvent} style={[styles.socialButton, {backgroundColor: 'white'}]}>
-              <FontAwesome5 style={[styles.btnIcon, {fontSize: 14, top: 17, color: '#1AA2B0'}]} name="user" />
-              <Text style={[styles.btnText, {color: '#1AA2B0'}]}>Share with Contacts</Text>
+              <FontAwesome5 style={[styles.btnIcon, {fontSize: 14, color: '#1AA2B0'}]} name="user" />
+              <Text style={[styles.btnText, {fontSize: fontSize, color: '#1AA2B0'}]}>Share with Contacts</Text>
             </TouchableOpacity>
           </View>
         </>
       ) : (
-        <View style={{flexDirection: 'row', marginBottom: 60, marginTop: 5, left: 10}}>
-          <TouchableOpacity onPress={shareEvent} style={[styles.socialButton, {backgroundColor: 'white', width: 160, height: 45, shadowOpacity: 0.1}]}>
-            <FontAwesome5 style={[styles.btnIcon, {fontSize: 12, top: 17, color: '#1AA2B0'}]} name="user" />
-            <Text style={[styles.btnText, {color: '#1AA2B0', fontSize: 13}]}>Share with Contacts</Text>
+        <View style={{flexDirection: 'row', marginTop: 5, left: 10}}>
+          <TouchableOpacity onPress={shareEvent} style={[styles.socialButton, {backgroundColor: 'white', width: '54%', height: 0.055 * windowHeight, shadowOpacity: 0.1}]}>
+            <FontAwesome5 style={[styles.btnIcon, {fontSize: 12, color: '#1AA2B0'}]} name="user" />
+            <Text style={[styles.btnText, {color: '#1AA2B0', fontSize: fontSize}]}>Share with Contacts</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -103,7 +110,8 @@ const ShareButtons = ({ event, view }) => {
 const styles = StyleSheet.create({
   socialButton: {
     flexDirection: 'row',
-    width: 180,
+    alignItems: 'center',
+    width: '43%',
     borderRadius: 30,
     height: 50,
     marginLeft: 10,
@@ -118,15 +126,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   btnIcon: {
-    top: 14,
     fontSize: 18,
     left: 18,
     color: 'white',
-    marginLeft: -2
   },
   btnText: {
-    top: 15,
-    fontSize: 15,
     left: 27,
     fontFamily: 'Avenir',
     color: 'white'

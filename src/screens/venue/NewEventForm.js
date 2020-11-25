@@ -218,7 +218,6 @@ const styles = StyleSheet.create({
     flex: 1
   },
   dateSelector: {
-    marginLeft: 4,
     marginTop: 10,
     marginBottom: -5,
     width: '90%'
@@ -230,10 +229,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#22C2D2'
   },
   eventImage: {
-    width: 330,
+    width: '90%',
     height: 200,
     left: 3,
-    marginTop: 10,
+    marginTop: 15,
     borderRadius: 5
   },
   header: {
@@ -256,10 +255,9 @@ const styles = StyleSheet.create({
     margin: 8
   },
   selectInput: {
-    width: 300,
+    width: '90%',
     height: 200,
-    marginTop: -55,
-    marginLeft: 15
+    marginTop: -50,
   },
   input: {
     backgroundColor: 'white',
@@ -304,11 +302,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 40,
     marginTop: 10,
-    marginBottom: 50
+    marginBottom: 50,
+    width: '90%'
   },
   submitButton: {
     height: 50,
-    width: 160,
+    width: '44%',
     backgroundColor: '#22C2D2',
     borderColor: '#22C2D2',
     borderWidth: 1,
