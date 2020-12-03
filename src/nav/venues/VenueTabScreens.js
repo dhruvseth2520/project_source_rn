@@ -5,8 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 import VenuePromoterStackScreen from "./VenuePromoterStackScreen";
 import VenueEventStackScreen from "./VenueEventStackScreen";
-import VenueLedgerScreen from "../screens/venue/VenueLedgerScreen";
-import TempScreen from '../screens/TempScreen';
+import VenueLedgerStackScreen from "./VenueLedgerStackScreen";
+import TempScreen from '../../screens/TempScreen';
 
 const VenueTabNav = createBottomTabNavigator();
 
@@ -58,7 +58,7 @@ const VenueTabScreens = () => {
               headerShown: false,
               title: "Ledger"
             }}
-            component={VenueLedgerScreen} />
+            component={VenueLedgerStackScreen} />
 
           <VenueTabNav.Screen
             name="VenueSettings"

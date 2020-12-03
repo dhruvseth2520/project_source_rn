@@ -34,7 +34,7 @@ const LoginScreen = ({ navigation }) => {
   async function signInWithFacebookAsync() {
     Facebook.initializeAsync('667100777242989', 'Source')
     const { type, token } = await Facebook.logInWithReadPermissionsAsync('667100777242989', {
-      permissions: ['public_profile'],
+      permissions: ['public_profile', 'user_friends'],
     });
     if (type === 'success') {
       const result = await fetch(
@@ -51,7 +51,6 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = (callback) => {
     callback().then(response => {
       if (!response.cancelled) {
-        setLoading(true);
         fetch(`${env.API_URL}/api/auth/user`, {
           method: 'POST',
           mode: 'cors',
@@ -67,6 +66,7 @@ const LoginScreen = ({ navigation }) => {
               navigation.navigate('VoP');
             });
           } else {
+            setLoading(true);
             if (data.type === "Promoter") {
               fetch(`${env.API_URL}/api/promoter/${data.id}`)
               .then(response => response.json())
@@ -96,41 +96,40 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <StatusBar barStyle={'dark-content'} />
-      <ImageBackground
-        source={require('../../assets/loginScreenBackground.jpg')}
-        style={{height: '100%', width: '100%'}}>
-        {isLoading ? <View style={{alignItems: 'center', flex: 1, justifyContent: 'center'}}>
-          <ActivityIndicator size="large" color="white" />
-          <Text style={styles.loadingText}>Welcome Back</Text>
-        </View> : (
-        <>
-          <View style={{flex: 4}}>
-            <Image source={require('../../assets/glowlight2.png')} style={styles.banner} />
-          </View>
-          <View style={{flex: 3, width: '90%', alignSelf:'center'}}>
-            <Text style={styles.slogan}>The new way to promote</Text>
-            <View style={styles.buttonArea}>
-                <FAB
-                  style={styles.googleLoginButton}
-                  icon="google"
-                  label="Sign In with Google"
-                  onPress={() => handleLogin(signInWithGoogleAsync)}
-                  color="#DB4437"
-                />
-                <FAB
-                  style={styles.facebookLoginButton}
-                  icon="facebook"
-                  label="Sign In with Facebook"
-                  onPress={() => handleLogin(signInWithFacebookAsync)}
-                  color="white"
-                />
-            </View>
-          </View>
-        </>
-        )}
-    </ImageBackground>
-
+          <StatusBar barStyle={'dark-content'} />
+          <ImageBackground
+            source={require('../../assets/loginScreenBackground.jpg')}
+            style={{height: '100%', width: '100%'}}>
+            {isLoading ? <View style={{alignItems: 'center', flex: 1, justifyContent: 'center'}}>
+              <ActivityIndicator size="large" color="white" />
+              <Text style={styles.loadingText}>Welcome Back</Text>
+            </View> : (
+            <>
+              <View style={{flex: 4}}>
+                <Image source={require('../../assets/glowlight2.png')} style={styles.banner} />
+              </View>
+              <View style={{flex: 3, width: '88%', alignSelf:'center'}}>
+                <Text style={styles.slogan}>The new way to promote</Text>
+                <View style={styles.buttonArea}>
+                    <FAB
+                      style={styles.googleLoginButton}
+                      icon="google"
+                      label="Sign In with Google"
+                      onPress={() => handleLogin(signInWithGoogleAsync)}
+                      color="#DB4437"
+                    />
+                    <FAB
+                      style={styles.facebookLoginButton}
+                      icon="facebook"
+                      label="Sign In with Facebook"
+                      onPress={() => handleLogin(signInWithFacebookAsync)}
+                      color="white"
+                    />
+                </View>
+              </View>
+            </>
+            )}
+        </ImageBackground>
     </View>
   );
 };

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, ActivityIndicator, SafeAreaView, Image, View, Text, StyleSheet, TouchableOpacity, TouchableHighlight, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import EventCard from "../../components/EventCard";
-import Header from "../../components/Header";
-import env from "../../utils/environment";
-import { getData } from "../../utils/localStorage";
-import Jumbotron from "../../components/Jumbotron";
+import EventCard from "../../../components/EventCard";
+import Header from "../../../components/Header";
+import env from "../../../utils/environment";
+import { getData } from "../../../utils/localStorage";
+import Jumbotron from "../../../components/Jumbotron";
 import { FAB } from 'react-native-paper';
 
 
@@ -72,9 +72,7 @@ const VenueEventsScreen = () => {
 
   return (
     <ScrollView style={styles.background} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always">
-
       <Text style={styles.title}>Events</Text>
-
       <Jumbotron
         title="Get Started"
         caption="Create custom events for your target market and share them with our network of promoters"
@@ -83,7 +81,6 @@ const VenueEventsScreen = () => {
 
 
       <Text style={styles.subTitle}>Your Events</Text>
-
       <ScrollView style={styles.eventContainer}>
         {isLoading ? (<ActivityIndicator size="large" style={{alignSelf: 'center', left: -11, marginTop: 20, marginBottom: 20}}></ActivityIndicator>) : (<>
           {upcomingEvents.length === 0 && pastEvents.length === 0
@@ -132,7 +129,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 100,
-    left: 33,
+    marginLeft: 33,
     fontFamily: 'Futura',
     fontSize: 35,
     fontWeight: '400',

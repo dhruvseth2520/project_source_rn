@@ -2,10 +2,10 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import { PromoterEventStackScreens, PromoterSavedEventStackScreens } from './PromoterEventStackScreens';
-import PromoterActivityScreen from "../screens/promoter/PromoterActivityScreen";
-import MessageStackScreens from './MessageStackScreens';
-import PromoterProfile from '../screens/promoter/ProfileScreen';
-import theme, { tabDefaults } from '../utils/theme.styles'
+import PromoterActivityScreen from "../../screens/promoter/PromoterActivityScreen";
+import MessageStackScreens from '../MessageStackScreens';
+import PromoterProfile from '../../screens/promoter/ProfileScreen';
+import theme, { tabDefaults } from '../../utils/theme.styles'
 
 const PromoterTabNav = createBottomTabNavigator();
 

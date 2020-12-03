@@ -5,7 +5,7 @@ import Ledger from "../../components/Ledger";
 const PromoterActivityScreen = () => {
   return (<View style={styles.background}>
     <Text style={styles.title}>Activity</Text>
-    
+
   </View>)
 }
 
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     },
     title: {
       marginTop: 100,
-      left: 33,
+      marginLeft: 33,
       fontFamily: 'Futura',
       fontSize: 35,
       fontWeight: '400',

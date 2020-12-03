@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Image, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
-import PromoterCard from "../../components/PromoterCard";
-import Header from "../../components/Header";
+import PromoterCard from "../../../components/PromoterCard";
+import Header from "../../../components/Header";
 import { useNavigation } from '@react-navigation/native';
-import Jumbotron from "../../components/Jumbotron";
+import Jumbotron from "../../../components/Jumbotron";
 
-import { getData } from "../../utils/localStorage";
+import { getData } from "../../../utils/localStorage";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Searchbar } from 'react-native-paper';
 import { Button } from 'react-native-paper';
-import env from "../../utils/environment";
-import { PromotersFilterGrid } from "../../components/FilterGrid";
+import env from "../../../utils/environment";
+import { PromotersFilterGrid } from "../../../components/FilterGrid";
 
 
 const VenuePromotersHome = () => {
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 100,
-    left: 33,
+    marginLeft: 33,
     fontFamily: 'Futura',
     fontSize: 35,
     fontWeight: '400',

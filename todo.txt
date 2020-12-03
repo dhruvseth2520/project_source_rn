@@ -1,0 +1,6 @@
+TO DO
+- Get number of connections for promoter on profile setup page. Use promoter's social media urls
+- Set up activity view for promoter
+- Set up settings page for promoters and venues
+- Set up payment flow
+- Reconfigure routes to use JWT

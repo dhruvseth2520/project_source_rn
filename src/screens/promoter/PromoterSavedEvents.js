@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     },
     title: {
       marginTop: 100,
-      left: 33,
+      marginLeft: 33,
       fontFamily: 'Futura',
       fontSize: 35,
       fontWeight: '400',

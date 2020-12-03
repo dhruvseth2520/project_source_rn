@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Image, ScrollView, Dimensions, FlatList, SectionList } from 'react-native';
 import { Chip, Avatar } from 'react-native-paper';
-import { getData } from "../../utils/localStorage";
-import env from "../../utils/environment";
+import { getData } from "../../../utils/localStorage";
+import env from "../../../utils/environment";
 import { useNavigation } from '@react-navigation/native';
-import Ledger from '../../components/Ledger';
+import Ledger from '../../../components/Ledger';
 
 const MONTH_ARRAY = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -91,7 +91,7 @@ const VenueLedgerScreen = () => {
   return (<ScrollView style={styles.background} showsVerticalScrollIndicator={false}>
     <Text style={styles.title}>Ledger</Text>
     {isLoading ? (<ActivityIndicator size="large" style={{alignSelf: 'center', marginTop: 30}}></ActivityIndicator>) : (
-      <Ledger balance={balance} ledger={ledger} graphData={graphData} timelineData={timelineData} />
+      <Ledger balance={balance} ledger={ledger} graphData={graphData} timelineData={timelineData} mode="Venue" />
     )}
   </ScrollView>)
 }
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 100,
-    left: 33,
+    marginLeft: 33,
     fontFamily: 'Futura',
     fontSize: 35,
     fontWeight: '400',

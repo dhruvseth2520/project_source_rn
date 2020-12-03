@@ -3,8 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { getData, removeData } from './src/utils/localStorage';
 import LoginStackScreens from "./src/nav/LoginStackScreens";
-import VenueTabScreens from "./src/nav/VenueTabScreens";
-import PromoterTabScreens from "./src/nav/PromoterTabScreens";
+import VenueTabScreens from "./src/nav/venues/VenueTabScreens";
+import PromoterTabScreens from "./src/nav/promoters/PromoterTabScreens";
 
 const RootStack = createStackNavigator();
 

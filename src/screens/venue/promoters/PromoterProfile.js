@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { FontAwesome5 } from '@expo/vector-icons';
 import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, YellowBox, Dimensions } from 'react-native';
 import { SliderBox } from "react-native-image-slider-box";
-import BadgeModal from "../../components/BadgeModal";
+import BadgeModal from "../../../components/BadgeModal";
 import ImageView from 'react-native-image-view';
 import { List } from 'react-native-paper';
 import { Entypo } from '@expo/vector-icons';
@@ -40,7 +39,7 @@ const VenuePromoterProfile = ({ route }) => {
       </TouchableOpacity>
 
       <View style={styles.profileHeader}>
-        <Image style={{width: windowWidth, height: 420, position: 'absolute', top: -150}} source={require('../../assets/profile-gradient.png')}></Image>
+        <Image style={{width: windowWidth, height: 420, position: 'absolute', top: -150}} source={require('../../../assets/profile-gradient.png')}></Image>
         <Image style={styles.profileImage} source={{uri: promoterProfile.images[0]}} />
         <Text style={styles.title}>{promoter.firstName + ", " + promoter.age}</Text>
         <Text style={[styles.title, {fontSize: 18, top: 30}]}>{promoterProfile.occupation}</Text>

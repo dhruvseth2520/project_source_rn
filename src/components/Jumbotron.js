@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   caption: {
     color: 'white',
     fontFamily: 'Avenir',
-    width: '90%',
+    width: '88%',
     fontWeight: '700',
     left: 22,
     fontSize: 15,

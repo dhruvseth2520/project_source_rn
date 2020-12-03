@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Dimensions, SectionList } from 'react-native';
 import { LineChart } from "react-native-chart-kit";
-import { Chip, Avatar } from 'react-native-paper';
+import { Chip, Avatar, FAB } from 'react-native-paper';
 import Timeline from 'react-native-timeline-flatlist';
 
-const Ledger = ({ balance, ledger, graphData, timelineData }) => {
+const Ledger = ({ balance, ledger, graphData, timelineData, mode }) => {
   const screenWidth = Dimensions.get("window").width;
+  const navigation = useNavigation();
   const [guestListVisible, setGuestListVisible] = useState(false);
 
   const sortByDate = (arr) => {
@@ -27,6 +29,14 @@ const Ledger = ({ balance, ledger, graphData, timelineData }) => {
                 <Text style={styles.label}>Amount Payable</Text>
                 <Text style={[styles.label, {fontSize: balance >= 100000 ? 44 : 48, left: -3}]}>{balance} MMK</Text>
               </View>
+
+              {mode === "Venue" ? (
+                <View style={{alignSelf: 'flex-start', marginTop: 82, marginLeft: 20}}>
+                  <TouchableOpacity style={styles.paymentButton} onPress={() => navigation.navigate("VenuePayment", {balance: balance})}>
+                    <Text style={{fontFamily: 'Avenir', color: '#1AA2B0'}}>Clear Balance</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (<></>)}
             </View>
 
             <Text style={styles.subTitle}>Monthly Breakdown</Text>
@@ -106,7 +116,7 @@ const Ledger = ({ balance, ledger, graphData, timelineData }) => {
                                   </View>
                                 ))}
                               </View>
-                              <View style={[styles.tableRow, {borderTopWidth: 0.5, paddingVertical: 12, width: '92%', marginTop: 10}]}>
+                              <View style={[styles.tableRow, {borderTopWidth: 0.2, paddingVertical: 12, width: '92%', marginTop: 10}]}>
                                 <Text style={[styles.tableCell, {top: 0, left: 0, fontWeight: '500', width: '33%'}]}>Total</Text>
                                 <Text style={[styles.tableCell, {top: 0, left: 34, width: '35%', fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.guestCount, 0)}</Text>
                                 <Text style={[styles.tableCell, {top: 0, left: 29, fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.payable, 0)}</Text>
@@ -115,7 +125,6 @@ const Ledger = ({ balance, ledger, graphData, timelineData }) => {
                       ))}
                   </>
                 ) : (<Text style={[styles.caption, {marginTop: 0}]}>No guests registered yet</Text>)}
-
               </View>
             ) : (
               <View style={{flex: 1}}>
@@ -157,8 +166,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 30,
     marginBottom: 10,
+    height: 235,
     width: '84%',
-    height: 215,
     borderRadius: 30,
     backgroundColor: 'white',
     shadowColor: "#000",
@@ -175,11 +184,24 @@ const styles = StyleSheet.create({
     position: 'absolute',
     flex: 1,
     width: '100%',
-    height: 220
+    height: 235
   },
   cardContent: {
     top: 68,
     left: 25
+  },
+  paymentButton: {
+    padding: 12,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+    	width: 0,
+    	height: 1,
+    },
+    shadowOpacity: 0.20,
+    shadowRadius: 1.41,
+    elevation: 2,
   },
   caption: {
     fontFamily: 'Avenir',
@@ -208,7 +230,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#424242',
     marginLeft: 33,
-    marginTop: 30
+    marginTop: 20
   },
   ledger: {
     marginLeft: 33,

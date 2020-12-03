@@ -4,11 +4,11 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { View, Image, ScrollView, Text, StyleSheet, TextInput, Picker, TouchableOpacity, ActivityIndicator,
 KeyboardAvoidingView } from 'react-native';
-import { getData } from '../../utils/localStorage';
+import { getData } from '../../../utils/localStorage';
 import * as ImagePicker from 'expo-image-picker';
 
 import { FAB } from 'react-native-paper';
-import env from '../../utils/environment';
+import env from '../../../utils/environment';
 
 const VenueNewEventForm = ({ route }) => {
   const navigation = useNavigation();
