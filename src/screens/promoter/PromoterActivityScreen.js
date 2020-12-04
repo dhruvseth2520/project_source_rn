@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Ledger from "../../components/Ledger";
 
 const PromoterActivityScreen = () => {
   return (<View style={styles.background}>

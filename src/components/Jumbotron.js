@@ -48,13 +48,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     left: 20,
     width: '90%',
-    marginTop: 200
+    marginTop: 207
   },
   caption: {
     color: 'white',
     fontFamily: 'Avenir',
-    width: '88%',
-    fontWeight: '700',
+    width: '85%',
+    fontWeight: '500',
     left: 22,
     fontSize: 15,
     marginTop: 5

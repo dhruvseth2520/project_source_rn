@@ -3,8 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-nati
 import { useNavigation } from '@react-navigation/native';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 
-
-const VenuePaymentScreen = ({ payment }) => {
+const VenuePaymentScreen = ({ balance }) => {
   const navigation = useNavigation();
   const windowWidth = Dimensions.get('window').width;
 
@@ -12,7 +11,6 @@ const VenuePaymentScreen = ({ payment }) => {
   if (windowWidth < 400) {
     descriptionFontSize = 12;
   }
-
 
   return (
     <View style={styles.background}>
@@ -22,21 +20,12 @@ const VenuePaymentScreen = ({ payment }) => {
       <Text style={styles.title}>Choose a payment method</Text>
 
       <View style={styles.methodContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('VenuePaymentDetails', {method: 'cash', balance: balance})}>
           <View style={styles.methodCard}>
             <FontAwesome5 name="money-bill" style={[styles.methodIcon, {color: '#85bb65'}]}></FontAwesome5>
             <View style={styles.cardContent}>
               <Text style={styles.cardTitle}>Cash</Text>
               <Text style={[styles.description, {fontSize: descriptionFontSize}]}>Pay your outstanding balance in cash. Schedule a pickup time and we'll send someone to collect your payment</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <View style={styles.methodCard}>
-            <FontAwesome5 name="credit-card" style={[styles.methodIcon, {color: '#B83D23'}]}></FontAwesome5>
-            <View style={styles.cardContent}>
-              <Text style={styles.cardTitle}>Debit or Credit Card</Text>
-              <Text style={[styles.description, {fontSize: descriptionFontSize}]}>Pay through a debit or credit card. All transactions are processed through Stripe and incur a 2% fee</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -49,6 +38,16 @@ const VenuePaymentScreen = ({ payment }) => {
             </View>
           </View>
         </TouchableOpacity>
+        <TouchableOpacity>
+          <View style={styles.methodCard}>
+            <FontAwesome5 name="share-alt" style={[styles.methodIcon, {color: '#FFC21A'}]}></FontAwesome5>
+            <View style={styles.cardContent}>
+              <Text style={styles.cardTitle}>Wave Money</Text>
+              <Text style={[styles.description, {fontSize: descriptionFontSize}]}>Pay via debit or credit card. All transactions are processed through Stripe and incur a 2% fee</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+
       </View>
     </View>
   )

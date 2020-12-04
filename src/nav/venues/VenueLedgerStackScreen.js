@@ -2,6 +2,8 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import VenueLedgerScreen from "../../screens/venue/payments/VenueLedgerScreen";
 import VenuePaymentScreen from "../../screens/venue/payments/VenuePaymentScreen";
+import VenuePaymentDetailsScreen from "../../screens/venue/payments/VenuePaymentDetailsScreen";
+
 
 const Stack = createStackNavigator();
 
@@ -21,7 +23,7 @@ const VenueLedgerStackScreen = () => {
       <Stack.Screen
         name="VenuePaymentDetails"
         options={{ headerShown: false }}
-        component={VenuePaymentScreen}
+        component={VenuePaymentDetailsScreen}
       />
     </Stack.Navigator>
   )
