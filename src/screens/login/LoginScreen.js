@@ -2,9 +2,12 @@ import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity, Statu
 import React, { useState } from "react";
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
-import { storeData, removeData } from '../../utils/localStorage';
-import env from  "../../utils/environment";
+import { storeData, removeData, getData } from '../../utils/localStorage';
+import env from "../../utils/environment";
 import { FAB } from 'react-native-paper';
+
+import { apiLogin } from '../../serverSDK/auth'
+import { apiPromoterDetails } from '../../serverSDK/api'
 
 
 const LoginScreen = ({ navigation }) => {
@@ -24,7 +27,7 @@ const LoginScreen = ({ navigation }) => {
           cancelled: true
         };
       }
-    } catch(e) {
+    } catch (e) {
       return {
         error: true
       };
@@ -48,6 +51,42 @@ const LoginScreen = ({ navigation }) => {
     }
   }
 
+  const handleLogin2 = (callback) => {
+    callback().then(response => {
+      if (!response.cancelled) {
+        apiLogin(response.id, response.email, response.name, response.photoUrl)
+          .then(data => {
+            var user = data.user
+            storeData('@accessToken', data.accessToken)
+            if (!user.registered) {
+              navigation.navigate('VoP')
+            } else {
+              setLoading(true);
+              if (user.type === "Promoter") {
+                apiPromoterDetails()
+                  .then(data => {
+                    storeData('@promoterFormData', data).then(() => {
+                      removeData('@venueFormData').then(() => {
+                        navigation.navigate('PromoterTab');
+                      });
+                    });
+                  })
+              } else if (data.type === "Venue") {
+                apiVenueDetails()
+                  .then(data => {
+                    storeData('@venueFormData', data).then(() => {
+                      removeData('@promoterFormData').then(() => {
+                        navigation.navigate('VenueTab');
+                      })
+                    });
+                  })
+              }
+            }
+          })
+      }
+    });
+  }
+
   const handleLogin = (callback) => {
     callback().then(response => {
       if (!response.cancelled) {
@@ -69,24 +108,24 @@ const LoginScreen = ({ navigation }) => {
             setLoading(true);
             if (data.type === "Promoter") {
               fetch(`${env.API_URL}/api/promoter/${data.id}`)
-              .then(response => response.json())
-              .then(data => {
+                .then(response => response.json())
+                .then(data => {
                   storeData('@promoterFormData', data).then(() => {
                     removeData('@venueFormData').then(() => {
                       navigation.navigate('PromoterTab');
                     });
                   });
-              })
+                })
             } else if (data.type === "Venue") {
               fetch(`${env.API_URL}/api/venue/${data.id}`)
-              .then(response => response.json())
-              .then(data => {
+                .then(response => response.json())
+                .then(data => {
                   storeData('@venueFormData', data).then(() => {
                     removeData('@promoterFormData').then(() => {
                       navigation.navigate('VenueTab');
                     })
                   });
-              })
+                })
             }
           }
         })
@@ -96,40 +135,40 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-          <StatusBar barStyle={'dark-content'} />
-          <ImageBackground
-            source={require('../../assets/loginScreenBackground.jpg')}
-            style={{height: '100%', width: '100%'}}>
-            {isLoading ? <View style={{alignItems: 'center', flex: 1, justifyContent: 'center'}}>
-              <ActivityIndicator size="large" color="white" />
-              <Text style={styles.loadingText}>Welcome Back</Text>
-            </View> : (
+      <StatusBar barStyle={'dark-content'} />
+      <ImageBackground
+        source={require('../../assets/loginScreenBackground.jpg')}
+        style={{ height: '100%', width: '100%' }}>
+        {isLoading ? <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color="white" />
+          <Text style={styles.loadingText}>Welcome Back</Text>
+        </View> : (
             <>
-              <View style={{flex: 4}}>
+              <View style={{ flex: 4 }}>
                 <Image source={require('../../assets/glowlight2.png')} style={styles.banner} />
               </View>
-              <View style={{flex: 3, width: '88%', alignSelf:'center'}}>
+              <View style={{ flex: 3, width: '88%', alignSelf: 'center' }}>
                 <Text style={styles.slogan}>The new way to promote</Text>
                 <View style={styles.buttonArea}>
-                    <FAB
-                      style={styles.googleLoginButton}
-                      icon="google"
-                      label="Sign In with Google"
-                      onPress={() => handleLogin(signInWithGoogleAsync)}
-                      color="#DB4437"
-                    />
-                    <FAB
-                      style={styles.facebookLoginButton}
-                      icon="facebook"
-                      label="Sign In with Facebook"
-                      onPress={() => handleLogin(signInWithFacebookAsync)}
-                      color="white"
-                    />
+                  <FAB
+                    style={styles.googleLoginButton}
+                    icon="google"
+                    label="Sign In with Google"
+                    onPress={() => handleLogin(signInWithGoogleAsync)}
+                    color="#DB4437"
+                  />
+                  <FAB
+                    style={styles.facebookLoginButton}
+                    icon="facebook"
+                    label="Sign In with Facebook"
+                    onPress={() => handleLogin(signInWithFacebookAsync)}
+                    color="white"
+                  />
                 </View>
               </View>
             </>
-            )}
-        </ImageBackground>
+          )}
+      </ImageBackground>
     </View>
   );
 };

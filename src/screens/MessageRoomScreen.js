@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 
-import { updateMessagesByThreadId, updateThreadById, getMessagesByThreadId, updateThreadAsRead } from '../api/Messages'
+import { updateMessagesByThreadId, updateThreadById, getMessagesByThreadId, updateThreadAsRead } from '../serverSDK/Messages'
 import { useIsFocused } from '@react-navigation/native'
 
 const MessageRoomScreen = ({ route }) => {
