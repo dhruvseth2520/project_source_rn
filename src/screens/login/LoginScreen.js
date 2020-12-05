@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity, StatusBar, ActivityIndicator } from "react-native";
+import { Text, View, StyleSheet, Image, ImageBackground, TouchableOpacity, StatusBar, ActivityIndicator, Alert } from "react-native";
 import React, { useState } from "react";
 import * as Google from "expo-google-app-auth";
 import * as Facebook from "expo-facebook";
@@ -51,40 +51,46 @@ const LoginScreen = ({ navigation }) => {
     }
   }
 
-  const handleLogin2 = (callback) => {
-    callback().then(response => {
-      if (!response.cancelled) {
-        apiLogin(response.id, response.email, response.name, response.photoUrl)
-          .then(data => {
-            var user = data.user
-            storeData('@accessToken', data.accessToken)
-            if (!user.registered) {
-              navigation.navigate('VoP')
-            } else {
-              setLoading(true);
-              if (user.type === "Promoter") {
-                apiPromoterDetails()
-                  .then(data => {
-                    storeData('@promoterFormData', data).then(() => {
-                      removeData('@venueFormData').then(() => {
-                        navigation.navigate('PromoterTab');
-                      });
-                    });
-                  })
-              } else if (data.type === "Venue") {
-                apiVenueDetails()
-                  .then(data => {
-                    storeData('@venueFormData', data).then(() => {
-                      removeData('@promoterFormData').then(() => {
-                        navigation.navigate('VenueTab');
-                      })
-                    });
-                  })
-              }
-            }
-          })
+  const handleLoginJWT = async (callback) => {
+    try {
+      const callbackResponse = await callback()
+
+      if (callbackResponse.cancelled) {
+        return
       }
-    });
+
+      const loginApiResponse = await apiLogin(
+        callbackResponse.id,
+        callbackResponse.email,
+        callbackResponse.name,
+        callbackResponse.photoUrl
+      )
+      var user = loginApiResponse.user
+      storeData('@accessToken', loginApiResponse.accessToken)
+
+      if (!user.registered) {
+        navigation.navigate('VoP')
+      }
+
+      setLoading(true);
+
+      if (user.type === "Promoter") {
+        const promoterDetailsResponse = await apiPromoterDetails()
+        await storeData('@promoterFormData', promoterDetailsResponse)
+        await removeData('@venueFormData')
+        navigation.navigate('PromoterTab');
+      }
+
+      if (user.type === "Venue") {
+        const venueDetailsResponse = await apiVenueDetails()
+        await storeData('@venueFormData', venueDetailsResponse)
+        await removeData('@promoterFormData')
+        navigation.navigate('VenueTab');
+      }
+
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   const handleLogin = (callback) => {
