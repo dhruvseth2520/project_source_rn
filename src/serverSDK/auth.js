@@ -1,6 +1,13 @@
 import env from "../utils/environment";
 
-export const apiLogin = (userId, email, name, photoUrl) => {
+/**
+ * Returns user information in the user object + the accessToken
+ * @param {*} userId 
+ * @param {*} email 
+ * @param {*} name 
+ * @param {*} photoUrl 
+ */
+export const apiLogin = async (userId, email, name, photoUrl) => {
     return fetch(`${env.API_URL}/auth/login`, {
         method: 'POST',
         mode: 'cors',
