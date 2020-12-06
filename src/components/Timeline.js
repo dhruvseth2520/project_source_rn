@@ -16,8 +16,8 @@ const Timeline = ({ data }) => {
           <Text style={styles.timeYear}>{year}</Text>
         </View>
         <View style={styles.markerContainer}>
-            <AntDesign name="downcircle" size={15} color={item.circleColor} style={styles.marker} />
-            <View style={[styles.line, {borderColor: isFinalElement ? 'white' : 'gray'}]}></View>
+          <AntDesign name="downcircle" size={15} color={item.circleColor} style={styles.marker} />
+          <View style={[styles.line, {borderColor: isFinalElement ? 'white' : 'gray'}]}></View>  
         </View>
         <View style={styles.detailContainer}>
           <Text style={styles.title}>{item.title}</Text>

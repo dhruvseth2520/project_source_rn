@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-nati
 import { useNavigation } from '@react-navigation/native';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 
-const VenuePaymentScreen = ({ balance }) => {
+const VenuePaymentScreen = ({ route }) => {
   const navigation = useNavigation();
   const windowWidth = Dimensions.get('window').width;
 
@@ -20,7 +20,7 @@ const VenuePaymentScreen = ({ balance }) => {
       <Text style={styles.title}>Choose a payment method</Text>
 
       <View style={styles.methodContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('VenuePaymentDetails', {method: 'cash', balance: balance})}>
+        <TouchableOpacity onPress={() => navigation.navigate('VenuePaymentDetails', {method: 'cash', balance: route.params.balance})}>
           <View style={styles.methodCard}>
             <FontAwesome5 name="money-bill" style={[styles.methodIcon, {color: '#85bb65'}]}></FontAwesome5>
             <View style={styles.cardContent}>
@@ -34,7 +34,7 @@ const VenuePaymentScreen = ({ balance }) => {
             <FontAwesome5 name="university" style={[styles.methodIcon, {color: '#C4C4B1'}]}></FontAwesome5>
             <View style={styles.cardContent}>
               <Text style={styles.cardTitle}>Wire Transfer</Text>
-              <Text style={[styles.description, {fontSize: descriptionFontSize}]}>Pay via wire transfer through your bank. We accept 7+ leading banking institutions</Text>
+              <Text style={[styles.description, {fontSize: descriptionFontSize}]}>Pay via wire transfer through your bank. We accept 4 leading banking institutions</Text>
             </View>
           </View>
         </TouchableOpacity>

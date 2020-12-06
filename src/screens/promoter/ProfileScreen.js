@@ -3,7 +3,6 @@ import { Text, View, StyleSheet, SafeAreaView, Image } from 'react-native';
 import { getData } from "../../utils/localStorage";
 
 
-
 const PromoterProfileScreen = () => {
     const [name, setName] = useState("");
     const [promoter, setPromoter] = useState({});

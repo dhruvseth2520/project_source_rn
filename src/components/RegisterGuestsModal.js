@@ -43,6 +43,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
             getData('@venueFormData').then(response => {
               const attendance = {
                 venueId: response._id,
+                venueName: response.venueName,
                 promoterId: promoter._id,
                 promoterName: promoter.firstName + " (" + promoter.promoterCode + ")",
                 promoterAvatar: promoter.promoterProfile.images[0],

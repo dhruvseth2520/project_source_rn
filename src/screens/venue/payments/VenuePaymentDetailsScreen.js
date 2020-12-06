@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, KeyboardAvoidingView, ScrollView, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -17,14 +17,14 @@ const VenuePaymentDetailsScreen = ({ route }) => {
         <Entypo name="chevron-small-left" size={44} />
       </TouchableOpacity>
       {paymentMethod === "cash" ? (
-        <VenueCashPickup />
+        <VenueCashPickup balance={route.params.balance} />
       ) : (<></>)}
     </ScrollView>
   )
 }
 
 
-const VenueCashPickup = () => {
+const VenueCashPickup = ({ balance }) => {
   const earliestPickupDate = new Date();
   earliestPickupDate.setDate(earliestPickupDate.getDate() + 1);
   earliestPickupDate.setHours(10);
@@ -32,28 +32,39 @@ const VenueCashPickup = () => {
   const [venue, setVenue] = useState({});
   const [pickupDate, setPickupDate] = useState(earliestPickupDate);
   const [pickupCode, setPickupCode] = useState(0);
-  const [error, setError] = useState(false);
+  const [pickupAmount, setPickupAmount] = useState(balance);
+  const [errorDate, setErrorDate] = useState(false);
+  const [errorAmount, setErrorAmount] = useState(false);
+
 
   const handleSubmit = () => {
-    if (pickupDate.getHours() < 10 || pickupDate.getHours() > 21) {
-      setError(true);
+    if (pickupAmount < 10000) {
+      setErrorAmount(true);
     } else {
-      setError(false);
-      const pickupDetails = {
-        id: venue._id,
-        name: venue.venueName,
-        address: venue.venueAddress,
-        pickupDate,
-        pickupCode
+      setErrorAmount(false);
+      if (pickupDate.getHours() < 10 || pickupDate.getHours() > 21) {
+        setErrorDate(true);
+      } else {
+        setErrorDate(false);
+        const pickupDetails = {
+          id: venue._id,
+          name: venue.venueName,
+          address: venue.venueAddress,
+          email: venue.venueContactEmail,
+          amount: pickupAmount,
+          balance: balance,
+          pickupDate,
+          pickupCode
+        }
+        fetch(`${env.API_URL}/api/payments/cash/scheduled`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          mode: 'cors',
+          body: JSON.stringify(pickupDetails)
+        })
       }
-      fetch(`${env.API_URL}/api/payments/cash/scheduled`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        mode: 'cors',
-        body: JSON.stringify(pickupDetails)
-      })
     }
   }
 
@@ -73,9 +84,10 @@ const VenueCashPickup = () => {
       </View>
     </View>
 
+
     <View style={styles.container}>
       <Text style={styles.label}>Pickup Slot</Text>
-      {error ?
+      {errorDate ?
         (<Text style={[styles.detail, {color: 'red'}]}>Please select a pickup slot between 11 am and 10 pm</Text>) :
         <></>
       }
@@ -88,6 +100,18 @@ const VenueCashPickup = () => {
         onChange={(event, val) => setPickupDate(val)}
         minimumDate={earliestPickupDate}
       />
+    </View>
+
+    <View style={styles.container}>
+      <Text style={styles.label}>Pickup Amount</Text>
+      {errorAmount ?
+        (<Text style={[styles.detail, {color: 'red'}]}>A minimum pickup amount of 10000 MMK is required</Text>) :
+        <Text style={styles.detail}>The amount of your pending balance you want collected</Text>
+      }
+      <View style={{flexDirection: 'row'}}>
+        <TextInput mode="flat" keyboardType="numeric" onChangeText={(val) => setPickupAmount(val)} style={{backgroundColor: 'white', width: '30%'}} underlineColor="#19C2BD" value={pickupAmount + ""} theme={{colors: {primary: '#19C2BD'}}}></TextInput>
+        <Text style={{fontFamily: 'Avenir', fontSize: 15, marginTop: 23, marginLeft: 10}}>MMK of {balance} MMK balance</Text>
+      </View>
     </View>
 
     <View style={styles.container}>
