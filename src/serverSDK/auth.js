@@ -1,13 +1,10 @@
 import env from "../utils/environment";
 
 /**
- * Returns user information in the user object + the accessToken
- * @param {*} userId 
- * @param {*} email 
- * @param {*} name 
- * @param {*} photoUrl 
+ * The function that creates the accessToken for the app after the user login.
+ * @param {String} userId 
  */
-export const apiLogin = async (userId, email, name, photoUrl) => {
+export const authLogin = async (userId) => {
     return fetch(`${env.API_URL}/auth/login`, {
         method: 'POST',
         mode: 'cors',
@@ -16,9 +13,6 @@ export const apiLogin = async (userId, email, name, photoUrl) => {
         },
         body: JSON.stringify({
             userId: userId,
-            email: email,
-            name: name,
-            photoUrl: photoUrl
         })
     }).then(response => response.json())
 }
