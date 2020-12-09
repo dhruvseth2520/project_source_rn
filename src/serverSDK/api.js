@@ -64,3 +64,32 @@ export const apiPromoters = async (accessToken) => {
         { headers: DefaultHeaders(accessToken) }
     )
 }
+
+/**
+ * Toggles Event to be saved or unsaved from the users saved list
+ * @param {String} accessToken 
+ * @param {String} eventId 
+ */
+export const apiToggleEvent = async (accessToken, eventId) => {
+    return fetch(`${env.API_URL}/apx/promoters/saved`,
+        {
+            headers: DefaultHeaders(accessToken),
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify({ eventId: eventId })
+        }
+    )
+}
+
+/**
+ * Returns all saved events for current user
+ * @param {String} accessToken 
+ */
+export const apiSavedEventList = async (accessToken) => {
+    return fetch(`${env.API_URL}/apx/promoters/saved`,
+        {
+            headers: DefaultHeaders(accessToken),
+            method: 'GET',
+        }
+    ).then(response => response.json())
+}
