@@ -1,4 +1,4 @@
-import env from "../utils/environment";
+import env from "project_source_rn/src/utils/environment";
 
 /**
  * The function that creates the accessToken for the app after the user login.
