@@ -312,18 +312,18 @@ const styles = StyleSheet.create({
     top: 7,
     left: 16,
     fontWeight: '300',
-    color: '#218A95'
+    color: '#069A91'
   },
   cardIcon: {
     alignSelf: 'center',
     fontSize: 20,
     marginTop: 10,
-    color: '#2395A0'
+    color: '#1AB0A8'
   },
   btnIcon: {
     alignSelf: 'flex-end',
     fontSize: 16,
-    color: '#2395A0',
+    color: '#069A91',
     top: 4,
     left: 12
   },

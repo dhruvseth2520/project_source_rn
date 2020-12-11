@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, KeyboardAvoidingView, ScrollView, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, KeyboardAvoidingView, Image, ScrollView, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -9,22 +9,85 @@ import env from "../../../utils/environment";
 
 const VenuePaymentDetailsScreen = ({ route }) => {
   const paymentMethod = route.params.method;
-
   const navigation = useNavigation();
+  const [isLoading, setLoading] = useState(false);
+
   return (
     <ScrollView style={styles.background}>
-      <TouchableOpacity style={styles.backArrow} onPress={() => navigation.goBack()}>
-        <Entypo name="chevron-small-left" size={44} />
-      </TouchableOpacity>
-      {paymentMethod === "cash" ? (
-        <VenueCashPickup balance={route.params.balance} />
-      ) : (<></>)}
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>Please wait a moment while we finish scheduling your pickup</Text>
+          <ActivityIndicator size="large" color="#1AA2B0" style={{top: 30}}></ActivityIndicator>
+        </View>) : (
+          <>
+            <TouchableOpacity style={styles.backArrow} onPress={() => navigation.goBack()}>
+              <Entypo name="chevron-small-left" size={44} />
+            </TouchableOpacity>
+            {paymentMethod === "cash" ? (
+              <VenueCashPickup balance={route.params.balance} isLoading={isLoading} setLoading={setLoading} />
+            ) : (<>
+              {paymentMethod === "wire transfer" ? (
+                <VenueWireTransfer balance={route.params.balance} isLoading={isLoading} setLoading={setLoading} />
+              ) : (
+                <></>
+              )}
+            </>)}
+          </>
+      )}
     </ScrollView>
   )
 }
 
+const VenueWireTransfer = ({ balance, isLoading, setLoading }) => {
+  const navigation = useNavigation();
+  const initialState = {"KBZ": false, "AYA": false, "CB": false, "Yoma": false};
+  const [activeButtons, setActiveButtons] = useState(initialState);
 
-const VenueCashPickup = ({ balance }) => {
+  return (<ScrollView>
+    <Text style={[styles.title, {fontFamily: 'Avenir', fontSize: 24}]}>Select the branch of your bank account to proceed</Text>
+    <View style={styles.grid}>
+      <View style={{flexDirection: 'row', marginBottom: 25}}>
+          <TouchableOpacity style={activeButtons["KBZ"] ? [styles.tile, styles.active] : styles.tile} onPress={() => setActiveButtons({...initialState, "KBZ": !activeButtons["KBZ"]})}>
+              <Image source={{uri: 'https://www.fintechfutures.com/files/2018/12/kbz-bank-Cropped.png'}} style={styles.icon} />
+              <Text style={styles.tileLabel}>KBZ Bank</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={activeButtons["CB"] ? [styles.tile, styles.active] : styles.tile} onPress={() => setActiveButtons({...initialState, "CB": !activeButtons["CB"]})}>
+              <Image source={{uri: 'https://yt3.ggpht.com/a/AATXAJxM0r4YPsMbnVk7iNNWmZFvSgCCtgJE9uMsWTmsSw=s900-c-k-c0x00ffffff-no-rj'}} style={styles.icon} />
+              <Text style={styles.tileLabel}>CB Bank</Text>
+          </TouchableOpacity>
+      </View>
+      <View style={{flexDirection: 'row', marginBottom: 20}}>
+          <TouchableOpacity style={activeButtons["Yoma"] ? [styles.tile, styles.active] : styles.tile} onPress={() => setActiveButtons({...initialState, "Yoma": !activeButtons["Yoma"]})}>
+              <Image source={{uri: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/3c/Yoma_Bank_Logo.svg/1200px-Yoma_Bank_Logo.svg.png'}} style={styles.icon} />
+              <Text style={styles.tileLabel}>Yoma Bank</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={activeButtons["AYA"] ? [styles.tile, styles.active] : styles.tile} onPress={() => setActiveButtons({...initialState, "AYA": !activeButtons["AYA"]})}>
+              <Image source={{uri: 'https://zenprospect-production.s3.amazonaws.com/uploads/pictures/5f666a0b4deeaa00019573bb/picture'}} style={styles.icon} />
+              <Text style={styles.tileLabel}>AYA Bank</Text>
+          </TouchableOpacity>
+      </View>
+    </View>
+
+    {Object.values(activeButtons).every(el => el === false) ? (
+      <></>
+    ) : (
+      <FAB
+        label="Proceed"
+        icon="arrow-right"
+        onPress={() => navigation.navigate("VenueBankAccountDetails", {balance: balance, bank: Object.keys(activeButtons).find(btn => activeButtons[btn] === true)})}
+        style={styles.proceedButton}
+        color="white"
+      />
+    )}
+
+  </ScrollView>)
+}
+
+
+
+const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
+  const navigation = useNavigation();
+
   const earliestPickupDate = new Date();
   earliestPickupDate.setDate(earliestPickupDate.getDate() + 1);
   earliestPickupDate.setHours(10);
@@ -36,7 +99,6 @@ const VenueCashPickup = ({ balance }) => {
   const [errorDate, setErrorDate] = useState(false);
   const [errorAmount, setErrorAmount] = useState(false);
 
-
   const handleSubmit = () => {
     if (pickupAmount < 10000) {
       setErrorAmount(true);
@@ -45,6 +107,7 @@ const VenueCashPickup = ({ balance }) => {
       if (pickupDate.getHours() < 10 || pickupDate.getHours() > 21) {
         setErrorDate(true);
       } else {
+        setLoading(true);
         setErrorDate(false);
         const pickupDetails = {
           id: venue._id,
@@ -63,6 +126,15 @@ const VenueCashPickup = ({ balance }) => {
           },
           mode: 'cors',
           body: JSON.stringify(pickupDetails)
+        }).then(response => response.json()).then(data => {
+          if (data.status === "Success") {
+            setLoading(false);
+            navigation.navigate("VenuePaymentReceipt", {
+              title: "Thank you, your pickup is confirmed",
+              detail: `Your payment will be collected from ${venue.venueName} on ${pickupDate.toLocaleDateString()} at ${pickupDate.toLocaleTimeString()}`,
+              receipt: [{label: "Amount", amount: pickupAmount + " MMK"}, {label: "Pickup fee", amount: "5000 MMK"}, {label: "Total", amount: `${parseInt(pickupAmount) + 5000} MMK`}]
+            });
+          }
         })
       }
     }
@@ -73,63 +145,64 @@ const VenueCashPickup = ({ balance }) => {
     setPickupCode(Math.floor(Math.random() * 10000));
   }, [])
 
-  return (<>
-    <Text style={styles.title}>Prefer to pay your bill in cash?</Text>
-    <Text style={[styles.disclaimer, {fontSize: 22}]}>No problem. We've got you covered</Text>
-    <Text style={[styles.disclaimer, {marginTop: 20}]}>Select a pickup slot and we'll send someone to collect your payment. We charge a flat 5000 MMK fee for all pickups</Text>
-    <View style={[styles.container, {marginTop: 10}]}>
-      <Text style={styles.label}>Pickup Address</Text>
-      <View style={styles.addressContainer}>
-        <Text style={{fontFamily: 'Avenir', fontWeight: '200'}}>{venue.venueAddress}</Text>
-      </View>
-    </View>
+  return (
+            <>
+                <Text style={styles.title}>Prefer to pay your bill in cash?</Text>
+                <Text style={[styles.disclaimer, {fontSize: 20}]}>No problem. We've got you covered</Text>
+                <Text style={[styles.disclaimer, {marginTop: 20}]}>Select a pickup slot and we'll send someone to collect your payment. We charge a flat 5000 MMK fee for all pickups</Text>
+                <View style={[styles.container, {marginTop: 10}]}>
+                  <Text style={styles.label}>Pickup Address</Text>
+                  <View style={styles.addressContainer}>
+                    <Text style={{fontFamily: 'Avenir', fontWeight: '200', color: '#535353'}}>{venue.venueAddress}</Text>
+                  </View>
+                </View>
 
+                <View style={styles.container}>
+                  <Text style={styles.label}>Pickup Slot</Text>
+                  {errorDate ?
+                    (<Text style={[styles.detail, {color: 'red'}]}>Please select a pickup slot between 11 am and 10 pm</Text>) :
+                    <></>
+                  }
+                  <DateTimePicker
+                    style={styles.dateSelector}
+                    mode="datetime"
+                    testID="dateTimePicker"
+                    minuteInterval={30}
+                    value={pickupDate}
+                    onChange={(event, val) => setPickupDate(val)}
+                    minimumDate={earliestPickupDate}
+                  />
+                </View>
 
-    <View style={styles.container}>
-      <Text style={styles.label}>Pickup Slot</Text>
-      {errorDate ?
-        (<Text style={[styles.detail, {color: 'red'}]}>Please select a pickup slot between 11 am and 10 pm</Text>) :
-        <></>
-      }
-      <DateTimePicker
-        style={styles.dateSelector}
-        mode="datetime"
-        testID="dateTimePicker"
-        minuteInterval={30}
-        value={pickupDate}
-        onChange={(event, val) => setPickupDate(val)}
-        minimumDate={earliestPickupDate}
-      />
-    </View>
+                <View style={styles.container}>
+                  <Text style={styles.label}>Pickup Amount</Text>
+                  {errorAmount ?
+                    (<Text style={[styles.detail, {color: 'red'}]}>A minimum pickup amount of 10000 MMK is required</Text>) :
+                    <Text style={styles.detail}>The amount of your pending balance you want collected</Text>
+                  }
+                  <View style={{flexDirection: 'row'}}>
+                    <TextInput mode="flat" keyboardType="numeric" onChangeText={(val) => setPickupAmount(val)} style={{backgroundColor: 'white', width: '30%'}} underlineColor="#19C2BD" value={pickupAmount + ""} theme={{colors: {primary: '#19C2BD'}}}></TextInput>
+                    <Text style={{fontFamily: 'Avenir', fontSize: 15, marginTop: 23, marginLeft: 10}}>MMK of {balance} MMK balance</Text>
+                  </View>
+                </View>
 
-    <View style={styles.container}>
-      <Text style={styles.label}>Pickup Amount</Text>
-      {errorAmount ?
-        (<Text style={[styles.detail, {color: 'red'}]}>A minimum pickup amount of 10000 MMK is required</Text>) :
-        <Text style={styles.detail}>The amount of your pending balance you want collected</Text>
-      }
-      <View style={{flexDirection: 'row'}}>
-        <TextInput mode="flat" keyboardType="numeric" onChangeText={(val) => setPickupAmount(val)} style={{backgroundColor: 'white', width: '30%'}} underlineColor="#19C2BD" value={pickupAmount + ""} theme={{colors: {primary: '#19C2BD'}}}></TextInput>
-        <Text style={{fontFamily: 'Avenir', fontSize: 15, marginTop: 23, marginLeft: 10}}>MMK of {balance} MMK balance</Text>
-      </View>
-    </View>
+                <View style={styles.container}>
+                  <Text style={styles.label}>Pickup Code</Text>
+                  <Text style={styles.detail}>Use this code to confirm that the representative picking up your payment is with Source. Please don't pay anyone with an incorrect code</Text>
+                  <Text style={styles.code}>{pickupCode}</Text>
+                </View>
 
-    <View style={styles.container}>
-      <Text style={styles.label}>Pickup Code</Text>
-      <Text style={styles.detail}>Use this code to confirm that the representative picking up your payment is with Source. Please don't pay anyone with an incorrect code</Text>
-      <Text style={styles.code}>{pickupCode}</Text>
-    </View>
-
-    <View style={[styles.container, {marginBottom: 60}]}>
-      <FAB
-        icon="check"
-        label="Confirm"
-        color="white"
-        style={{backgroundColor: '#22C2D2'}}
-        onPress={handleSubmit}
-      />
-    </View>
-  </>)
+                <View style={[styles.container, {marginBottom: 60}]}>
+                  <FAB
+                    icon="check"
+                    label="Confirm"
+                    color="white"
+                    style={{backgroundColor: '#22D2C9'}}
+                    onPress={handleSubmit}
+                  />
+                </View>
+            </>
+      )
 }
 
 const styles = StyleSheet.create({
@@ -143,10 +216,10 @@ const styles = StyleSheet.create({
     zIndex: 1
   },
   title: {
-    marginTop: 50,
+    marginTop: 55,
     marginLeft: 45,
     width: '80%',
-    fontFamily: 'Futura',
+    fontFamily: 'Gill Sans',
     fontSize: 35,
     fontWeight: '400',
     marginBottom: 15,
@@ -156,7 +229,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir',
     marginLeft: 48,
     fontWeight: '100',
-    width: '75%'
+    width: '90%'
   },
   container: {
     marginLeft: 40,
@@ -178,12 +251,13 @@ const styles = StyleSheet.create({
     borderWidth: 1.2,
     marginTop: 15,
     borderRadius: 4,
-    borderColor: '#22C2D2',
+    borderColor: '#1AB0A8',
     padding: 15
   },
   dateSelector: {
     width: '100%',
-    marginTop: 10
+    marginTop: 15,
+    height: 50
   },
   code: {
     alignSelf: 'center',
@@ -192,6 +266,67 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 15,
     fontSize: 36
+  },
+  loadingContainer: {
+    marginTop: 320,
+    alignSelf: 'center'
+  },
+  loadingText: {
+    fontSize: 24,
+    textAlign: 'center',
+    width: 300,
+    fontFamily: 'Avenir',
+    fontWeight: '400'
+  },
+  grid: {
+    marginLeft: 49,
+    marginTop: 15,
+    width: '78%'
+  },
+  tile: {
+    width: '47%',
+    borderWidth: 1,
+    borderColor: 'white',
+    paddingVertical: 13,
+    paddingHorizontal: 8,
+    borderRadius: 10,
+    marginRight: 15,
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    shadowColor: "#000",
+    shadowOffset: {
+    	width: 0,
+    	height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  icon: {
+    width: 36,
+    height: 36
+  },
+  tileLabel: {
+    fontFamily: 'Avenir',
+    fontSize: 18,
+    marginTop: 8,
+    marginLeft: 9
+  },
+  active: {
+    borderWidth: 1,
+    borderColor: "#25D3A1"
+  },
+  proceedButton: {
+    width: '80%',
+    backgroundColor: "#22D2C9",
+    marginTop: 20,
+    marginLeft: 45,
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    shadowOffset: {
+    	width: 0,
+    	height: 4,
+    },
   }
 
 })

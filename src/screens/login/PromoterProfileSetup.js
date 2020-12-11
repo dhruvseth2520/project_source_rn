@@ -104,7 +104,7 @@ const PromoterProfileSetup = ({ route }) => {
    }
 
    const handleFacebook = () => {
-     
+
    }
 
   return (
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     width: '95%',
     marginTop: 10,
     marginBottom: 10,
-    backgroundColor: '#22C2D2',
+    backgroundColor: '#22D2D1',
   },
   closeButton: {
     position: 'absolute',
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     padding: 15,
     width: 100,
-    backgroundColor: '#1AA2B0'
+    backgroundColor: '#22D2D1'
   },
   disclaimer: {
     marginHorizontal: 10,

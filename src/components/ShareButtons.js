@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Linking, Share, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Linking, Share, Dimensions, Clipboard, Alert } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { getData } from "../utils/localStorage";
-
+import * as WebBrowser from 'expo-web-browser';
 
 const ShareButtons = ({ event, view }) => {
   const [eventURL, setEventURL] = useState("");
@@ -22,11 +22,16 @@ const ShareButtons = ({ event, view }) => {
     })
   }, [])
 
+  const copyEventURL = async () => {
+    Clipboard.setString(eventURL);
+    await WebBrowser.openBrowserAsync(eventURL);
+    Alert.alert("Thanks", "Invitation link has been copied to clipboard");
+  }
+
   const shareEvent = async () => {
     try {
       const result = await Share.share({
-        title: event.eventName,
-        url: eventURL
+        message: `Come check out ${event.eventName} at ${event.venueName} on ${new Date(event.date).toDateString()}. Say my name, ${promoterData.firstName} or use my code, ${promoterData.promoterCode}, at the door to get a promotion. View details here: ${eventURL}`
       })
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -44,7 +49,7 @@ const ShareButtons = ({ event, view }) => {
 
   const facebookShare = () => {
     let facebookParameters = [];
-    facebookParameters.push('quote=' + encodeURI(`Come check out ${event.eventName} at ${event.venue} on ${new Date(event.date).toDateString()}. Say my name, ${promoterData.firstName} or use my code, ${promoterData.promoterCode}, at the door to get a promotion`));
+    facebookParameters.push('quote=' + encodeURI(`Come check out ${event.eventName} at ${event.venueName} on ${new Date(event.date).toDateString()}. Say my name, ${promoterData.firstName} or use my code, ${promoterData.promoterCode}, at the door to get a promotion`));
     facebookParameters.push('u=' + encodeURI(eventURL));
 
     const url = 'https://www.facebook.com/sharer/sharer.php?' + facebookParameters.join('&');
@@ -60,7 +65,7 @@ const ShareButtons = ({ event, view }) => {
   const postTweet = () => {
     let twitterParameters = [];
     twitterParameters.push('url=' + encodeURI(eventURL));
-    twitterParameters.push('text=' + encodeURI(`Come check out ${event.eventName} at ${event.venue} on ${new Date(event.date).toDateString()}. Say my name, ${promoterData.firstName} or use my code, ${promoterData.promoterCode}, at the door to get a promotion`));
+    twitterParameters.push('text=' + encodeURI(`Come check out ${event.eventName} at ${event.venueName} on ${new Date(event.date).toDateString()}. Say my name, ${promoterData.firstName} or use my code, ${promoterData.promoterCode}, at the door to get a promotion`));
 
     const url = 'https://twitter.com/intent/tweet?' + twitterParameters.join('&');
 
@@ -77,7 +82,7 @@ const ShareButtons = ({ event, view }) => {
     <>
       {view === "Page" ? (
         <>
-          <View style={{flexDirection: 'row', marginBottom: 25, marginTop: 5, left: 10}}>
+          <View style={{flexDirection: 'row', marginBottom: 25, marginTop: 2, left: 10}}>
             <TouchableOpacity onPress={facebookShare} style={[styles.socialButton, {backgroundColor: '#3b5998'}]}>
               <FontAwesome5 style={styles.btnIcon} name="facebook-f" />
               <Text style={[styles.btnText, {fontSize: fontSize}]}>Share on Facebook</Text>
@@ -89,8 +94,12 @@ const ShareButtons = ({ event, view }) => {
           </View>
           <View style={{flexDirection: 'row', marginBottom: 60, marginTop: 5, left: 10}}>
             <TouchableOpacity onPress={shareEvent} style={[styles.socialButton, {backgroundColor: 'white'}]}>
-              <FontAwesome5 style={[styles.btnIcon, {fontSize: 14, color: '#1AA2B0'}]} name="user" />
+              <FontAwesome5 style={[styles.btnIcon, {fontSize: 15, color: '#1AA2B0'}]} name="paper-plane" />
               <Text style={[styles.btnText, {fontSize: fontSize, color: '#1AA2B0'}]}>Share with Contacts</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={copyEventURL} style={[styles.socialButton, {backgroundColor: '#525252'}]}>
+              <FontAwesome5 style={[styles.btnIcon, {fontSize: 15, color: 'white'}]} name="link" />
+              <Text style={[styles.btnText, {fontSize: fontSize}]}>Get Invitation Link</Text>
             </TouchableOpacity>
           </View>
         </>

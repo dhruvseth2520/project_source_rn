@@ -10,62 +10,60 @@ const FilterRange = ({ state, setState, title, icon, unit, step, min, max, label
   const [visible, setVisible] = useState(false);
   let left = 160 / (max - min) * state.displayValue - 20 - 160 * min / (max - min);
 
-  return (
-    <Popover
-      isVisible={visible}
-      onRequestClose={() => {
-        setVisible(false);
-        setState({...state, displayValue: state.filterValue});
-      }}
-      placement={PopoverPlacement.BOTTOM}
-      arrowStyle={{backgroundColor: 'transparent'}}
-      from={(
-        <Chip icon={icon} compact={true} selectedColor={state.active ? 'white' : 'black'}
-          textStyle={{fontFamily: 'Avenir', fontSize: 13}}
-          style={[styles.filterBtn, {backgroundColor: state.active ? '#19D2CC' : '#EFEFEF'}]}
-          onPress={() => setVisible(true)}
-        >
-          {title}
-        </Chip>
-      )}>
-      <View style={styles.filterCard}>
-        <Text style={styles.label}>{label}</Text>
-        <Text style={{top: 7, left: left, width: 80, marginBottom: 6, textAlign: 'center', fontFamily: 'Avenir', fontWeight: '300', fontSize: 12 } }>
-            {Math.floor(state.displayValue) + " " + unit}
-        </Text>
-        <Slider
-          style={{width: 200, height: 40}}
-          minimumValue={min}
-          maximumValue={max}
-          step={step}
-          minimumTrackTintColor="#2CCADA"
-          maximumTrackTintColor="#26A5B2"
-          value={state.displayValue}
-          onSlidingComplete={val => setState({...state, displayValue: val})}
-        />
-        <View style={{flexDirection: 'row', marginLeft: 20}}>
-          <Button icon="close" compact={true} onPress={() => {
-              setState({active: false, filterValue: (maxOrMin === "max" ? max : min), displayValue: (maxOrMin === "max" ? max : min)});
-              setVisible(false);
-            }}
-            color="#515151"
-            style={{alignSelf: 'center', top: 5, left: -5}}
-            labelStyle={{fontFamily: 'Futura', fontSize: 12}}>Remove
-          </Button>
-          <Button icon="check" compact={true} onPress={() => {
-            setState({...state, active: true, filterValue: state.displayValue});
+  return (<Popover
+    isVisible={visible}
+    onRequestClose={() => {
+      setVisible(false);
+      setState({...state, displayValue: state.filterValue});
+    }}
+    placement={PopoverPlacement.BOTTOM}
+    arrowStyle={{backgroundColor: 'transparent'}}
+    from={(
+      <TouchableOpacity onPress={() => setVisible(true)}>
+          <Chip icon={icon} compact={true} selectedColor={state.active ? 'white' : 'black'}
+            textStyle={{fontFamily: 'Avenir', fontSize: 13}}
+            style={[styles.filterBtn, {backgroundColor: state.active ? '#19D2CC' : '#EFEFEF'}]}
+          >
+            {title}
+          </Chip>
+      </TouchableOpacity>
+    )}>
+    <View style={styles.filterCard}>
+      <Text style={styles.label}>{label}</Text>
+      <Text style={{top: 7, left: left, width: 80, marginBottom: 6, textAlign: 'center', fontFamily: 'Avenir', fontWeight: '300', fontSize: 12 } }>
+          {Math.floor(state.displayValue) + " " + unit}
+      </Text>
+      <Slider
+        style={{width: 200, height: 40}}
+        minimumValue={min}
+        maximumValue={max}
+        step={step}
+        minimumTrackTintColor="#2CCADA"
+        maximumTrackTintColor="#26A5B2"
+        value={state.displayValue}
+        onSlidingComplete={val => setState({...state, displayValue: val})}
+      />
+      <View style={{flexDirection: 'row', marginLeft: 20}}>
+        <Button icon="close" compact={true} onPress={() => {
+            setState({active: false, filterValue: (maxOrMin === "max" ? max : min), displayValue: (maxOrMin === "max" ? max : min)});
             setVisible(false);
           }}
-            color="#515151"
-            style={{alignSelf: 'center', top: 5, left: -12}}
-            labelStyle={{fontFamily: 'Futura', fontSize: 12}}>
-              Apply
-          </Button>
-        </View>
+          color="#515151"
+          style={{alignSelf: 'center', top: 5, left: -5}}
+          labelStyle={{fontFamily: 'Futura', fontSize: 12}}>Remove
+        </Button>
+        <Button icon="check" compact={true} onPress={() => {
+          setState({...state, active: true, filterValue: state.displayValue});
+          setVisible(false);
+        }}
+          color="#515151"
+          style={{alignSelf: 'center', top: 5, left: -12}}
+          labelStyle={{fontFamily: 'Futura', fontSize: 12}}>
+            Apply
+        </Button>
       </View>
-    </Popover>
-  )
-
+    </View>
+  </Popover>)
 }
 
 const FilterSelect = ({ state, setState, icon, title, label, items }) => {
@@ -79,13 +77,15 @@ const FilterSelect = ({ state, setState, icon, title, label, items }) => {
       }}
       arrowStyle={{backgroundColor: 'transparent'}}
       from={(
-        <Chip icon={icon} compact={true} selectedColor={state.active ? 'white' : 'black'}
-          textStyle={{fontFamily: 'Avenir', fontSize: 13}}
-          style={[styles.filterBtn, {backgroundColor: state.active ? '#19D2CC' : '#EAEAEA'}]}
-          onPress={() => setVisible(true)}
-        >
-          {title}
-        </Chip>
+        <TouchableOpacity onPress={() => setVisible(true)}>
+            <Chip icon={icon} compact={true} selectedColor={state.active ? 'white' : 'black'}
+              textStyle={{fontFamily: 'Avenir', fontSize: 13}}
+              style={[styles.filterBtn, {backgroundColor: state.active ? '#19D2CC' : '#EAEAEA'}]}
+            >
+              {title}
+            </Chip>
+        </TouchableOpacity>
+
       )}>
       <View style={styles.filterCard}>
         <Text style={styles.label}>{label}</Text>
@@ -131,6 +131,10 @@ const FilterSelect = ({ state, setState, icon, title, label, items }) => {
 
 
 const PromotersFilterGrid = ({ price, setPrice, clients, setClients, availability, setAvailability, connections, setConnections, languages, setLanguages }) => {
+
+
+
+
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterGrid}>
       <FilterRange setState={setPrice} state={price} maxOrMin="max"
@@ -165,6 +169,8 @@ const PromotersFilterGrid = ({ price, setPrice, clients, setClients, availabilit
            items={["English", "Burmese"]}
            selectMultiple={true}
            icon="alphabetical" title="Languages" label="Preferred Languages" />
+
+
     </ScrollView>
   )
 

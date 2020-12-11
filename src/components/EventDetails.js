@@ -101,7 +101,7 @@ const EventDetails = ({ route }) => {
               </View>
             </View>
 
-            <View style={{marginLeft: 20, paddingHorizontal: 5, paddingVertical: 20, width: '88%', marginBottom: 10}}>
+            <View style={{marginLeft: 20, paddingHorizontal: 5, paddingVertical: 15, width: '88%', marginBottom: 10}}>
               <Text style={styles.description}>{event.description}</Text>
             </View>
 
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   eventComponent: {
     marginLeft: 20,
     paddingHorizontal: 5,
-    paddingVertical: 20,
+    paddingVertical: 18,
     borderBottomWidth: 0.5,
     borderColor: 'gray',
     width: '88%'
@@ -176,7 +176,8 @@ const styles = StyleSheet.create({
   },
   description: {
     fontFamily: 'Avenir',
-    fontWeight: '300'
+    fontWeight: '300',
+    marginTop: 5
   },
   backArrow: {
     position: 'absolute',

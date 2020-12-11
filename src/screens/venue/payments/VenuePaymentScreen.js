@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 
@@ -13,7 +13,7 @@ const VenuePaymentScreen = ({ route }) => {
   }
 
   return (
-    <View style={styles.background}>
+    <ScrollView style={styles.background}>
       <TouchableOpacity style={styles.backArrow} onPress={() => navigation.goBack()}>
         <Entypo name="chevron-small-left" size={44} />
       </TouchableOpacity>
@@ -29,7 +29,7 @@ const VenuePaymentScreen = ({ route }) => {
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('VenuePaymentDetails', {method: 'wire transfer', balance: route.params.balance})}>
           <View style={styles.methodCard}>
             <FontAwesome5 name="university" style={[styles.methodIcon, {color: '#C4C4B1'}]}></FontAwesome5>
             <View style={styles.cardContent}>
@@ -43,13 +43,12 @@ const VenuePaymentScreen = ({ route }) => {
             <FontAwesome5 name="share-alt" style={[styles.methodIcon, {color: '#FFC21A'}]}></FontAwesome5>
             <View style={styles.cardContent}>
               <Text style={styles.cardTitle}>Wave Money</Text>
-              <Text style={[styles.description, {fontSize: descriptionFontSize}]}>Pay via debit or credit card. All transactions are processed through Stripe and incur a 2% fee</Text>
+              <Text style={[styles.description, {fontSize: descriptionFontSize}]}>Pay via Wave Money mobile transfer. WavePay account required</Text>
             </View>
           </View>
         </TouchableOpacity>
-
       </View>
-    </View>
+    </ScrollView>
   )
 }
 

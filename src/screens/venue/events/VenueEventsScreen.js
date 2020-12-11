@@ -115,6 +115,7 @@ const VenueEventsScreen = () => {
       <FAB
         style={styles.fab}
         icon="plus"
+        color="white"
         onPress={() => navigation.navigate('VenueEventForm')}
       />
     </ScrollView>
@@ -148,15 +149,6 @@ const styles = StyleSheet.create({
     marginTop: 7,
     marginLeft: 35
   },
-  addBtn: {
-    width: 54,
-    height: 54,
-    borderRadius: 54,
-    backgroundColor: '#1AA2B0',
-    marginTop: 20,
-    marginLeft: 142,
-    marginBottom: 50
-  },
   btnContainer: {
     flexDirection: 'row',
     marginTop: 5,
@@ -177,7 +169,7 @@ const styles = StyleSheet.create({
     fontSize: 15
   },
   fab: {
-    backgroundColor: '#1AA2B0',
+    backgroundColor: '#1AB0A8',
     width: 56,
     height: 56,
     marginTop: 25,

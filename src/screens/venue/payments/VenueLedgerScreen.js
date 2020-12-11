@@ -71,21 +71,21 @@ const VenueLedgerScreen = () => {
               timeline.push({time: payment.dueDate, title: title, description: description, circleColor: '#CA3467'});
 
               sum += payment.amount;
-            })
-          })
 
-          fetch(`${env.API_URL}/api/payments/${response._id}`).then(response => response.json()).then(data => {
-            data.forEach(transaction => {
-              const dateString = `${MONTH_ARRAY[new Date(transaction.date).getMonth()]} ${new Date(transaction.date).getDate()} ${new Date(transaction.date).getFullYear()}`
-              timeline.push({time: dateString, title: 'Payment Received', description: `${transaction.amount} MMK received through ${transaction.method}`, circleColor: '#34C056'});
-              sum -= transaction.amount;
-            })
+              fetch(`${env.API_URL}/api/payments/${response._id}`).then(response => response.json()).then(data => {
+                data.forEach(transaction => {
+                  const dateString = `${MONTH_ARRAY[new Date(transaction.date).getMonth()]} ${new Date(transaction.date).getDate()} ${new Date(transaction.date).getFullYear()}`
+                  timeline.push({time: dateString, title: 'Payment Received', description: `${transaction.amount} MMK received through ${transaction.method}`, circleColor: '#34C056'});
+                  sum -= transaction.amount;
+                })
 
-            setBalance(sum);
-            setTimelineData(timeline);
-            setGraphData(dateBalance);
-            setLedger(tableData);
-            setLoading(false);
+                setBalance(sum);
+                setTimelineData(timeline);
+                setGraphData(dateBalance);
+                setLedger(tableData);
+                setLoading(false);
+              })
+            })
           })
         })
       })

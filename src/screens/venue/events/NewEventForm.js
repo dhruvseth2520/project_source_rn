@@ -130,6 +130,19 @@ const VenueNewEventForm = ({ route }) => {
               </View>
 
               <View style={styles.inputContainer}>
+                <Text style={styles.label}>Event Date</Text>
+                <Text style={styles.comment}>The date and time of the event</Text>
+                <DateTimePicker
+                  style={styles.dateSelector}
+                  mode="datetime"
+                  testID="dateTimePicker"
+                  value={new Date(date)}
+                  onChange={(event, val) => setDate(val)}
+                  minimumDate={new Date()}
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
                 <Text style={styles.label}>Event Image</Text>
                 <Text style={styles.comment}>Banner or Poster for the event</Text>
 
@@ -149,18 +162,6 @@ const VenueNewEventForm = ({ route }) => {
                 />
               </View>
 
-              <View style={styles.inputContainer}>
-                <Text style={styles.label}>Event Date</Text>
-                <Text style={styles.comment}>The date and time of the event</Text>
-                <DateTimePicker
-                  style={styles.dateSelector}
-                  mode="datetime"
-                  testID="dateTimePicker"
-                  value={new Date(date)}
-                  onChange={(event, val) => setDate(val)}
-                  minimumDate={new Date()}
-                />
-              </View>
 
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Promotion</Text>
@@ -219,14 +220,15 @@ const styles = StyleSheet.create({
   },
   dateSelector: {
     marginTop: 10,
-    marginBottom: -5,
-    width: '90%'
+    marginBottom: 5,
+    width: '90%',
+    height: 50
   },
   cameraButton: {
     width: '92%',
     marginTop: 18,
     marginBottom: 10,
-    backgroundColor: '#22C2D2'
+    backgroundColor: '#22D2C9'
   },
   eventImage: {
     width: '90%',
@@ -252,7 +254,8 @@ const styles = StyleSheet.create({
     marginLeft: 30
   },
   inputContainer: {
-    margin: 8
+    margin: 8,
+    marginBottom: 15
   },
   selectInput: {
     width: '90%',
@@ -308,8 +311,8 @@ const styles = StyleSheet.create({
   submitButton: {
     height: 50,
     width: '44%',
-    backgroundColor: '#22C2D2',
-    borderColor: '#22C2D2',
+    backgroundColor: '#22D2C9',
+    borderColor: '#22D2C9',
     borderWidth: 1,
     marginTop: 15,
     alignSelf: 'center',

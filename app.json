@@ -4,14 +4,12 @@
     "slug": "project_source_rn",
     "version": "1.0.0",
     "orientation": "portrait",
-
     "splash": {
-      "image": "./src/assets/glass-logo.png",
+      "image": "./src/assets/splash-screen.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "facebookScheme": "fb2126657990894930",
-
     "updates": {
       "fallbackToCacheTimeout": 0
     },

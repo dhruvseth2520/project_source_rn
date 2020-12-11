@@ -101,8 +101,8 @@ const VenuePromotersHome = () => {
                     inputStyle={styles.inputText}
                     placeholder="Search Promoters"
                     value={query}
-                    iconColor="#1AA2B0"
-                    selectionColor="#1AA2B0"
+                    iconColor="#1AB0A8"
+                    selectionColor="#1AB0A8"
                     onChangeText={(val) => setQuery(val)}
                   />
 

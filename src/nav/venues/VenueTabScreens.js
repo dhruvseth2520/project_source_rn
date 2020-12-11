@@ -20,7 +20,7 @@ const VenueTabScreens = () => {
           <VenueTabNav.Screen name="VenuePromoters"
             options={{
               tabBarIcon: ({ focused, size }) => (
-                  <Ionicons name="md-people" size={size} color={focused ? "#1AA2B0" : 'gray'} style={{"marginTop": 5}}/>
+                  <Ionicons name="md-people" size={size} color={focused ? "#1AB0A8" : 'gray'} style={{"marginTop": 5}}/>
               ),
               headerShown: false,
               title: "Promoters",
@@ -32,7 +32,7 @@ const VenueTabScreens = () => {
           <VenueTabNav.Screen name="VenueEvents"
             options={{
               tabBarIcon: ({ focused, size }) => (
-                <Ionicons name="ios-calendar" size={size} color={focused ? "#1AA2B0" : 'gray'} style={{"marginTop": 5}}/>
+                <Ionicons name="ios-calendar" size={size} color={focused ? "#1AB0A8" : 'gray'} style={{"marginTop": 5}}/>
               ),
               headerShown: false,
               title: "Events"
@@ -43,7 +43,7 @@ const VenueTabScreens = () => {
           <VenueTabNav.Screen name="VenueMessages"
             options={{
               tabBarIcon: ({ focused, size, color }) => (
-                <Ionicons name="ios-chatboxes" size={size} color={focused ? '#1AA2B0' : 'gray'} style={{"marginTop": 5}}/>
+                <Ionicons name="ios-chatboxes" size={size} color={focused ? '#1AB0A8' : 'gray'} style={{"marginTop": 5}}/>
               ),
               headerShown: false,
               title: "Inbox"
@@ -53,7 +53,7 @@ const VenueTabScreens = () => {
           <VenueTabNav.Screen name="VenueLedger"
             options={{
               tabBarIcon: ({ focused, size, color }) => (
-                <Ionicons name="ios-wallet" size={size} color={focused ? '#1AA2B0' : 'gray'} style={{"marginTop": 5}}/>
+                <Ionicons name="ios-wallet" size={size} color={focused ? '#1AB0A8' : 'gray'} style={{"marginTop": 5}}/>
               ),
               headerShown: false,
               title: "Ledger"
@@ -64,7 +64,7 @@ const VenueTabScreens = () => {
             name="VenueSettings"
             options={{
               tabBarIcon: ({ focused, size }) => (
-                <Ionicons name="md-settings" size={size} color={focused ? "#1AA2B0" : 'gray'} style={{"marginTop": 5}}/>
+                <Ionicons name="md-settings" size={size} color={focused ? "#1AB0A8" : 'gray'} style={{"marginTop": 5}}/>
               ),
               headerShown: false,
               title: "Settings"
