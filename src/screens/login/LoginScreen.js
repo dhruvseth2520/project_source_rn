@@ -6,8 +6,8 @@ import { storeData, removeData, getData } from '../../utils/localStorage';
 import env from "../../utils/environment";
 import { FAB } from 'react-native-paper';
 
-import { apiLogin } from '../../serverSDK/auth'
-import { apiPromoterDetails } from '../../serverSDK/api'
+import { authLogin } from 'project_source_rn/src/serverSDK/auth'
+import { getPromoterDetails, getVenueDetails } from 'project_source_rn/src/serverSDK/api'
 
 
 const LoginScreen = ({ navigation }) => {
@@ -54,35 +54,30 @@ const LoginScreen = ({ navigation }) => {
   const handleLoginJWT = async (callback) => {
     try {
       const callbackResponse = await callback()
+      if (callbackResponse.cancelled) return
 
-      if (callbackResponse.cancelled) {
-        return
-      }
+      const loginApiResponse = await authLogin(callbackResponse.id)
 
-      const loginApiResponse = await apiLogin(
-        callbackResponse.id,
-        callbackResponse.email,
-        callbackResponse.name,
-        callbackResponse.photoUrl
-      )
       var user = loginApiResponse.user
       storeData('@accessToken', loginApiResponse.accessToken)
 
-      if (!user.registered) {
-        navigation.navigate('VoP')
-      }
+      if (!user.registered) navigation.navigate('VoP')
 
       setLoading(true);
 
       if (user.type === "Promoter") {
-        const promoterDetailsResponse = await apiPromoterDetails()
+        const promoterDetailsResponse = await getPromoterDetails(
+          loginApiResponse.accessToken
+          )
         await storeData('@promoterFormData', promoterDetailsResponse)
         await removeData('@venueFormData')
         navigation.navigate('PromoterTab');
       }
 
       if (user.type === "Venue") {
-        const venueDetailsResponse = await apiVenueDetails()
+        const venueDetailsResponse = await getVenueDetails(
+          loginApiResponse.accessToken
+        )
         await storeData('@venueFormData', venueDetailsResponse)
         await removeData('@promoterFormData')
         navigation.navigate('VenueTab');
