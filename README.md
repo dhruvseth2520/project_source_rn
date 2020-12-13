@@ -8,10 +8,10 @@ Make sure you have npm and watchman installed
 brew install npm watchman
 ```
 
-You will need the expo cli package globally
+You will need the expo cli & yarn package globally
 
 ```bash
-npm install -g expo-cli
+npm install -g expo-cli yarn
 ```
 
 ## Run the app
