@@ -25,7 +25,7 @@ const VenuePaymentReceipt = ({ route }) => {
         })}
       </View>
 
-      <Text style={styles.disclaimer}>You will be responsible for payment of all applicable federal, state and local taxes and assessments (including sales, use and similar taxes) levied on the transaction</Text>
+      <Text style={styles.disclaimer}>Please have your cash payment ready ahead of your scheduled pickup slot</Text>
 
       <FAB
         label="Finish"

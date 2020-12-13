@@ -41,10 +41,16 @@ const VenuePaymentDetailsScreen = ({ route }) => {
 const VenueWireTransfer = ({ balance, isLoading, setLoading }) => {
   const navigation = useNavigation();
   const initialState = {"KBZ": false, "AYA": false, "CB": false, "Yoma": false};
+  const bankDetails = {
+                        "KBZ": {"name": "KBZ Bank", "image": "https://www.fintechfutures.com/files/2018/12/kbz-bank-Cropped.png", "bankAccountNumber": "0084-1001-0000-6588", "branch": "Ahlone"},
+                        "CB": {"name": "CB Bank", "image": "https://yt3.ggpht.com/a/AATXAJxM0r4YPsMbnVk7iNNWmZFvSgCCtgJE9uMsWTmsSw=s900-c-k-c0x00ffffff-no-rj", "bankAccountNumber": "0084-1001-0000-6588", "branch": "Ahlone"},
+                        "Yoma": {"name": "Yoma Bank", "image": "https://upload.wikimedia.org/wikipedia/en/thumb/3/3c/Yoma_Bank_Logo.svg/1200px-Yoma_Bank_Logo.svg.png", "bankAccountNumber": "0084-1001-0000-6588", "branch": "Ahlone"},
+                        "AYA": {"name": "AYA Bank", "image": "https://zenprospect-production.s3.amazonaws.com/uploads/pictures/5f666a0b4deeaa00019573bb/picture", "bankAccountNumber": "0084-1001-0000-6588", "branch": "Ahlone"}
+                      };
   const [activeButtons, setActiveButtons] = useState(initialState);
 
   return (<ScrollView>
-    <Text style={[styles.title, {fontFamily: 'Avenir', fontSize: 24}]}>Select the branch of your bank account to proceed</Text>
+    <Text style={[styles.title, {fontFamily: 'Avenir', fontSize: 22, marginLeft: 49}]}>Select your bank to proceed</Text>
     <View style={styles.grid}>
       <View style={{flexDirection: 'row', marginBottom: 25}}>
           <TouchableOpacity style={activeButtons["KBZ"] ? [styles.tile, styles.active] : styles.tile} onPress={() => setActiveButtons({...initialState, "KBZ": !activeButtons["KBZ"]})}>
@@ -74,7 +80,7 @@ const VenueWireTransfer = ({ balance, isLoading, setLoading }) => {
       <FAB
         label="Proceed"
         icon="arrow-right"
-        onPress={() => navigation.navigate("VenueBankAccountDetails", {balance: balance, bank: Object.keys(activeButtons).find(btn => activeButtons[btn] === true)})}
+        onPress={() => navigation.navigate("VenueBankAccountDetails", {balance: balance, bank: bankDetails[Object.keys(activeButtons).find(btn => activeButtons[btn] === true)]})}
         style={styles.proceedButton}
         color="white"
       />
@@ -166,7 +172,6 @@ const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
                   <DateTimePicker
                     style={styles.dateSelector}
                     mode="datetime"
-                    testID="dateTimePicker"
                     minuteInterval={30}
                     value={pickupDate}
                     onChange={(event, val) => setPickupDate(val)}
@@ -251,7 +256,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.2,
     marginTop: 15,
     borderRadius: 4,
-    borderColor: '#1AB0A8',
+    borderColor: '#22D2C9',
     padding: 15
   },
   dateSelector: {
@@ -280,7 +285,7 @@ const styles = StyleSheet.create({
   },
   grid: {
     marginLeft: 49,
-    marginTop: 15,
+    marginTop: 10,
     width: '78%'
   },
   tile: {
@@ -308,9 +313,9 @@ const styles = StyleSheet.create({
   },
   tileLabel: {
     fontFamily: 'Avenir',
-    fontSize: 18,
+    fontSize: 17,
     marginTop: 8,
-    marginLeft: 9
+    marginLeft: 10
   },
   active: {
     borderWidth: 1,
