@@ -74,3 +74,38 @@ export const deleteEvent = async (accessToken, eventId) => {
         body: JSON.stringify({ eventId: eventId })
     })
 }
+
+/**
+ * Register attendance for an event
+ * @param {String} accessToken 
+ * @param {Object} attendanceData 
+ */
+export const registerAttendance = async (accessToken, attendanceData) => {
+    return fetch(`${env.API_URL}/apx/events/attendance`, {
+        headers: DefaultHeaders(accessToken),
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify({ attendanceData })
+    })
+}
+
+/**
+ * Returns attendance from an event from its eventId
+ * @param {String} accessToken 
+ * @param {Object} eventId 
+ */
+export const getAttendanceFromEventId = async (accessToken, eventId) => {
+    return fetch(`${env.API_URL}/apx/events/attendance/${eventId}`, {
+        headers: DefaultHeaders(accessToken)
+    })
+}
+
+/**
+ * Returns attendance on a venue based on the userId in the accessToken
+ * @param {String} accessToken 
+ */
+export const getAttendanceForVenueFromAccessToken = async (accessToken) => {
+    return fetch(`${env.API_URL}/apx/events/attendance/venue`, {
+        headers: DefaultHeaders(accessToken)
+    })
+}
