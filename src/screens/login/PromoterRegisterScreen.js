@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   disclaimer: {
     alignSelf: 'center',
     paddingHorizontal: 22,
-    marginTop: 25,
+    marginTop: 20,
     marginLeft: 5,
     width: '91%',
     fontSize: 12,
@@ -151,8 +151,8 @@ const styles = StyleSheet.create({
   submitButton: {
     height: 50,
     width: '80%',
-    backgroundColor: '#22D2D1',
-    borderColor: '#22D2D1',
+    backgroundColor: '#1AB0A8',
+    borderColor: '#1AB0A8',
     borderWidth: 1,
     borderRadius: 1,
     marginTop: 20,

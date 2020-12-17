@@ -132,9 +132,6 @@ const FilterSelect = ({ state, setState, icon, title, label, items }) => {
 
 const PromotersFilterGrid = ({ price, setPrice, clients, setClients, availability, setAvailability, connections, setConnections, languages, setLanguages }) => {
 
-
-
-
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterGrid}>
       <FilterRange setState={setPrice} state={price} maxOrMin="max"

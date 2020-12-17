@@ -16,7 +16,6 @@ const VenueBankAccountDetails = ({ route }) => {
       const venueId = response._id;
       setReference(response.venueName.replace(" ", "-") + "-" + venueId.substring(venueId.length - 5, venueId.length));
     })
-
   }, [])
 
   const copyText = (text, item) => {
