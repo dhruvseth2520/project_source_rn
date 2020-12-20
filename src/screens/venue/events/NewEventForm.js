@@ -23,7 +23,7 @@ const VenueNewEventForm = ({ route }) => {
   }
 
   const [eventName, setEventName] = useState(event ? event.eventName : "");
-  const [category, setCategory] = useState(event ? event.category : "Show");
+  const [category, setCategory] = useState(event ? event.category : "Themed Event");
   const [image, setImage] = useState(event ? {uri: event.imageURL} : null);
   const [description, setDescription] = useState(event ? event.description : "");
   const [promotion, setPromotion] = useState(event ? event.promotion : "");
@@ -219,16 +219,17 @@ const styles = StyleSheet.create({
     flex: 1
   },
   dateSelector: {
-    marginTop: 10,
+    marginTop: 15,
     marginBottom: 5,
     width: '90%',
     height: 50
   },
   cameraButton: {
     width: '92%',
-    marginTop: 18,
-    marginBottom: 10,
-    backgroundColor: '#22D2C9'
+    marginTop: 20,
+    marginBottom: 0,
+    backgroundColor: '#22D2C9',
+    shadowOpacity: 0.06,
   },
   eventImage: {
     width: '90%',
@@ -258,9 +259,10 @@ const styles = StyleSheet.create({
     marginBottom: 15
   },
   selectInput: {
-    width: '90%',
+    width: '95%',
     height: 200,
-    marginTop: -50,
+    marginLeft: -10,
+    marginTop: -30,
   },
   input: {
     backgroundColor: 'white',
@@ -311,6 +313,7 @@ const styles = StyleSheet.create({
   submitButton: {
     height: 50,
     width: '44%',
+    shadowOpacity: 0.11,
     backgroundColor: '#22D2C9',
     borderColor: '#22D2C9',
     borderWidth: 1,

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Image, ScrollView, Dimensions, FlatList } from 'react-native';
 import { Chip, Avatar, FAB } from 'react-native-paper';
+import {
+  PulseIndicator,
+} from 'react-native-indicators';
 import { getData } from "../../../utils/localStorage";
 import env from "../../../utils/environment";
 import { useNavigation } from '@react-navigation/native';
@@ -79,11 +82,11 @@ const VenueLedgerScreen = () => {
                   sum -= transaction.amount;
                 })
 
+                setLoading(false);
                 setBalance(sum);
                 setTimelineData(timeline);
                 setGraphData(dateBalance);
                 setLedger(tableData);
-                setLoading(false);
               })
             })
           })
@@ -95,122 +98,122 @@ const VenueLedgerScreen = () => {
 
   return (<ScrollView style={styles.background} showsVerticalScrollIndicator={false}>
     <Text style={styles.title}>Ledger</Text>
-    {isLoading ? (<ActivityIndicator size="large" style={{alignSelf: 'center', marginTop: 30}}></ActivityIndicator>) : (
+
+    {isLoading ? (<PulseIndicator color="#22D2C9" style={{alignSelf: 'center', left: -11, marginTop: 20, marginBottom: 20}}></PulseIndicator>) : (
       <>
-      <View style={styles.card}>
-        <Image style={styles.cardBackground} source={require('../../../assets/canva-photo-editor.png')}/>
-        <Image style={styles.visaLogo} source={require('../../../assets/visalogo.png')} />
-        <View style={styles.cardContent}>
-          <Text style={styles.label}>Amount Payable</Text>
-          <Text style={[styles.label, {fontSize: balance >= 100000 ? 44 : 48, left: -3}]}>{balance} MMK</Text>
-        </View>
+          <View style={styles.card}>
+            <Image style={styles.cardBackground} source={require('../../../assets/canva-photo-editor.png')}/>
+            <Image style={styles.visaLogo} source={require('../../../assets/visalogo.png')} />
+            <View style={styles.cardContent}>
+              <Text style={styles.label}>Amount Payable</Text>
+              <Text style={[styles.label, {fontSize: balance >= 100000 ? 44 : (balance === 0 ? 64 : 48), left: -3}]}>{balance} MMK</Text>
+            </View>
 
-        {balance > 0 ? (<View style={{alignSelf: 'flex-start', marginTop: 82, marginLeft: 20}}>
-          <TouchableOpacity style={styles.paymentButton} onPress={() => navigation.navigate("VenuePayment", {balance: balance})}>
-            <Text style={{fontFamily: 'Avenir', color: '#1AA2B0'}}>Clear Balance</Text>
-          </TouchableOpacity>
-        </View>) : (<></>)}
+            {balance > 0 ? (<View style={{alignSelf: 'flex-start', marginTop: 82, marginLeft: 20}}>
+              <TouchableOpacity style={styles.paymentButton} onPress={() => navigation.navigate("VenuePayment", {balance: balance})}>
+                <Text style={{fontFamily: 'Avenir', color: '#1AA2B0'}}>Clear Balance</Text>
+              </TouchableOpacity>
+            </View>) : (<></>)}
 
-      </View>
+          </View>
 
-      <Text style={styles.subTitle}>Monthly Breakdown</Text>
-      <View>
-          {Object.values(graphData).every(val => val === 0) ? (<Text style={styles.caption}>No activity yet. Start registering guests for events now to see your month to month growth</Text>) : (
-            <LineChart
-              data={{
-                labels: Object.keys(graphData),
-                datasets: [
-                  {
-                    data: Object.values(graphData)
-                  }
-                ]
-              }}
-              width={0.93 * screenWidth}
-              height={220}
-              withOuterLines={false}
-              withHorizontalLines={false}
-              withVerticalLines={false}
-              yAxisSuffix="k"
-              yAxisInterval={1} // optional, defaults to 1
-              chartConfig={{
-                backgroundColor: "#FFFFFF",
-                backgroundGradientFrom: "#FFFFFF",
-                backgroundGradientTo: "#FFFFFF",
-                decimalPlaces: 0, // optional, defaults to 2dp
-                color: (opacity = 1) => `rgba(26, 162, 176, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(56, 56, 56, ${opacity})`,
-                style: {
-                  borderRadius: 16
-                },
-                propsForDots: {
-                  r: "3",
-                  strokeWidth: "2",
-                  stroke: "#1AA2B0"
-                }
-              }}
-              bezier
-              style={{
-                marginVertical: 8,
-                left: 34,
-                marginTop: 30
-              }}
-            />
-          )}
-      </View>
-      <Text style={[styles.subTitle, {marginTop: 15}]}>Details</Text>
-      <View style={{flexDirection: 'row', marginTop: 17, left: 33, marginBottom: 5}}>
-        <TouchableOpacity style={{marginRight: 10}} onPress={() => setGuestListVisible(false)}>
-          <Text style={guestListVisible ? styles.btnText : styles.active}>Payment History</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setGuestListVisible(true)}>
-          <Text style={!guestListVisible ? styles.btnText : styles.active}>Guest List</Text>
-        </TouchableOpacity>
-      </View>
+          <Text style={styles.subTitle}>Monthly Breakdown</Text>
+          <View>
+              {Object.values(graphData).every(val => val === 0) ? (<Text style={styles.caption}>No activity yet. Start registering guests for events now to see your month to month growth</Text>) : (
+                <LineChart
+                  data={{
+                    labels: Object.keys(graphData),
+                    datasets: [
+                      {
+                        data: Object.values(graphData)
+                      }
+                    ]
+                  }}
+                  width={0.93 * screenWidth}
+                  height={220}
+                  withOuterLines={false}
+                  withHorizontalLines={false}
+                  withVerticalLines={false}
+                  yAxisSuffix="k"
+                  yAxisInterval={1} // optional, defaults to 1
+                  chartConfig={{
+                    backgroundColor: "#FFFFFF",
+                    backgroundGradientFrom: "#FFFFFF",
+                    backgroundGradientTo: "#FFFFFF",
+                    decimalPlaces: 0, // optional, defaults to 2dp
+                    color: (opacity = 1) => `rgba(26, 176, 168, ${opacity})`,
+                    labelColor: (opacity = 1) => `rgba(56, 56, 56, ${opacity})`,
+                    style: {
+                      borderRadius: 16
+                    },
+                    propsForDots: {
+                      r: "3",
+                      strokeWidth: "2",
+                      stroke: "#1AB0A8"
+                    }
+                  }}
+                  bezier
+                  style={{
+                    marginVertical: 8,
+                    left: 34,
+                    marginTop: 30
+                  }}
+                />
+              )}
+          </View>
+          <Text style={[styles.subTitle, {marginTop: 15}]}>Details</Text>
+          <View style={{flexDirection: 'row', marginTop: 17, left: 33, marginBottom: 5}}>
+            <TouchableOpacity style={{marginRight: 10}} onPress={() => setGuestListVisible(false)}>
+              <Text style={guestListVisible ? styles.btnText : styles.active}>Payment History</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setGuestListVisible(true)}>
+              <Text style={!guestListVisible ? styles.btnText : styles.active}>Guest List</Text>
+            </TouchableOpacity>
+          </View>
 
-      {guestListVisible ? (
-        <View style={{marginBottom: 80}}>
-          {Object.keys(ledger).length !== 0 ? (
-            <>
-                {Object.keys(ledger).map(eventName => (
-                    <View style={styles.eventCard}>
-                        <View>
-                          <Text style={styles.header}>{eventName}</Text>
-                          <View style={{flexDirection: 'row', marginTop: 5}}>
-                            <Text style={[styles.subheader, {width: '41%'}]}>Promoter</Text>
-                            <Text style={styles.subheader}>Guest Count</Text>
-                            <Text style={styles.subheader}>Payable (MMK)</Text>
+          {guestListVisible ? (
+            <View style={{marginBottom: 80}}>
+              {Object.keys(ledger).length !== 0 ? (
+                <>
+                    {Object.keys(ledger).map(eventName => (
+                        <View style={styles.eventCard}>
+                            <Text style={styles.header}>{eventName}</Text>
+                            <View style={styles.tableData}>
+                              <View style={{flexDirection: 'row', marginTop: 15}}>
+                                <Text style={[styles.subheader, {width: '28%', left: 10}]}>Promoter</Text>
+                                <Text style={[styles.subheader, {width: '33%', left: 22}]}>Guest Count</Text>
+                                <Text style={[styles.subheader, {width: '33%', left: 16}]}>Payable (MMK)</Text>
+                              </View>
+                            <View>
+                              {ledger[eventName].map(item => (
+                                <View style={[styles.tableRow, {backgroundColor: '#f3f3f3'}]}>
+                                  <Chip avatar={<Avatar.Image size={24} source={{uri: item.promoterAvatar}} />} style={styles.promoterChip} textStyle={{fontFamily: 'Avenir', top: 1, fontSize: 13}}>{item.promoterName.split(" ")[0]}</Chip>
+                                  <Text style={styles.tableCell}>{item.guestCount}</Text>
+                                  <Text style={styles.tableCell}>{item.payable}</Text>
+                                </View>
+                              ))}
+                            </View>
+                            <View style={[styles.tableRow, {paddingVertical: 12}]}>
+                              <Text style={[styles.tableCell, {top: 0, left: 0, marginLeft: 10, fontWeight: '500', width: '33%'}]}>Total</Text>
+                              <Text style={[styles.tableCell, {top: 0, width: '33%', fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.guestCount, 0)}</Text>
+                              <Text style={[styles.tableCell, {top: 0, fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.payable, 0)}</Text>
+                            </View>
                           </View>
                         </View>
-                        <View>
-                          {ledger[eventName].map(item => (
-                            <View style={styles.tableRow}>
-                              <Chip avatar={<Avatar.Image size={24} source={{uri: item.promoterAvatar}} />} style={styles.promoterChip} textStyle={{fontFamily: 'Avenir', top: 1, fontSize: 13}}>{item.promoterName.split(" (")[0]}</Chip>
-                              <Text style={styles.tableCell}>{item.guestCount}</Text>
-                              <Text style={styles.tableCell}>{item.payable}</Text>
-                            </View>
-                          ))}
-                        </View>
-                        <View style={[styles.tableRow, {borderTopWidth: 0.2, paddingVertical: 12, width: '92%', marginTop: 10}]}>
-                          <Text style={[styles.tableCell, {top: 0, left: 0, fontWeight: '500', width: '33%'}]}>Total</Text>
-                          <Text style={[styles.tableCell, {top: 0, left: 34, width: '35%', fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.guestCount, 0)}</Text>
-                          <Text style={[styles.tableCell, {top: 0, left: 29, fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.payable, 0)}</Text>
-                        </View>
-                    </View>
-                ))}
-            </>
-          ) : (<Text style={[styles.caption, {marginTop: 0}]}>No guests registered yet</Text>)}
-        </View>
-      ) : (
-        <View style={{flex: 1}}>
-          {timelineData.length !== 0 ? (
-            <Timeline data={sortByDate(timelineData)} />
+                    ))}
+                </>
+              ) : (<Text style={[styles.caption, {marginTop: 0}]}>No guests registered yet</Text>)}
+            </View>
           ) : (
-            <Text style={[styles.caption, {marginTop: 0}]}>No payment data yet</Text>
-          )}
-        </View>
-      )}
-      </>
-    )}
+            <View style={{flex: 1}}>
+              {timelineData.length !== 0 ? (
+                <Timeline data={sortByDate(timelineData)} />
+              ) : (
+                <Text style={[styles.caption, {marginTop: 0}]}>No payment data yet</Text>
+              )}
+            </View>
+        )}
+      </>)}
   </ScrollView>)
 }
 
@@ -308,28 +311,29 @@ const styles = StyleSheet.create({
   },
   tableRow: {
     flexDirection: 'row',
+    backgroundColor: '#EEEEEE',
+    borderRadius: 18,
+    paddingVertical: 5,
+    width: '98%',
+    marginTop: 10,
     padding: 5,
     marginBottom: 3,
-    marginTop: 3
   },
   subheader: {
-    width: '30%',
     fontWeight: '300',
-    marginTop: 10,
-    fontSize: 14,
     fontFamily: 'Avenir',
     fontWeight: '400'
   },
   tableCell: {
-    left: 23,
+    width: '33%',
     top: 8,
-    width: '30.5%',
     fontFamily: 'Avenir',
     fontSize: 13,
     fontWeight: '300'
   },
   promoterChip: {
-    width: '34%',
+    width: '33%',
+    marginLeft: 10,
     left: -6,
     backgroundColor: '#F3F3F3'
   },
@@ -340,7 +344,7 @@ const styles = StyleSheet.create({
   active: {
     fontFamily: 'Avenir',
     fontSize: 15,
-    color: '#1AA2B0'
+    color: '#1AB0A8'
   },
   eventCard: {
     width: '83%',

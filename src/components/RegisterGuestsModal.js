@@ -38,14 +38,14 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
     } else {
       for (let i = 0; i < promoters.length; i++) {
         let promoter = promoters[i];
-        let promoterUser = promoter.firstName + " (" + promoter.promoterCode + ")";
-        if (promoterUser.toLowerCase() === query.toLowerCase()) {
+        let promoterName = promoter.firstName + " " + promoter.lastName[0] + ". (" + promoter.promoterCode + ")";
+        if (promoterName.toLowerCase() === query.toLowerCase()) {
             getData('@venueFormData').then(response => {
               const attendance = {
                 venueId: response._id,
                 venueName: response.venueName,
                 promoterId: promoter._id,
-                promoterName: promoter.firstName + " (" + promoter.promoterCode + ")",
+                promoterName,
                 promoterAvatar: promoter.promoterProfile.images[0],
                 eventId: event._id,
                 eventName: event.eventName,
@@ -101,7 +101,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
                 }}
                 value={query}
                 style={styles.promoterSearch}
-                fontSize={15}
+                fontSize={14}
                 selectionColor="#1AA2B0"
                 iconColor="#1AA2B0"
                 placeholder="Promoter Name">
@@ -114,7 +114,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
                            extraData={query}
                            showsVerticalScrollIndicator={false}
                            renderItem={({ item }) => {
-                             const display = item.firstName + " (" + item.promoterCode + ")";
+                             const display = item.firstName + " " + item.lastName[0] + ". (" + item.promoterCode + ")";
                              if (display.toLowerCase().startsWith(query.toLowerCase())) {
                                return <TouchableOpacity onPress={() => setQuery(display)}>
                                  <View style={styles.listItem}>
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   modalView: {
-    width: '80%',
+    width: '72%',
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     left: 3,
     elevation: 2,
-    backgroundColor: '#22C2D2'
+    backgroundColor: '#1AB0A8'
   },
   textStyle: {
     color: "white",

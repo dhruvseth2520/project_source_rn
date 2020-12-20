@@ -377,6 +377,7 @@ const styles = StyleSheet.create({
     width: '95%',
     marginTop: 10,
     marginBottom: 10,
+    shadowOpacity: 0.15,
     backgroundColor: '#22D2D1',
   },
   closeButton: {

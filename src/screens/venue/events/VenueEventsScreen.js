@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, ActivityIndicator, SafeAreaView, Image, View, Text, StyleSheet, TouchableOpacity, TouchableHighlight, FlatList } from 'react-native';
+import { ScrollView, SafeAreaView, Image, View, Text, StyleSheet, TouchableOpacity, TouchableHighlight, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import {
+  PulseIndicator,
+  DotIndicator,
+  MaterialIndicator,
+} from 'react-native-indicators';
 import EventCard from "../../../components/EventCard";
 import Header from "../../../components/Header";
 import env from "../../../utils/environment";
@@ -82,9 +87,9 @@ const VenueEventsScreen = () => {
 
       <Text style={styles.subTitle}>Your Events</Text>
       <ScrollView style={styles.eventContainer}>
-        {isLoading ? (<ActivityIndicator size="large" style={{alignSelf: 'center', left: -11, marginTop: 20, marginBottom: 20}}></ActivityIndicator>) : (<>
+        {isLoading ? (<MaterialIndicator size={24} color="#22D2C9" style={{alignSelf: 'center', left: -11, marginTop: 25, marginBottom: 20}}></MaterialIndicator>) : (<>
           {upcomingEvents.length === 0 && pastEvents.length === 0
-            ? <Text style={{fontFamily: "Avenir", fontWeight: '300', marginTop: 5}}>You have no events to show yet. Add your first now!</Text>
+            ? <Text style={{fontFamily: "Avenir", fontWeight: '300', marginTop: 5, marginLeft: 3, color: '#5D5D5D'}}>You have no events to show yet. Add your first now!</Text>
             :
             <>
                 <View style={styles.btnContainer}>

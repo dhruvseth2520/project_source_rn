@@ -1,150 +1,116 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, YellowBox, Dimensions } from 'react-native';
+import { ScrollView, View, Text, Image, ImageBackground, StyleSheet, FlatList, TouchableOpacity, YellowBox, Dimensions } from 'react-native';
 import { SliderBox } from "react-native-image-slider-box";
-import BadgeModal from "../../../components/BadgeModal";
 import ImageView from 'react-native-image-view';
 import { List } from 'react-native-paper';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 
+const Detail = ({ label, value, icon, maxLines }) => {
+  return (
+    <View style={{width: '33.3%'}}>
+      <View style={{backgroundColor: '#F0F1F3', height: 50, width: 50, borderRadius: 25, marginLeft: 26, alignItems: "center"}}>
+        <FontAwesome5 name={icon} style={{fontSize: 18, top: 14, color: '#13958E'}}/>
+      </View>
+      <Text style={{fontFamily: 'Avenir', marginTop: 12, fontWeight: '500', fontSize: 15, marginLeft: 15, color: '#1AB0A8'}}>{label}</Text>
+      <Text numberOfLines={maxLines ? maxLines : 2} style={{fontFamily: 'Avenir', marginLeft: 16, fontSize: 13, marginTop: 5, color: '#4D4D4D', width: '50%'}}>{value}</Text>
+    </View>
+  )
+}
 
 const VenuePromoterProfile = ({ route }) => {
   const { promoter } = route.params;
   const promoterProfile = promoter.promoterProfile;
   const navigation = useNavigation();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [imageIndex, setImageIndex] = useState(0);
-  const [imageModalVisible, setImageModalVisible] = useState(false);
-  const [profileVisible, setProfileVisible] = useState(true);
 
   const windowWidth = Dimensions.get('window').width;
-
-  console.disableYellowBox = true;
-
-  let images = [];
-  promoterProfile.images.forEach(image => {
-    images.push({
-        source: {
-            uri: image,
-        },
-        width: 806,
-        height: 720,
-    })
-  });
 
   return (
     <ScrollView style={styles.background} showsVerticalScrollIndicator={false}>
       <TouchableOpacity style={styles.backArrow} onPress={() => navigation.goBack()}>
-        <Entypo name="chevron-small-left" size={44} />
+        <Entypo name="chevron-small-left" style={{color: 'white'}} size={44} />
       </TouchableOpacity>
+      <View style={styles.headerContainer}>
+        <View style={styles.profileContainer}>
+          <Image source={{uri: promoterProfile.images[0]}} style={styles.profileImage} />
+          <View>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={styles.name}>{promoter.firstName + " " + promoter.lastName[0] + "."}</Text>
+              <Text style={styles.age}>{promoter.age}</Text>
+            </View>
 
-      <View style={styles.profileHeader}>
-        <Image style={{width: windowWidth, height: 420, position: 'absolute', top: -150}} source={require('../../../assets/profile-gradient.png')}></Image>
-        <Image style={styles.profileImage} source={{uri: promoterProfile.images[0]}} />
-        <Text style={styles.title}>{promoter.firstName + ", " + promoter.age}</Text>
-        <Text style={[styles.title, {fontSize: 18, top: 30}]}>{promoterProfile.occupation}</Text>
+            <Text style={styles.bio}>"{promoterProfile.bio}"</Text>
+          </View>
+        </View>
+
+        <View style={styles.statsContainer}>
+          <View style={[styles.statsBox, {width: '29%'}]}>
+            <Text style={styles.statValue}>
+              {promoterProfile.guestCount}
+            </Text>
+            <Text style={styles.statLabel}>
+              Clients Sourced
+            </Text>
+
+          </View>
+          <View style={[styles.statsBox, {width: '33%'}]}>
+            <Text style={styles.statValue}>
+              {promoterProfile.expectedRate}
+            </Text>
+            <Text style={styles.statLabel}>
+              Expected Rate (MMK)
+            </Text>
+          </View>
+          <View style={[styles.statsBox, {width: '33%'}]}>
+            <Text style={styles.statValue}>
+              {promoterProfile.availability} hrs
+            </Text>
+            <Text style={[styles.statLabel, {left: 4}]}>
+               Weekly Availability
+            </Text>
+          </View>
+        </View>
       </View>
+      <View style={styles.badgeContainer}>
+        <Text style={{fontFamily: 'Avenir', fontSize: 15, color: 'white', marginTop: -5}}>Influence Badge</Text>
 
-      <View style={styles.statsContainer}>
-        <View style={styles.statsBox}>
-          <Text style={styles.statValue}>{promoterProfile.guestCount}</Text>
-          <Text style={styles.statLabel}>Clients Sourced</Text>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.badgeTitle}>Loyalist</Text>
+          <TouchableOpacity style={{borderWidth: 1, height: 21, width: 21, borderRadius: 11, borderColor: 'white', marginTop: 9, marginLeft: 7}}>
+            <FontAwesome5 name="info" style={{color: 'white', alignSelf: 'center', fontSize: 10, top: 3}}></FontAwesome5>
+          </TouchableOpacity>
         </View>
-        <View style={styles.statsBox}>
-          <Text style={styles.statValue}>11</Text>
-          <Text style={styles.statLabel}>Positive Reviews</Text>
-        </View>
-        <View style={[styles.statsBox, {borderRightWidth: 0}]}>
-          <Text style={styles.statValue}>{promoterProfile.numConnections}</Text>
-          <Text style={styles.statLabel}>Followers</Text>
-        </View>
+
       </View>
 
       <View style={styles.bodyContainer}>
-        <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity onPress={() => setProfileVisible(true)}><Text style={profileVisible ? styles.active : styles.btnText}>
-            Profile
-          </Text></TouchableOpacity>
-          <TouchableOpacity onPress={() => setProfileVisible(false)} style={{marginLeft: 15}}><Text style={!profileVisible ? styles.active : styles.btnText}>
-            Gallery
-          </Text></TouchableOpacity>
+        <View style={{flexDirection: 'row', marginLeft: 30}}>
+          <Detail label="Active Since" value={promoterProfile.activeSinceDate} icon="calendar-alt" />
+          <Detail label="Occupation" value={promoterProfile.occupation} icon="briefcase" />
+          <Detail label="Education" value={promoterProfile.education} icon="university" />
         </View>
+        <View style={{flexDirection: 'row', marginLeft: 30, marginTop: 35}}>
+          <Detail label="Languages" value={promoterProfile.languages} icon="language" />
+          <Detail label="Hobbies" value={promoterProfile.hobbies} icon="skiing" maxLines={3} />
+          <Detail label="Favorite Drink" value={promoterProfile.favoriteDrink} icon="glass-cheers" />
+        </View>
+      </View>
 
-        {profileVisible ? (
-          <View style={styles.profileDetails}>
-            <View style={styles.col}>
-              <List.Item
-                title="Active Since"
-                description={promoterProfile.activeSinceDate}
-                titleStyle={styles.listTitle}
-                descriptionStyle={styles.listDescription}
-                left={props => <List.Icon {...props} color="#4F4F4F" icon="calendar" />}
-              />
-              <List.Item
-                title="Availability"
-                description={promoterProfile.availability + " hours/week"}
-                titleStyle={styles.listTitle}
-                descriptionStyle={styles.listDescription}
-                left={props => <List.Icon {...props} color="#4F4F4F" icon="clock" />}
-              />
-              <List.Item
-                title="Expected Rate"
-                description={promoterProfile.expectedRate + " MMK/head"}
-                titleStyle={styles.listTitle}
-                descriptionStyle={styles.listDescription}
-                left={props => <List.Icon {...props} color="#4F4F4F" icon="coin" />}
-              />
-              <List.Item
-                title="Languages"
-                description={promoterProfile.languages}
-                titleStyle={styles.listTitle}
-                descriptionStyle={styles.listDescription}
-                left={props => <List.Icon {...props} color="#4F4F4F" icon="microphone" />}
-              />
-            </View>
-            <View style={styles.col}>
-              <List.Item
-                title="Education"
-                description={promoterProfile.education}
-                titleStyle={styles.listTitle}
-                descriptionStyle={styles.listDescription}
-                left={props => <List.Icon {...props} color="#4F4F4F" icon="school" />}
-              />
-              <List.Item
-                title="Hobbies"
-                description={promoterProfile.hobbies}
-                titleStyle={styles.listTitle}
-                descriptionStyle={styles.listDescription}
-                left={props => <List.Icon {...props} color="#4F4F4F" icon="run" />}
-              />
-              <List.Item
-                title="Favorite Drink"
-                description={promoterProfile.favoriteDrink}
-                titleStyle={styles.listTitle}
-                descriptionStyle={styles.listDescription}
-                left={props => <List.Icon {...props} icon="beer" color="#4F4F4F" />}
-              />
-            </View>
-          </View>
-        ) : (
-          <View style={styles.imageContainer}>
-            {images.map((photo, index) => (
-              <TouchableOpacity onPress={() => {
-                setImageIndex(index);
-                setImageModalVisible(true);
-              }}>
-                <Image source={{uri: photo.source.uri}} style={[styles.thumbnail, {width: windowWidth * 0.27}]}></Image>
-              </TouchableOpacity>
-            ))}
-            <ImageView
-                images={images}
-                imageIndex={imageIndex}
-                isVisible={imageModalVisible}
-                isSwipeCloseEnabled={false}
-                onClose={() => setImageModalVisible(false)}
-            />
-          </View>
-        )}
+      <View style={styles.galleryContainer}>
+        <Text style={styles.title}>{promoter.firstName}'s Photos</Text>
+        <View style={styles.photoContainer}>
+          <FlatList
+            keyExtractor={photo => photo}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={promoterProfile.images}
+            renderItem={({ item }) => (
+              <View style={styles.imageContainer}>
+                <Image source={{uri: item}} style={styles.image}></Image>
+              </View>
+            )}
+          />
+        </View>
       </View>
     </ScrollView>
   )
@@ -158,92 +124,131 @@ const styles = StyleSheet.create({
   backArrow: {
     top: 50,
     left: 10,
-    zIndex: 1
+    zIndex: 1,
+    position: 'absolute'
   },
-  profileHeader: {
-    marginTop: 60,
-    alignItems: 'center'
+  headerContainer: {
+    paddingVertical: 5,
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
+    backgroundColor: '#A9E1DE'
+  },
+  profileContainer: {
+    flexDirection: 'row',
+    marginTop: 110,
+    marginLeft: 50
   },
   profileImage: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
+    height: 80,
+    width: 80,
+    borderRadius: 40,
+    borderWidth: 3,
+    borderColor: 'white'
   },
-  title: {
-    fontSize: 32,
+  name: {
     fontFamily: 'Gill Sans',
-    fontWeight: '300',
-    top: 22,
-    alignSelf: 'center'
+    fontWeight: '400',
+    maxWidth: '75%',
+    marginTop: 10,
+    marginLeft: 22,
+    fontSize: 30,
+    color: 'white'
+  },
+  age: {
+    fontFamily: 'Gill Sans',
+    fontSize: 20,
+    marginLeft: 15,
+    marginTop: 18,
+    color: 'white',
+    fontWeight: '400'
+  },
+  bio: {
+    fontFamily: 'Gill Sans',
+    fontSize: 18,
+    marginTop: 5,
+    marginLeft: 22,
+    fontWeight: '400',
+    color: 'white'
   },
   statsContainer: {
     flexDirection: 'row',
     alignSelf: 'center',
-    marginTop: 65,
-    width: '90%'
+    marginLeft: 40,
+    marginTop: 15,
+    marginBottom: 60,
+    width: '86%',
   },
   statsBox: {
-    alignItems: 'center',
-    flex: 1,
-    paddingHorizontal: 10,
-    borderRightWidth: 0.5
+    padding: 10,
   },
   statValue: {
+    fontFamily: 'Futura',
+    fontWeight: '500',
     fontSize: 22,
-    fontFamily: 'HelveticaNeue',
-    fontWeight: '300'
+    color: 'white'
   },
   statLabel: {
     fontFamily: 'Avenir',
-    color: "#52575d",
-    top: 3
+    color: 'white',
+    marginTop: 4,
+    fontWeight: '500'
+  },
+  badgeContainer: {
+    paddingHorizontal: 25,
+    paddingVertical: 22,
+    backgroundColor: '#8DD7D3',
+    alignSelf: 'flex-end',
+    width: '70%',
+    borderTopLeftRadius: 25,
+    borderBottomLeftRadius: 25,
+    marginTop: -45
+  },
+  badgeTitle: {
+    fontFamily: 'Futura',
+    color: 'white',
+    marginTop: 3,
+    fontSize: 25
   },
   bodyContainer: {
+    marginTop: 40,
+    width: '95%'
+  },
+  galleryContainer: {
     marginTop: 35,
-    left: 37
-  },
-  btnText: {
-    fontFamily: 'Avenir',
-    fontSize: 16
-  },
-  active: {
-    fontFamily: 'Avenir',
-    fontSize: 16,
-    color: '#1AA2B0',
-  },
-  profileDetails: {
-    marginLeft: -15,
-    marginTop: 10,
+    marginLeft: 30,
+    width: '85%',
     marginBottom: 50,
-    flexDirection: 'row'
+    alignSelf: 'center',
   },
-  col: {
-    width: '43%'
+  title: {
+    fontFamily: 'Gill Sans',
+    fontWeight: '300',
+    color: '#464646',
+    fontSize: 24
   },
-  listTitle: {
-    marginLeft: -15,
-    fontFamily: 'Avenir',
-    fontSize: 16
-  },
-  listDescription: {
-    marginLeft: -15,
-    fontFamily: 'Avenir',
-    top: 2,
-    fontSize: 15
+  photoContainer: {
+    marginTop: 20
   },
   imageContainer: {
-    marginTop: 15,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginBottom: 50
+    height: 241,
+    marginRight: 15,
+    borderRadius: 5,
+    width: 151,
+    shadowColor: "#000",
+    shadowOffset: {
+    	width: 0,
+    	height: 7,
+    },
+    shadowOpacity: 0.31,
+    shadowRadius: 3,
+    elevation: 14,
   },
-  thumbnail: {
-    height: 180,
-    width: 110,
-    borderRadius: 3,
-    marginRight: 5,
-    marginBottom: 10
+  image: {
+    height: 240,
+    width: 150,
+    borderRadius: 5
   }
+
 });
 
 export default VenuePromoterProfile;

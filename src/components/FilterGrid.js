@@ -38,8 +38,8 @@ const FilterRange = ({ state, setState, title, icon, unit, step, min, max, label
         minimumValue={min}
         maximumValue={max}
         step={step}
-        minimumTrackTintColor="#2CCADA"
-        maximumTrackTintColor="#26A5B2"
+        minimumTrackTintColor="#1AB0A8"
+        maximumTrackTintColor="#22D2C9"
         value={state.displayValue}
         onSlidingComplete={val => setState({...state, displayValue: val})}
       />

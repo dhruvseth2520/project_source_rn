@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 const Timeline = ({ data }) => {
   return (<View style={styles.container}>
@@ -16,8 +16,8 @@ const Timeline = ({ data }) => {
           <Text style={styles.timeYear}>{year}</Text>
         </View>
         <View style={styles.markerContainer}>
-          <AntDesign name="downcircle" size={15} color={item.circleColor} style={styles.marker} />
-          <View style={[styles.line, {borderColor: isFinalElement ? 'white' : 'gray'}]}></View>  
+          <FontAwesome name="circle-o" size={15} color={item.circleColor} style={styles.marker} />
+          <View style={[styles.line, {borderColor: isFinalElement ? 'white' : 'gray'}]}></View>
         </View>
         <View style={styles.detailContainer}>
           <Text style={styles.title}>{item.title}</Text>
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Avenir',
     fontWeight: '500',
-    color: '#1AA2B0'
+    color: '#1AB0A8'
   },
   timeDay: {
     fontFamily: 'Avenir',
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     	width: 0,
     	height: 3,
     },
-    shadowOpacity: 0.17,
+    shadowOpacity: 0.13,
     shadowRadius: 4.65,
     elevation: 6,
     width: '80%',

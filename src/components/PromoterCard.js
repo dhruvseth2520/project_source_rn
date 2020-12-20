@@ -3,7 +3,6 @@ import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { ScrollView, View, TouchableOpacity, Text, Image, StyleSheet, FlatList } from 'react-native';
-import BadgeModal from "./BadgeModal";
 
 const PromoterCard = ({ promoter }) => {
   const navigation = useNavigation();
@@ -19,21 +18,9 @@ const PromoterCard = ({ promoter }) => {
                     <Image style={styles.profileImg} source={{uri: promoter.promoterProfile.images[0]}} />
                   </View>
                   <View style={styles.contentContainer}>
-                        <View style={{flexDirection: 'row'}}>
-                          <Text style={styles.name}>{promoter.firstName + ", " + promoter.age}</Text>
-                          {promoter.badge ? (
-                            <>
-                                <TouchableOpacity style={styles.badgeBtn} onPress={() => setModalVisible(true)}>
-                                  <FontAwesome5 style={[styles.badgeIcon, {color: promoter.badge.color}]} name={promoter.badge.iconName}></FontAwesome5>
-                                </TouchableOpacity>
-
-                                <BadgeModal promoter={promoter} modalVisible={modalVisible} setModalVisible={setModalVisible} />
-                            </>
-                          ) : <></>}
-
-                        </View>
-                        <Text style={styles.role}>{promoter.promoterProfile.occupation}</Text>
-                </View>
+                      <Text style={styles.name}>{promoter.firstName + " " + promoter.lastName[0] + "."}</Text>
+                      <Text style={styles.role}>{promoter.promoterProfile.influence}</Text>
+                  </View>
             </View>
         </TouchableOpacity>
     </>
@@ -57,19 +44,18 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     alignItems: 'flex-start',
-    marginTop: 100
   },
   name: {
     marginLeft: 12,
-    marginTop: 10,
+    marginTop: 40,
     fontFamily: 'Avenir',
     fontWeight: '700',
     fontSize: 21,
     color: 'white'
   },
   role: {
-    fontFamily: 'Avenir',
-    fontWeight: '500',
+    fontFamily: 'Futura',
+    fontWeight: '600',
     color: 'white',
     fontSize: 12,
     marginLeft: 12

@@ -64,10 +64,9 @@ const VenuePromotersHome = () => {
   const handleSearch = () => {
       let filteredPromoters = [];
       promoterData.forEach(promoter => {
-        const nameMatch = promoter.firstName.toLowerCase().trim().startsWith(query.toLowerCase().trim());
+        const nameMatch = (promoter.firstName.toLowerCase() + " " + promoter.lastName[0].toLowerCase()).trim().startsWith(query.toLowerCase().trim());
         const priceMatch = promoter.promoterProfile.expectedRate <= price.filterValue;
         const availabilityMatch = promoter.promoterProfile.availability >= availability.filterValue;
-        const connectionsMatch = promoter.promoterProfile.numConnections >= connections.filterValue;
         const clientsMatch = promoter.promoterProfile.guestCount >= clients.filterValue;
 
         let languagesMatch = true;
@@ -78,7 +77,7 @@ const VenuePromotersHome = () => {
           }
         })
 
-        if (nameMatch && priceMatch && clientsMatch && availabilityMatch && connectionsMatch && languagesMatch) {
+        if (nameMatch && priceMatch && clientsMatch && availabilityMatch && languagesMatch) {
           filteredPromoters.push(promoter);
         }
       })

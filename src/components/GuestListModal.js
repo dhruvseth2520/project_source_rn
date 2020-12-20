@@ -52,7 +52,7 @@ const GuestListModal = ({ modalVisible, setModalVisible, event, guests, setGuest
                         <>
                           <View style={styles.row}>
                             <View style={{width: '45%'}}>
-                              <Text style={styles.tableData}>{item.promoterName}</Text>
+                              <Text style={[styles.tableData, {width: '90%'}]}>{item.promoterName.split(" (")[0]}</Text>
                             </View>
                             <View style={{width: '25%'}}>
                               <Text style={styles.tableData}>{item.guestCount}</Text>
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     backgroundColor: "white",
-    width: '80%',
+    width: '72%',
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-
   },
   openButton: {
     backgroundColor: "#F194FF",
