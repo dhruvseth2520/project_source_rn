@@ -11,7 +11,7 @@ const RootStack = createStackNavigator();
 export default function App() {
   const [initialRoute, setRoute] = useState("");
   removeData('@promoterFormData');
-  removeData('@venueFormData'); 
+  removeData('@venueFormData');
 
   getData('@venueFormData').then(response => {
     if (!response) {

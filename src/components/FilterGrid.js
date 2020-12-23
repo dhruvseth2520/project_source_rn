@@ -95,11 +95,11 @@ const FilterSelect = ({ state, setState, icon, title, label, items }) => {
               items={items}
               selectedItems={state.displayValue}
               checkboxSource={require('../assets/checkbox-unchecked.png')}
-              checkboxStyle={{width: 20, height: 20, marginLeft: -5}}
+              checkboxStyle={{width: 20, height: 20, marginLeft: -10}}
               selectedCheckboxSource={require('../assets/checkbox-checked.png')}
               onSelectionsChange={(val) => setState({...state, displayValue: val})}
               rowStyle={{borderBottomWidth: 0, marginBottom: -15}}
-              labelStyle={{fontFamily: 'Avenir', fontWeight: '300', top: 1, left: 5}}
+              labelStyle={{fontFamily: 'Avenir', fontWeight: '300', top: 1, left: 10}}
               style={{top: -5}}
              />
         </ScrollView>
@@ -130,7 +130,7 @@ const FilterSelect = ({ state, setState, icon, title, label, items }) => {
 }
 
 
-const PromotersFilterGrid = ({ price, setPrice, clients, setClients, availability, setAvailability, connections, setConnections, languages, setLanguages }) => {
+const PromotersFilterGrid = ({ price, setPrice, clients, setClients, availability, setAvailability, influenceBadge, setInfluenceBadge, languages, setLanguages }) => {
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterGrid}>
@@ -148,6 +148,12 @@ const PromotersFilterGrid = ({ price, setPrice, clients, setClients, availabilit
                min={0} max={100} step={1}
         />
 
+        <FilterSelect state={influenceBadge} setState={setInfluenceBadge}
+                  icon="instagram" title="Influence Badge"
+                  items={["Loyalist", "Advocate", "Influencer"]}
+                  label="Influence Badge"
+        />
+
        <FilterRange setState={setAvailability} state={availability} maxOrMin="min"
                icon="clock" title="Availability"
                label="Minimum Weekly Availability"
@@ -155,16 +161,8 @@ const PromotersFilterGrid = ({ price, setPrice, clients, setClients, availabilit
                min={3} max={15} step={1}
         />
 
-        <FilterRange setState={setConnections} state={connections} maxOrMin="min"
-                icon="instagram" title="Social Connections"
-                label="Minimum Social Connections"
-                unit=""
-                min={500} max={3000} step={100}
-         />
-
          <FilterSelect state={languages} setState={setLanguages}
            items={["English", "Burmese"]}
-           selectMultiple={true}
            icon="alphabetical" title="Languages" label="Preferred Languages" />
 
 

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { PulseIndicator } from 'react-native-indicators';
 import { getData } from '../../utils/localStorage';
 import EventCard from "../../components/EventCard";
 import env from "../../utils/environment";
 
 const PromoterSavedEvents = () => {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(true);
   const [savedEvents, setSavedEvents] = useState([]);
 
   const fetchData = () => {
@@ -21,19 +23,20 @@ const PromoterSavedEvents = () => {
           }
         })
         setSavedEvents(sortByDate(upcomingEvents));
+        setLoading(false);
       })
     })
   }
 
   const sortByDate = (arr) => {
     return arr.sort(function(a, b) {
-                        var keyA = new Date(a.date);
-                        var keyB = new Date(b.date);
-                        // Compare the 2 dates
-                        if (keyA < keyB) return -1;
-                        if (keyA > keyB) return 1;
-                        return 0;
-                    });
+        var keyA = new Date(a.date);
+        var keyB = new Date(b.date);
+        // Compare the 2 dates
+        if (keyA < keyB) return -1;
+        if (keyA > keyB) return 1;
+        return 0;
+    });
   }
 
   useEffect(() => {
@@ -46,17 +49,23 @@ const PromoterSavedEvents = () => {
   return (
       <ScrollView style={styles.screen}>
           <Text style={styles.title}>Saved</Text>
-          <Text style={styles.label}>You have {savedEvents.length} saved event(s)</Text>
-          <FlatList
-              style={styles.eventContainer}
-              keyExtractor={event => event._id}
-              data={savedEvents}
-              renderItem={({ item }) => {
-                return (
-                    <EventCard event={item} refreshEvents={fetchData} view="Promoter" />
-                )
-              }}
-          />
+          {loading ? (
+            <PulseIndicator color="#22D2C9" style={{alignSelf: 'center', left: -11, marginTop: 20, marginBottom: 20}}></PulseIndicator>
+          ) : (
+            <>
+                <Text style={styles.label}>You have {savedEvents.length} saved event(s)</Text>
+                <FlatList
+                    style={styles.eventContainer}
+                    keyExtractor={event => event._id}
+                    data={savedEvents}
+                    renderItem={({ item }) => {
+                      return (
+                          <EventCard event={item} isSaved={true} refreshEvents={fetchData} view="Promoter" />
+                      )
+                    }}
+                />
+            </>
+          )}
 
       </ScrollView>
   )

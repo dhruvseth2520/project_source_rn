@@ -29,7 +29,7 @@ export default () => {
       </TouchableOpacity>
     </View>
     <View style={styles.slide3}>
-      <Image style={{width: 260, height: 260, marginBottom: 50}} source={{uri: 'https://795364.smushcdn.com/1538781/wp-content/uploads/10-Social-Media-Marketing.png?lossy=1&strip=1&webp=1'}} />
+      <Image style={{width: 260, height: 260, marginBottom: 50}} source={{uri: 'https://www.vibrantpulse.com/wp-content/uploads/10-Social-Media-Marketing.png'}} />
 
       <Text style={styles.text}>Share these events with your friends, family and social network</Text>
       <TouchableOpacity style={styles.skipButton} onPress={toRegister}>

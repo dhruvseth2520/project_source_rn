@@ -4,18 +4,15 @@ import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { FAB } from 'react-native-paper';
 import RegisterGuestsModal from "./RegisterGuestsModal";
+import { getData } from '../utils/localStorage';
 import GuestListModal from "./GuestListModal";
 import ErrorModal from "./ErrorModal";
 import env from "../utils/environment";
-import FlipCard from 'react-native-flip-card'
-import ShareButtons from './ShareButtons';
-import { getData } from '../utils/localStorage';
 
-const EventCard = ({ event, refreshEvents, view }) => {
+const EventCard = ({ event, refreshEvents, view, isSaved }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [isFlipped, setFlipped] = useState(false);
   const [guestListVisible, setGuestListVisible] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -39,37 +36,13 @@ const EventCard = ({ event, refreshEvents, view }) => {
     })
   }
 
-  const refreshSavedStatus = () => {
-    getData('@promoterFormData').then(response => {
-      fetch(`${env.API_URL}/api/promoters/saved/${response._id}`).then(response => response.json()).then(data => {
-        for (let i = 0; i < data.length; i++) {
-          const savedEvent = data[i];
-          if (event._id === savedEvent._id) {
-            setSaved(true);
-            return;
-          }
-        }
-        setSaved(false);
-      })
-    })
-  }
+  useEffect(() => {
+    setSaved(isSaved);
+  }, [isSaved])
 
   useEffect(() => {
     fetchData();
-  }, [guestListVisible, modalVisible]);
-
-  useEffect(() => {
-    if (view === "Promoter") {
-      refreshSavedStatus();
-    }
-  }, [event])
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', () => {
-      setFlipped(false);
-    });
-    return unsubscribe;
-  }, [])
+  }, [modalVisible]);
 
   const fetchData = () => {
     fetch(`${env.API_URL}/api/events/attendance/event/${event._id}`)
@@ -190,50 +163,35 @@ const EventCard = ({ event, refreshEvents, view }) => {
     )
   } else if (view === "Promoter") {
       return (
-              <FlipCard flip={isFlipped}>
-                <TouchableOpacity onPress={viewEvent} onLongPress={() => setFlipped(!isFlipped)} activeOpacity={0.8}>
-                    <View style={styles.card}>
-                      <Image style={styles.eventImage} source={{uri: event.imageURL}}></Image>
-                      <View style={styles.cardContent}>
-                          <View style={styles.leftCol}>
-                            <Text style={[styles.eventName, {fontSize: 20}]}>{event.eventName}</Text>
-                            <Text style={[styles.eventName, {fontSize: 15, marginTop: 0}]}>{event.venueName}</Text>
-                            <Text style={[styles.eventDate, {marginBottom: 18, marginTop: 3}]}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
-                          </View>
+        <TouchableOpacity onPress={viewEvent} activeOpacity={0.8}>
+            <View style={styles.card}>
+              <Image style={styles.eventImage} source={{uri: event.imageURL}}></Image>
+              <View style={styles.cardContent}>
+                  <View style={styles.leftCol}>
+                    <Text style={[styles.eventName, {fontSize: 20}]}>{event.eventName}</Text>
+                    <Text style={[styles.eventName, {fontSize: 15, marginTop: 0}]}>{event.venueName}</Text>
+                    <Text style={[styles.eventDate, {marginBottom: 18, marginTop: 3}]}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
+                  </View>
 
-                          <View style={styles.rightCol}>
-                            <View style={styles.btnContainer}>
-                                <TouchableOpacity onPress={saveEvent}>
-                                  <View style={styles.circularBtn}>
-                                    {saved ? (<FontAwesome name="bookmark" style={styles.cardIcon}  />) : (
-                                      <FontAwesome name="bookmark-o" style={styles.cardIcon}  />
-                                    )}
-                                  </View>
-                                </TouchableOpacity>
-                            </View>
+                  <View style={styles.rightCol}>
+                    <View style={styles.btnContainer}>
+                        <TouchableOpacity onPress={saveEvent}>
+                          <View style={styles.circularBtn}>
+                            {saved ? (<FontAwesome name="bookmark" style={styles.cardIcon}  />) : (
+                              <FontAwesome name="bookmark-o" style={styles.cardIcon}  />
+                            )}
                           </View>
-                      </View>
+                        </TouchableOpacity>
                     </View>
-                </TouchableOpacity>
-                <CardFlipSide event={event} />
-            </FlipCard>
+                  </View>
+              </View>
+            </View>
+        </TouchableOpacity>
   )}
 }
 
 
-const CardFlipSide = ({ event }) => {
-  return (<View style={styles.card}>
-    <View style={styles.cardBack}>
-      <Text style={[styles.label, {marginTop: 27}]}>Description</Text>
-      <Text style={styles.value}>{event.description}</Text>
-      <Text style={styles.label}>Promotion</Text>
-      <Text style={styles.value}>{event.promotion}</Text>
-      <Text style={styles.label}>Promoter Fees</Text>
-      <Text style={[styles.value, {marginBottom: 15}]}>{event.promoterFees + " MMK per head"}</Text>
-      <ShareButtons event={event} view="Card" />
-    </View>
-  </View>)
-}
+
 
 const styles = StyleSheet.create({
   card: {
@@ -327,22 +285,6 @@ const styles = StyleSheet.create({
     top: 4,
     left: 12
   },
-  cardBack: {
-    height: 285,
-  },
-  label: {
-    paddingHorizontal: 25,
-    fontSize: 16,
-    fontFamily: 'Gill Sans',
-    fontWeight: '400',
-    marginTop: 5
-  },
-  value: {
-    fontFamily: 'Gill Sans',
-    fontWeight: '300',
-    paddingHorizontal: 25,
-    paddingVertical: 10
-  }
 })
 
 export default EventCard;

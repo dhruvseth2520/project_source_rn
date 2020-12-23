@@ -4,7 +4,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { getData } from "../utils/localStorage";
 import * as WebBrowser from 'expo-web-browser';
 
-const ShareButtons = ({ event, view }) => {
+const ShareButtons = ({ event }) => {
   const [eventURL, setEventURL] = useState("");
   const [promoterData, setPromoterData] = useState(null);
 
@@ -80,37 +80,26 @@ const ShareButtons = ({ event, view }) => {
 
   return (
     <>
-      {view === "Page" ? (
-        <>
-          <View style={{flexDirection: 'row', marginBottom: 25, marginTop: 2, left: 10}}>
-            <TouchableOpacity onPress={facebookShare} style={[styles.socialButton, {backgroundColor: '#3b5998'}]}>
-              <FontAwesome5 style={styles.btnIcon} name="facebook-f" />
-              <Text style={[styles.btnText, {fontSize: fontSize}]}>Share on Facebook</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={postTweet} style={[styles.socialButton, {backgroundColor: '#1DA1F2'}]}>
-              <FontAwesome5 style={styles.btnIcon} name="twitter" />
-              <Text style={[styles.btnText, {fontSize: fontSize}]}>Share on Twitter</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{flexDirection: 'row', marginBottom: 60, marginTop: 5, left: 10}}>
-            <TouchableOpacity onPress={shareEvent} style={[styles.socialButton, {backgroundColor: 'white'}]}>
-              <FontAwesome5 style={[styles.btnIcon, {fontSize: 15, color: '#1AA2B0'}]} name="paper-plane" />
-              <Text style={[styles.btnText, {fontSize: fontSize, color: '#1AA2B0'}]}>Share with Contacts</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={copyEventURL} style={[styles.socialButton, {backgroundColor: '#525252'}]}>
-              <FontAwesome5 style={[styles.btnIcon, {fontSize: 15, color: 'white'}]} name="link" />
-              <Text style={[styles.btnText, {fontSize: fontSize}]}>Get Invitation Link</Text>
-            </TouchableOpacity>
-          </View>
-        </>
-      ) : (
-        <View style={{flexDirection: 'row', marginTop: 5, left: 10}}>
-          <TouchableOpacity onPress={shareEvent} style={[styles.socialButton, {backgroundColor: 'white', width: '54%', height: 0.055 * windowHeight, shadowOpacity: 0.1}]}>
-            <FontAwesome5 style={[styles.btnIcon, {fontSize: 12, color: '#1AA2B0'}]} name="user" />
-            <Text style={[styles.btnText, {color: '#1AA2B0', fontSize: fontSize}]}>Share with Contacts</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      <View style={{flexDirection: 'row', marginBottom: 25, marginTop: 2, left: 10}}>
+        <TouchableOpacity onPress={facebookShare} style={[styles.socialButton, {backgroundColor: '#3b5998'}]}>
+          <FontAwesome5 style={styles.btnIcon} name="facebook-f" />
+          <Text style={[styles.btnText, {fontSize: fontSize}]}>Share on Facebook</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={postTweet} style={[styles.socialButton, {backgroundColor: '#1DA1F2'}]}>
+          <FontAwesome5 style={styles.btnIcon} name="twitter" />
+          <Text style={[styles.btnText, {fontSize: fontSize}]}>Share on Twitter</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={{flexDirection: 'row', marginBottom: 60, marginTop: 5, left: 10}}>
+        <TouchableOpacity onPress={shareEvent} style={[styles.socialButton, {backgroundColor: 'white'}]}>
+          <FontAwesome5 style={[styles.btnIcon, {fontSize: 15, color: '#1AA2B0'}]} name="paper-plane" />
+          <Text style={[styles.btnText, {fontSize: fontSize, color: '#1AA2B0'}]}>Share with Contacts</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={copyEventURL} style={[styles.socialButton, {backgroundColor: '#525252'}]}>
+          <FontAwesome5 style={[styles.btnIcon, {fontSize: 15, color: 'white'}]} name="link" />
+          <Text style={[styles.btnText, {fontSize: fontSize}]}>Get Invitation Link</Text>
+        </TouchableOpacity>
+      </View>
 
     </>
   )

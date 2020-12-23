@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { ScrollView, View, Text, Image, ImageBackground, StyleSheet, FlatList, TouchableOpacity, YellowBox, Dimensions } from 'react-native';
+import { ScrollView, View, Text, Image, ImageBackground, StyleSheet, Modal, FlatList, TouchableOpacity, YellowBox, Dimensions } from 'react-native';
 import { SliderBox } from "react-native-image-slider-box";
 import ImageView from 'react-native-image-view';
 import { List } from 'react-native-paper';
@@ -22,6 +22,26 @@ const VenuePromoterProfile = ({ route }) => {
   const { promoter } = route.params;
   const promoterProfile = promoter.promoterProfile;
   const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  let imageURL, content, imageWidth, imageHeight;
+  switch (promoterProfile.influence) {
+    case "Loyalist":
+      imageURL = 'https://image.freepik.com/free-vector/best-friends-toasting-together_23-2148394378.jpg';
+      content = "The Loyalist might not have the largest social media presence but they have a tight inner network and will be a committed affiliate to your venue. The Loyalist will not only promote your events within their circle but also be at your venue with their friends every night you have an event";
+      imageWidth = 160; imageHeight = 150;
+      break;
+    case "Advocate":
+      imageURL = 'https://weebdigital.com/images/aff3.png';
+      content = "The Advocate has a growing social media presence and influence in multiple different social groups in the city. They will ensure you get the footfall you are looking for by sharing your events with their network via social media and word of mouth";
+      imageWidth = 180; imageHeight = 140;
+      break;
+    case "Influencer":
+      imageURL = 'https://digitalprworld.com/wp-content/uploads/2017/11/influencer-marketing-package.jpg';
+      content = "The Influencer has an established and an avid following on social media. They have the reach and influence to get hordes of people excited about your events and through your front door";
+      imageWidth = 200; imageHeight = 100;
+      break;
+  }
 
   const windowWidth = Dimensions.get('window').width;
 
@@ -51,7 +71,6 @@ const VenuePromoterProfile = ({ route }) => {
             <Text style={styles.statLabel}>
               Clients Sourced
             </Text>
-
           </View>
           <View style={[styles.statsBox, {width: '33%'}]}>
             <Text style={styles.statValue}>
@@ -73,10 +92,9 @@ const VenuePromoterProfile = ({ route }) => {
       </View>
       <View style={styles.badgeContainer}>
         <Text style={{fontFamily: 'Avenir', fontSize: 15, color: 'white', marginTop: -5}}>Influence Badge</Text>
-
         <View style={{flexDirection: 'row'}}>
-          <Text style={styles.badgeTitle}>Loyalist</Text>
-          <TouchableOpacity style={{borderWidth: 1, height: 21, width: 21, borderRadius: 11, borderColor: 'white', marginTop: 9, marginLeft: 7}}>
+          <Text style={styles.badgeTitle}>{promoterProfile.influence}</Text>
+          <TouchableOpacity onPress={() => setModalVisible(true)} style={{borderWidth: 1, height: 21, width: 21, borderRadius: 11, borderColor: 'white', marginTop: 9, marginLeft: 7}}>
             <FontAwesome5 name="info" style={{color: 'white', alignSelf: 'center', fontSize: 10, top: 3}}></FontAwesome5>
           </TouchableOpacity>
         </View>
@@ -112,6 +130,33 @@ const VenuePromoterProfile = ({ route }) => {
           />
         </View>
       </View>
+
+        <View style={styles.centeredView}>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+              }}
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <TouchableOpacity style={styles.closeButton} onPress={() => {
+                    setModalVisible(!modalVisible);
+                  }}>
+                    <FontAwesome5 name="times" style={{fontSize: 15, color: 'gray', alignSelf: 'center', top: 7}} />
+                  </TouchableOpacity>
+
+                  <View style={styles.modalContent}>
+                    <Image source={{uri: imageURL}} style={[styles.badgeIcon, {width: imageWidth, height: imageHeight}]} />
+                    <Text style={styles.modalTitle}>The {promoterProfile.influence}</Text>
+                    <Text style={styles.modalText}>{content}</Text>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+        </View>
     </ScrollView>
   )
 }
@@ -247,6 +292,55 @@ const styles = StyleSheet.create({
     height: 240,
     width: 150,
     borderRadius: 5
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    width: '65%',
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  closeButton: {
+    position: 'absolute',
+    alignSelf: 'flex-start',
+    left: 5,
+    top: 15,
+    width: 40,
+    height: 40,
+  },
+  modalContent: {
+    marginTop: 10
+  },
+  modalTitle: {
+    fontFamily: 'Gill Sans',
+    marginTop: 20,
+    alignSelf: 'center',
+    fontSize: 25
+  },
+  badgeIcon: {
+    alignSelf: 'center',
+    borderRadius: 8,
+  },
+  modalText: {
+    marginTop: 15,
+    color: '#454545',
+    textAlign: 'center',
+    fontFamily: 'Avenir'
   }
 
 });

@@ -106,7 +106,7 @@ const EventDetails = ({ route }) => {
             </View>
 
             {view === "Promoter" ? (
-              <ShareButtons event={event} view="Page" />
+              <ShareButtons event={event} />
             ) : <></>}
         </>
       )}

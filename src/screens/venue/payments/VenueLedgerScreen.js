@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Image, ScrollView, Dimensions, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Dimensions, FlatList } from 'react-native';
 import { Chip, Avatar, FAB } from 'react-native-paper';
-import {
-  PulseIndicator,
-} from 'react-native-indicators';
+import { PulseIndicator } from 'react-native-indicators';
+import { useNavigation } from '@react-navigation/native';
 import { getData } from "../../../utils/localStorage";
 import env from "../../../utils/environment";
-import { useNavigation } from '@react-navigation/native';
 import { LineChart } from "react-native-chart-kit";
 import Timeline from "../../../components/Timeline";
 
@@ -46,50 +44,54 @@ const VenueLedgerScreen = () => {
 
       getData('@venueFormData').then(response => {
         fetch(`${env.API_URL}/api/events/attendance/venue/${response._id}`).then(response => response.json()).then(data => {
-          let tableData = {};
-          data.forEach(el => {
-            const eventName = el.eventName;
-            if (eventName in tableData) {
-              tableData[eventName].push({promoterName: el.promoterName, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable});
-            } else {
-              tableData[eventName] = [{promoterName: el.promoterName, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable}];
-            }
+          if (!data.length) {
+            setLoading(false);
+          } else {
+            let tableData = {};
+            data.forEach(el => {
+              const eventName = el.eventName;
+              if (eventName in tableData) {
+                tableData[eventName].push({promoterName: el.promoterName, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable});
+              } else {
+                tableData[eventName] = [{promoterName: el.promoterName, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable}];
+              }
 
-            const eventMonth = new Date(el.date).toLocaleString('default', {month: 'short'});
-            const difference = (new Date() - new Date(el.date)) / (86400000);
-            if (eventMonth in dateBalance && difference <= 180) {
-              dateBalance[eventMonth] = dateBalance[eventMonth] + el.recievable;
-            }
-          })
+              const eventMonth = new Date(el.date).toLocaleString('default', {month: 'short'});
+              const difference = (new Date() - new Date(el.date)) / (86400000);
+              if (eventMonth in dateBalance && difference <= 180) {
+                dateBalance[eventMonth] = dateBalance[eventMonth] + el.recievable;
+              }
+            })
 
-          let timeline = [];
-          let sum = 0;
-          fetch(`${env.API_URL}/api/payments/due/${response._id}`).then(response => response.json()).then(data => {
-            data.forEach(payment => {
-              const previousMonth = new Date();
-              previousMonth.setMonth(new Date(payment.dueDate).getMonth() - 1);
+            let timeline = [];
+            let sum = 0;
+            fetch(`${env.API_URL}/api/payments/due/${response._id}`).then(response => response.json()).then(data => {
+              data.forEach(payment => {
+                const previousMonth = new Date();
+                previousMonth.setMonth(new Date(payment.dueDate).getMonth() - 1);
 
-              const title = `Payment Due ${payment.dueDate.split(" ")[0]} ${payment.dueDate.split(" ")[1]}`;
-              const description = `${payment.amount} MMK due for month of ${previousMonth.toLocaleString('default', { month: 'long' })}`;
-              timeline.push({time: payment.dueDate, title: title, description: description, circleColor: '#CA3467'});
+                const title = `Payment Due ${payment.dueDate.split(" ")[0]} ${payment.dueDate.split(" ")[1]}`;
+                const description = `${payment.amount} MMK due for month of ${previousMonth.toLocaleString('default', { month: 'long' })}`;
+                timeline.push({time: payment.dueDate, title: title, description: description, circleColor: '#9E9E9E'});
 
-              sum += payment.amount;
+                sum += payment.amount;
 
-              fetch(`${env.API_URL}/api/payments/${response._id}`).then(response => response.json()).then(data => {
-                data.forEach(transaction => {
-                  const dateString = `${MONTH_ARRAY[new Date(transaction.date).getMonth()]} ${new Date(transaction.date).getDate()} ${new Date(transaction.date).getFullYear()}`
-                  timeline.push({time: dateString, title: 'Payment Received', description: `${transaction.amount} MMK received through ${transaction.method}`, circleColor: '#34C056'});
-                  sum -= transaction.amount;
+                fetch(`${env.API_URL}/api/payments/${response._id}`).then(response => response.json()).then(data => {
+                  data.forEach(transaction => {
+                    const dateString = `${MONTH_ARRAY[new Date(transaction.date).getMonth()]} ${new Date(transaction.date).getDate()} ${new Date(transaction.date).getFullYear()}`
+                    timeline.push({time: dateString, title: 'Payment Received', description: `${transaction.amount} MMK received through ${transaction.method}`, circleColor: '#34C056'});
+                    sum -= transaction.amount;
+                  })
+
+                  setLoading(false);
+                  setBalance(sum);
+                  setTimelineData(timeline);
+                  setGraphData(dateBalance);
+                  setLedger(tableData);
                 })
-
-                setLoading(false);
-                setBalance(sum);
-                setTimelineData(timeline);
-                setGraphData(dateBalance);
-                setLedger(tableData);
               })
             })
-          })
+          }
         })
       })
     });
@@ -178,9 +180,9 @@ const VenueLedgerScreen = () => {
                     {Object.keys(ledger).map(eventName => (
                         <View style={styles.eventCard}>
                             <Text style={styles.header}>{eventName}</Text>
-                            <View style={styles.tableData}>
+                            <View>
                               <View style={{flexDirection: 'row', marginTop: 15}}>
-                                <Text style={[styles.subheader, {width: '28%', left: 10}]}>Promoter</Text>
+                                <Text style={[styles.subheader, {width: '28%', left: 5}]}>Promoter</Text>
                                 <Text style={[styles.subheader, {width: '33%', left: 22}]}>Guest Count</Text>
                                 <Text style={[styles.subheader, {width: '33%', left: 16}]}>Payable (MMK)</Text>
                               </View>
@@ -193,9 +195,9 @@ const VenueLedgerScreen = () => {
                                 </View>
                               ))}
                             </View>
-                            <View style={[styles.tableRow, {paddingVertical: 12}]}>
+                            <View style={[styles.tableRow, {paddingVertical: 11}]}>
                               <Text style={[styles.tableCell, {top: 0, left: 0, marginLeft: 10, fontWeight: '500', width: '33%'}]}>Total</Text>
-                              <Text style={[styles.tableCell, {top: 0, width: '33%', fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.guestCount, 0)}</Text>
+                              <Text style={[styles.tableCell, {top: 0, left: 1, width: '33%', fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.guestCount, 0)}</Text>
                               <Text style={[styles.tableCell, {top: 0, fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.payable, 0)}</Text>
                             </View>
                           </View>
@@ -311,9 +313,9 @@ const styles = StyleSheet.create({
   },
   tableRow: {
     flexDirection: 'row',
-    backgroundColor: '#EEEEEE',
+    backgroundColor: '#E8E8E8',
     borderRadius: 18,
-    paddingVertical: 5,
+    paddingVertical: 3,
     width: '98%',
     marginTop: 10,
     padding: 5,
@@ -326,7 +328,7 @@ const styles = StyleSheet.create({
   },
   tableCell: {
     width: '33%',
-    top: 8,
+    top: 9,
     fontFamily: 'Avenir',
     fontSize: 13,
     fontWeight: '300'
@@ -349,18 +351,18 @@ const styles = StyleSheet.create({
   eventCard: {
     width: '83%',
     left: 33,
-    borderRadius: 5,
+    borderRadius: 12,
     backgroundColor: 'white',
     padding: 18,
     marginTop: 15,
     shadowColor: "#000",
     shadowOffset: {
     	width: 0,
-    	height: 1,
+    	height: 2,
     },
     shadowOpacity: 0.20,
-    shadowRadius: 1.41,
-    elevation: 2,
+    shadowRadius: 3.5,
+    elevation: 5,
   },
 
 })

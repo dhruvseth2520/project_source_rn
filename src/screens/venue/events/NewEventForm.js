@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { DotIndicator, UIActivityIndicator } from 'react-native-indicators';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { View, Image, ScrollView, Text, StyleSheet, TextInput, Picker, TouchableOpacity, ActivityIndicator,
+import { View, Image, ScrollView, Text, StyleSheet, TextInput, Picker, TouchableOpacity,
 KeyboardAvoidingView } from 'react-native';
 import { getData } from '../../../utils/localStorage';
 import * as ImagePicker from 'expo-image-picker';
@@ -87,7 +88,7 @@ const VenueNewEventForm = ({ route }) => {
           {isLoading ? (
             <View style={styles.loadingContainer}>
               <Text style={styles.loadingText}>Please wait a moment while we finish publishing your event</Text>
-              <ActivityIndicator size="large" color="#1AA2B0" style={{top: 30}}></ActivityIndicator>
+              <DotIndicator size={8} color="#1AB0A8" style={{top: 30}}></DotIndicator>
             </View>
           ) : (<>
             <View style={styles.header}>

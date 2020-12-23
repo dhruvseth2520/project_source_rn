@@ -3,12 +3,14 @@ import { View, SafeAreaView, StyleSheet, FlatList, Image, ScrollView, Text } fro
 import Jumbotron from '../../components/Jumbotron';
 import { Searchbar } from 'react-native-paper';
 import EventCard from "../../components/EventCard";
+import { getData } from '../../utils/localStorage';
 import { EventsFilterGrid } from "../../components/FilterGrid";
 import env from '../../utils/environment';
 
 const PromoterEventListScreen = ({ navigation }) => {
     const [events, setEvents] = useState([]);
     const [eventData, setEventData] = useState([]);
+    const [savedEvents, setSavedEvents] = useState([]);
     const [query, setQuery] = useState("");
     const [price, setPrice] = useState({
       active: false,
@@ -28,13 +30,13 @@ const PromoterEventListScreen = ({ navigation }) => {
 
     const sortByDate = (arr) => {
       return arr.sort(function(a, b) {
-                          var keyA = new Date(a.date);
-                          var keyB = new Date(b.date);
-                          // Compare the 2 dates
-                          if (keyA < keyB) return -1;
-                          if (keyA > keyB) return 1;
-                          return 0;
-                      });
+          var keyA = new Date(a.date);
+          var keyB = new Date(b.date);
+          // Compare the 2 dates
+          if (keyA < keyB) return -1;
+          if (keyA > keyB) return 1;
+          return 0;
+      });
     }
 
     const fetchData = () => {
@@ -50,11 +52,24 @@ const PromoterEventListScreen = ({ navigation }) => {
         const sortedEvents = sortByDate(upcomingEvents);
         setEvents(sortedEvents);
         setEventData(sortedEvents);
+
+        const temp = [];
+        getData('@promoterFormData').then(response => {
+          fetch(`${env.API_URL}/api/promoters/saved/${response._id}`).then(response => response.json()).then(data => {
+            data.forEach(savedEvent => {
+              temp.push(savedEvent._id);
+            })
+            setSavedEvents(temp);
+          })
+        })
       })
     }
 
     useEffect(() => {
-      fetchData();
+      const unsubscribe = navigation.addListener('focus', () => {
+        fetchData();
+      });
+      return unsubscribe;
     }, [])
 
     useEffect(() => {
@@ -114,12 +129,11 @@ const PromoterEventListScreen = ({ navigation }) => {
                 style={styles.eventContainer}
                 keyExtractor={event => event._id}
                 data={events}
-                renderItem={({ item }) => {
-                  return (
-                      <EventCard event={item} refreshEvents={fetchData} view="Promoter" />
-                  )
-                }}
+                renderItem={({ item }) => (
+                  <EventCard event={item} isSaved={savedEvents.includes(item._id)} refreshEvents={fetchData} view="Promoter" />
+                )}
             />
+
         </ScrollView>
     );
 }

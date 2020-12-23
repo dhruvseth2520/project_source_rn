@@ -87,9 +87,9 @@ const VenueEventsScreen = () => {
 
       <Text style={styles.subTitle}>Your Events</Text>
       <ScrollView style={styles.eventContainer}>
-        {isLoading ? (<MaterialIndicator size={24} color="#22D2C9" style={{alignSelf: 'center', left: -11, marginTop: 25, marginBottom: 20}}></MaterialIndicator>) : (<>
+        {isLoading ? (<MaterialIndicator size={28} color="#22D2C9" style={{alignSelf: 'center', left: -11, marginTop: 25, marginBottom: 20}}></MaterialIndicator>) : (<>
           {upcomingEvents.length === 0 && pastEvents.length === 0
-            ? <Text style={{fontFamily: "Avenir", fontWeight: '300', marginTop: 5, marginLeft: 3, color: '#5D5D5D'}}>You have no events to show yet. Add your first now!</Text>
+            ? <Text style={{fontFamily: "Avenir", fontWeight: '300', marginTop: 5, marginLeft: 3, color: '#5A5A5A'}}>You have no events to show yet. Add your first now!</Text>
             :
             <>
                 <View style={styles.btnContainer}>
@@ -102,7 +102,7 @@ const VenueEventsScreen = () => {
                 </View>
 
                 {isUpcoming && upcomingEvents.length === 0 ? (
-                  <Text style={{fontFamily: "Avenir", fontWeight: '300', marginTop: 5}}>You have no upcoming events. Add one now!</Text>
+                  <Text style={{fontFamily: "Avenir", fontWeight: '300', marginTop: 5, marginLeft: 2, color: '#5A5A5A'}}>You have no upcoming events. Add one now!</Text>
                 ) : (
                   <FlatList
                       showsVerticalScrollIndicator={false}

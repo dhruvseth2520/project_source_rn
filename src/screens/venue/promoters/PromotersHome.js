@@ -28,10 +28,10 @@ const VenuePromotersHome = () => {
     displayValue: 3,
     filterValue: 3
   });
-  const [connections, setConnections] = useState({
+  const [influenceBadge, setInfluenceBadge] = useState({
     active: false,
-    displayValue: 500,
-    filterValue: 500
+    displayValue: [],
+    filterValue: []
   });
   const [languages, setLanguages] = useState({
     active: false,
@@ -59,7 +59,7 @@ const VenuePromotersHome = () => {
 
   useEffect(() => {
     setPromoters(handleSearch());
-  }, [query, price.filterValue, availability.filterValue, connections.filterValue, languages.filterValue, clients.filterValue])
+  }, [query, price.filterValue, availability.filterValue, influenceBadge.filterValue, languages.filterValue, clients.filterValue])
 
   const handleSearch = () => {
       let filteredPromoters = [];
@@ -77,7 +77,10 @@ const VenuePromotersHome = () => {
           }
         })
 
-        if (nameMatch && priceMatch && clientsMatch && availabilityMatch && languagesMatch) {
+        const filteredBadges = influenceBadge.filterValue.map(badge => badge.value);
+        let badgeMatch = filteredBadges.length === 0 || filteredBadges.includes(promoter.promoterProfile.influence);
+
+        if (nameMatch && priceMatch && clientsMatch && availabilityMatch && languagesMatch && badgeMatch) {
           filteredPromoters.push(promoter);
         }
       })
@@ -108,7 +111,7 @@ const VenuePromotersHome = () => {
                   <PromotersFilterGrid
                     price={price} setPrice={setPrice}
                     availability={availability} setAvailability={setAvailability}
-                    connections={connections} setConnections={setConnections}
+                    influenceBadge={influenceBadge} setInfluenceBadge={setInfluenceBadge}
                     languages={languages} setLanguages={setLanguages}
                     clients={clients} setClients={setClients}
                   />

@@ -58,8 +58,8 @@ const LoginScreen = ({ navigation }) => {
 
       const loginApiResponse = await authLogin(callbackResponse.id)
 
-      var user = loginApiResponse.user
-      storeData('@accessToken', loginApiResponse.accessToken)
+      var user = loginApiResponse.user;
+      storeData('@accessToken', loginApiResponse.accessToken);
 
       if (!user.registered) navigation.navigate('VoP')
 
@@ -68,7 +68,7 @@ const LoginScreen = ({ navigation }) => {
       if (user.type === "Promoter") {
         const promoterDetailsResponse = await getPromoterDetails(
           loginApiResponse.accessToken
-          )
+        )
         await storeData('@promoterFormData', promoterDetailsResponse)
         await removeData('@venueFormData')
         navigation.navigate('PromoterTab');
@@ -82,7 +82,6 @@ const LoginScreen = ({ navigation }) => {
         await removeData('@promoterFormData')
         navigation.navigate('VenueTab');
       }
-
     } catch (e) {
       console.error(e)
     }
