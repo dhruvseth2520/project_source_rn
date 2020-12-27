@@ -3,8 +3,8 @@ import { DefaultHeaders } from "project_source_rn/src/utils/api";
 
 /**
  * Creates new Event based on eventData
- * @param {String} accessToken 
- * @param {Object} eventData 
+ * @param {String} accessToken
+ * @param {Object} eventData
  */
 export const createEvent = async (accessToken, eventData) => {
     return fetch(`${env.API_URL}/apx/events/create`, {
@@ -17,10 +17,10 @@ export const createEvent = async (accessToken, eventData) => {
 
 /**
  * Update Event based on eventData
- * @param {String} accessToken 
- * @param {Object} eventData 
+ * @param {String} accessToken
+ * @param {Object} eventData
  */
-export const createEvent = async (accessToken, eventData) => {
+export const updateEvent = async (accessToken, eventData) => {
     return fetch(`${env.API_URL}/apx/events/update`, {
         headers: DefaultHeaders(accessToken),
         method: 'PUT',
@@ -31,7 +31,7 @@ export const createEvent = async (accessToken, eventData) => {
 
 /**
  * Returns a list of all the events
- * @param {String} accessToken 
+ * @param {String} accessToken
  */
 export const getAllEvents = async (accessToken) => {
     return fetch(`${env.API_URL}/apx/events`, {
@@ -41,8 +41,8 @@ export const getAllEvents = async (accessToken) => {
 
 /**
  * Return an Event based on its ID
- * @param {String} accessToken 
- * @param {String} eventId 
+ * @param {String} accessToken
+ * @param {String} eventId
  */
 export const getEvent = async (accessToken, eventId) => {
     return fetch(`${env.API_URL}/apx/events/${eventId}`, {
@@ -52,8 +52,8 @@ export const getEvent = async (accessToken, eventId) => {
 
 /**
  * Returns all events from a Venue using it's venueId
- * @param {String} accessToken 
- * @param {String} venueId 
+ * @param {String} accessToken
+ * @param {String} venueId
  */
 export const getEventfromVenueId = async (accessToken, venueId) => {
     return fetch(`${env.API_URL}/apx/events/venue/${venueId}`, {
@@ -63,8 +63,8 @@ export const getEventfromVenueId = async (accessToken, venueId) => {
 
 /**
  * Deletes event using it's eventId
- * @param {String} accessToken 
- * @param {String} eventId 
+ * @param {String} accessToken
+ * @param {String} eventId
  */
 export const deleteEvent = async (accessToken, eventId) => {
     return fetch(`${env.API_URL}/apx/events/${venueId}`, {
@@ -77,8 +77,8 @@ export const deleteEvent = async (accessToken, eventId) => {
 
 /**
  * Register attendance for an event
- * @param {String} accessToken 
- * @param {Object} attendanceData 
+ * @param {String} accessToken
+ * @param {Object} attendanceData
  */
 export const registerAttendance = async (accessToken, attendanceData) => {
     return fetch(`${env.API_URL}/apx/events/attendance`, {
@@ -91,8 +91,8 @@ export const registerAttendance = async (accessToken, attendanceData) => {
 
 /**
  * Returns attendance from an event from its eventId
- * @param {String} accessToken 
- * @param {Object} eventId 
+ * @param {String} accessToken
+ * @param {Object} eventId
  */
 export const getAttendanceFromEventId = async (accessToken, eventId) => {
     return fetch(`${env.API_URL}/apx/events/attendance/${eventId}`, {
@@ -102,7 +102,7 @@ export const getAttendanceFromEventId = async (accessToken, eventId) => {
 
 /**
  * Returns attendance on a venue based on the userId in the accessToken
- * @param {String} accessToken 
+ * @param {String} accessToken
  */
 export const getAttendanceForVenueFromAccessToken = async (accessToken) => {
     return fetch(`${env.API_URL}/apx/events/attendance/venue`, {

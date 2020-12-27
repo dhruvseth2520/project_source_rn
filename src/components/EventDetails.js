@@ -137,7 +137,6 @@ const EventDetails = ({ route }) => {
             </TouchableOpacity>
           ) : <></>}
 
-
           <View style={styles.imageContainer}>
             <Image source={{uri: event.imageURL}} style={styles.eventImage} />
           </View>

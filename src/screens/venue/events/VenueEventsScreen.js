@@ -8,6 +8,8 @@ import {
 } from 'react-native-indicators';
 import EventCard from "../../../components/EventCard";
 import Header from "../../../components/Header";
+import { getEventfromVenueId } from "../../../serverSDK/api/event";
+import { getVenueDetails } from "../../../serverSDK/api/index";
 import env from "../../../utils/environment";
 import { getData } from "../../../utils/localStorage";
 import Jumbotron from "../../../components/Jumbotron";
