@@ -67,7 +67,7 @@ export const getEventfromVenueId = async (accessToken, venueId) => {
  * @param {String} eventId 
  */
 export const deleteEvent = async (accessToken, eventId) => {
-    return fetch(`${env.API_URL}/apx/events/${venueId}`, {
+    return fetch(`${env.API_URL}/apx/events/${eventId}`, {
         headers: DefaultHeaders(accessToken),
         method: 'DELETE',
         mode: 'cors',
