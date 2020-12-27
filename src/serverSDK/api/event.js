@@ -51,12 +51,17 @@ export const getEvent = async (accessToken, eventId) => {
 }
 
 /**
+<<<<<<< HEAD
  * Returns all events from a Venue using it's venueId
  * @param {String} accessToken
  * @param {String} venueId
+=======
+ * Returns all events from a Venue using it's accessToken
+ * @param {String} accessToken 
+>>>>>>> 0efc15f7efc28202bd2f6ab513a6ae3f66526d56
  */
-export const getEventfromVenueId = async (accessToken, venueId) => {
-    return fetch(`${env.API_URL}/apx/events/venue/${venueId}`, {
+export const getEventfromVenueId = async (accessToken) => {
+    return fetch(`${env.API_URL}/apx/events/venue`, {
         headers: DefaultHeaders(accessToken),
     })
 }
@@ -67,7 +72,7 @@ export const getEventfromVenueId = async (accessToken, venueId) => {
  * @param {String} eventId
  */
 export const deleteEvent = async (accessToken, eventId) => {
-    return fetch(`${env.API_URL}/apx/events/${venueId}`, {
+    return fetch(`${env.API_URL}/apx/events/${eventId}`, {
         headers: DefaultHeaders(accessToken),
         method: 'DELETE',
         mode: 'cors',
