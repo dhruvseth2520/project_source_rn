@@ -51,12 +51,11 @@ export const getEvent = async (accessToken, eventId) => {
 }
 
 /**
- * Returns all events from a Venue using it's venueId
+ * Returns all events from a Venue using it's accessToken
  * @param {String} accessToken 
- * @param {String} venueId 
  */
-export const getEventfromVenueId = async (accessToken, venueId) => {
-    return fetch(`${env.API_URL}/apx/events/venue/${venueId}`, {
+export const getEventfromVenueId = async (accessToken) => {
+    return fetch(`${env.API_URL}/apx/events/venue`, {
         headers: DefaultHeaders(accessToken),
     })
 }
