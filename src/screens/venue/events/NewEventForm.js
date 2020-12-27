@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { DotIndicator, UIActivityIndicator } from 'react-native-indicators';
+import { PulseIndicator, UIActivityIndicator } from 'react-native-indicators';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { View, Image, ScrollView, Text, StyleSheet, TextInput, Picker, TouchableOpacity,
 KeyboardAvoidingView } from 'react-native';
@@ -65,6 +65,7 @@ const VenueNewEventForm = ({ route }) => {
           method = "POST";
         } else if (action === 'Update Event') {
           method = "PUT";
+          eventForm['eventId'] = event._id;
         }
 
         fetch(`${env.API_URL}/api/events`, {
@@ -87,8 +88,8 @@ const VenueNewEventForm = ({ route }) => {
         <ScrollView style={styles.background}>
           {isLoading ? (
             <View style={styles.loadingContainer}>
-              <Text style={styles.loadingText}>Please wait a moment while we finish publishing your event</Text>
-              <DotIndicator size={8} color="#1AB0A8" style={{top: 30}}></DotIndicator>
+              <Text style={styles.loadingText}>{action === "Create Event" ? 'Please wait a moment while we finish publishing your event' : 'Please wait a moment while we finish updating your event'}</Text>
+              <PulseIndicator size={36} color="#1AB0A8" style={{top: 30}}></PulseIndicator>
             </View>
           ) : (<>
             <View style={styles.header}>
@@ -99,11 +100,10 @@ const VenueNewEventForm = ({ route }) => {
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Event Name</Text>
 
-                <TextInput style={[styles.input, {color: (action === 'Create Event' ? 'black' : '#727272')}]}
+                <TextInput style={styles.input}
                   onChangeText={(val) => setEventName(val)}
                   value={eventName}
                   autoCapitalize="words" placeholder="Eg. Wine Wednesday, Tequila Thursday, Game Day"
-                  editable={action === 'Create Event' ? true : false}
                 />
               </View>
 
@@ -114,11 +114,14 @@ const VenueNewEventForm = ({ route }) => {
                   mode="dropdown"
                   onValueChange={(val) => setCategory(val)}
                   style={styles.selectInput}>
-                  <Picker.Item label="Show" value="Show" />
+                  <Picker.Item label="Live Show" value="Live Show" />
                   <Picker.Item label="Night Out" value="Night Out" />
                   <Picker.Item label="Themed Event" value="Themed Event" />
+                  <Picker.Item label="Game Day" value="Game Day" />
+                  <Picker.Item label="Ladies Night" value="Ladies Night" />
                   <Picker.Item label="Couples Event" value="Couples Event" />
-                  <Picker.Item label="Activity" value="Activity" />
+                  <Picker.Item label="Holiday Special" value="Holiday Special" />
+
                 </Picker>
               </View>
 
@@ -159,7 +162,6 @@ const VenueNewEventForm = ({ route }) => {
                   label="Upload Image"
                   style={styles.cameraButton}
                   onPress={pickImage}
-                  color="white"
                 />
               </View>
 
@@ -229,7 +231,7 @@ const styles = StyleSheet.create({
     width: '92%',
     marginTop: 20,
     marginBottom: 0,
-    backgroundColor: '#22D2C9',
+    backgroundColor: '#DFDFDF',
     shadowOpacity: 0.06,
   },
   eventImage: {

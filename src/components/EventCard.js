@@ -90,6 +90,7 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
     } else {
       navigation.navigate('PromoterEventDetail', {
         event,
+        isSaved: saved,
         view
       })
     }

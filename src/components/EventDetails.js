@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { FontAwesome5, Entypo } from '@expo/vector-icons';
+import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, Linking, Alert} from 'react-native';
+import { FontAwesome5, AntDesign, FontAwesome } from '@expo/vector-icons';
 import { getData } from "../utils/localStorage";
+import { PulseIndicator } from 'react-native-indicators';
 import { useNavigation } from "@react-navigation/native";
 import { FAB } from 'react-native-paper';
 import ShareButtons from './ShareButtons';
+import * as Calendar from 'expo-calendar';
+import * as Permissions from 'expo-permissions';
 import env from "../utils/environment";
 
 const EventDetails = ({ route }) => {
@@ -12,31 +15,94 @@ const EventDetails = ({ route }) => {
   const [eventType, setEventType] = useState({});
   const [isLoading, setLoading] = useState(true);
   const [promoter, setPromoter] = useState({});
+  const [saved, setSaved] = useState(false);
   const event = route.params.event;
   const view = route.params.view;
   const navigation = useNavigation();
+
+  const isSaved = route.params.isSaved;
+
+  useEffect(() => {
+    setSaved(isSaved);
+  }, [isSaved]);
+
+  const saveEvent = () => {
+    getData('@promoterFormData').then(response => {
+      fetch(`${env.API_URL}/api/promoters/saved`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({promoterId: response._id, eventId: event._id})
+      }).then(response => response.json()).then(data => {
+        if (data.status === "Success") {
+          setSaved(!saved);
+        }
+      })
+    })
+  }
 
   useEffect(() => {
     switch (event.category) {
       case "Night Out":
         setEventType({name: "Night Out", icon: "moon"})
         break;
-      case "Show":
-        setEventType({name: "Show", icon: "microphone-alt"})
+      case "Live Show":
+        setEventType({name: "Live Show", icon: "microphone-alt"})
         break;
       case "Themed Event":
         setEventType({name: "Themed Event", icon: "mask"})
         break;
+      case "Game Day":
+        setEventType({name: "Game Day", icon: "futbol"})
+        break;
+      case "Holiday Special":
+        setEventType({name: "Holiday Special", icon: "candy-cane"})
+        break;
+      case "Ladies Night":
+        setEventType({name: "Ladies Night", icon: "glass-cheers"})
+        break;
       case "Couples Event":
         setEventType({name: "Couples Event", icon: "restroom"})
         break;
-      case "Activity":
-          setEventType({name: "Activity", icon: "dice"})
-          break;
       default:
-          break;
+        break;
     }
   }, [])
+
+
+
+  async function createReminder() {
+      Calendar.requestCalendarPermissionsAsync().then(() => {
+        Calendar.requestRemindersPermissionsAsync().then(() => {
+          Alert.alert(
+            'Event Reminder',
+            `Set a reminder for ${event.eventName} on ${new Date(event.date).toDateString()}?`,
+            [
+              {
+                text: 'Cancel',
+                style: 'cancel'
+              },
+              {
+                text: 'OK', onPress: () => {
+                  Calendar.createReminderAsync(null, {
+                    title: `Reminder for ${event.eventName}`,
+                    startDate: new Date(),
+                    dueDate: new Date(event.date),
+                    location: venue.venueName + ", " + venue.venueAddress,
+                    notes: event.description,
+                    completed: false
+                  }).then(() => {
+                    Alert.alert('Success', `A reminder has been created for ${event.eventName}`)
+                  })
+                }}
+            ],
+            { cancelable: false }
+          );
+        });
+      });
+  }
 
   useEffect(() => {
     if (view === "Venue") {
@@ -57,59 +123,91 @@ const EventDetails = ({ route }) => {
       <TouchableOpacity style={styles.backArrow} onPress={() => {
         navigation.goBack();
       }}>
-        <Entypo name="chevron-small-left" size={34} color="black" />
+        <AntDesign name="arrowleft" size={25} color="black" />
       </TouchableOpacity>
-      <Image source={{uri: event.imageURL}} style={styles.eventImage}></Image>
-
-      <View style={styles.eventComponent}>
-        <Text style={styles.title}>{event.eventName}</Text>
-        <View style={{flexDirection: "row"}}>
-          <Text style={styles.eventCategory}>{eventType.name}</Text>
-          <FontAwesome5 name={eventType.icon} style={{marginTop: 7, marginLeft: 4}}/>
-        </View>
-      </View>
-
-      {isLoading ? <ActivityIndicator size="large" style={{top: 30}} /> : (
+      {isLoading ? (
+        <PulseIndicator color="#22D2C9" style={{alignSelf: 'center', left: -11, marginTop: 120, marginBottom: 20}}></PulseIndicator>
+      ) : (
         <>
-            <View style={styles.eventComponent}>
-              <View style={{flexDirection: "row"}}>
-                <View style={{width: "60%"}}>
+          {view === 'Promoter' ? (
+            <TouchableOpacity style={styles.saveButtonContainer} onPress={saveEvent}>
+              <View>
+                {saved ? (<FontAwesome name="bookmark" style={styles.saveButton} />) : (<FontAwesome name="bookmark-o" style={styles.saveButton}  />)}
+              </View>
+            </TouchableOpacity>
+          ) : <></>}
+
+
+          <View style={styles.imageContainer}>
+            <Image source={{uri: event.imageURL}} style={styles.eventImage} />
+          </View>
+
+          <View style={styles.eventContainer}>
+            <View style={styles.headerContainer}>
+              <View style={{flexDirection: 'row'}}>
+                <View style={{width: '61%'}}>
+                  <Text style={{fontFamily: 'Avenir', fontSize: 16, color: 'gray'}}>Event</Text>
+                  <Text style={styles.eventTitle}>{event.eventName}</Text>
+                  <View style={{flexDirection: 'row', marginTop: 10, left: 3}}>
+                    <Text style={styles.typeLabel}>{eventType.name}</Text>
+                    <FontAwesome5 name={eventType.icon} style={styles.typeIcon}></FontAwesome5>
+                  </View>
+                </View>
+
+                <View style={[styles.venueContainer, {marginTop: event.eventName.length > 13 ? 25 : 13}]}>
+                  <Image source={{uri: venue.venueImage}} style={{height: 50, width: 50, borderRadius: 25, alignSelf: 'center'}}></Image>
                   <Text style={styles.venueName}>{venue.venueName}</Text>
-                  <Text style={styles.address}>{venue.venueAddress}</Text>
                 </View>
               </View>
-            </View>
 
-            <View style={styles.eventComponent}>
-              <View style={styles.eventDetail}>
-                <FontAwesome5 style={styles.detailIcon} name="calendar-alt" />
-                <Text style={[styles.detailText, {marginLeft: 21}]}>Occurs next on {new Date(event.date).toDateString()}</Text>
-              </View>
-              <View style={styles.eventDetail}>
-                <FontAwesome5 style={styles.detailIcon} name="clock" />
-                <Text style={[styles.detailText, {marginLeft: 19}]}>Starts at {new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
-              </View>
-              <View style={styles.eventDetail}>
-                <FontAwesome5 style={styles.detailIcon} name="glass-cheers" />
-                <Text style={[styles.detailText, {marginLeft: 13}]}>{event.promotion}</Text>
-              </View>
-              <View style={[styles.eventDetail, {marginBottom: 10}]}>
-                <FontAwesome5 style={styles.detailIcon} name="money-bill-wave" />
-                {(view === "Venue") ? (<Text style={[styles.detailText, {width: '86%'}]}>
-                    {event.promoterFees} MMK per head promoter fees. {event.serviceFees} MMK per head service fees.
-                </Text>) : (<Text style={[styles.detailText, {width: '86%'}]}>{event.promoterFees} MMK per head promoter fees</Text>)}
+              <View style={{flexDirection: 'row', marginTop: 25, marginLeft: 0, width: '95%'}}>
+                <TouchableOpacity  style={{flexDirection: 'row', width: '53%'}} onPress={() => Linking.openURL(`https://maps.google.com/?q=${venue.venueName + ", " + venue.venueAddress}`)}>
+                  <Image source={{uri: 'https://www.mcsin-k12.org/images/links/map.png'}} style={styles.headerIcon} />
+                  <Text style={[styles.headerText, {marginTop: -2}]}>{venue.venueAddress}</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={createReminder} style={{flexDirection: 'row', width: '47%'}}>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBf3AGHGFoOuCwnKXJo7odWksfP8YqC-M_kg&usqp=CAU'}} style={styles.headerIcon} />
+                  <Text style={[styles.headerText, {marginTop: -2}]}>{new Date(event.date).toDateString() + " at " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
+                </TouchableOpacity>
               </View>
             </View>
 
-            <View style={{marginLeft: 20, paddingHorizontal: 5, paddingVertical: 15, width: '88%', marginBottom: 10}}>
-              <Text style={styles.description}>{event.description}</Text>
-            </View>
+            <View style={styles.bodyContainer}>
+              <View style={{borderBottomWidth: 0.5, borderColor: 'gray', width: '95%'}}>
+                <Text style={styles.title}>Description</Text>
+                <Text style={[styles.bodyText, {marginBottom: 30}]}>{event.description}</Text>
+              </View>
 
-            {view === "Promoter" ? (
-              <ShareButtons event={event} />
-            ) : <></>}
+              <View style={[styles.promoContainer, {borderBottomWidth: view === 'Promoter' ? 0.5 : 0, borderColor: 'gray'}]}>
+                <View style={styles.promoRow}>
+                  <Image source={{uri: 'https://image.freepik.com/free-vector/cheers-wine-glasses-flat-icon-isolated-white-background_97231-304.jpg'}} style={styles.promoIcon}/>
+                  <View style={{marginLeft: 15}}>
+                    <Text style={styles.promoTitle}>Promotion</Text>
+                    <Text style={styles.promoDescription}>{event.promotion}</Text>
+                  </View>
+                </View>
+                <View style={[styles.promoRow, {marginBottom: 45}]}>
+                  <Image source={{uri: 'https://cdn2.iconfinder.com/data/icons/cinema-hall-and-movie-making/50/58-512.png'}} style={[styles.promoIcon, {width: 45, height: 45}]}/>
+                  <View style={{marginLeft: 20}}>
+                    <Text style={styles.promoTitle}>Promoter Fees</Text>
+                    <Text style={styles.promoDescription}>{event.promoterFees + " MMK per head"}</Text>
+                    <Text style={styles.promoAsterisk}>*{event.serviceFees + " MMK per head service fees"}</Text>
+                  </View>
+                </View>
+              </View>
+
+              {view === 'Promoter' ? (
+                <View style={styles.socialContainer}>
+                  <Text style={[styles.title, {fontFamily: 'Avenir', fontWeight: '400', fontSize: 18}]}>Share this event</Text>
+                  <Text style={styles.comment}>Share your invite link on social media or with your friends and get paid for every referred guest who attends {event.eventName}</Text>
+                  <ShareButtons event={event} />
+                </View>
+              ) : <></>}
+            </View>
+          </View>
         </>
-      )}
+        )}
     </ScrollView>
   )
 }
@@ -119,72 +217,135 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1
   },
-  title: {
-    fontFamily: 'Avenir',
-    fontSize: 35,
-    fontWeight: '300'
-  },
-  eventCategory: {
-    marginTop: 5,
-    fontFamily: 'Avenir',
-    fontWeight: '300',
-    marginLeft: 4
+  backArrow: {
+    position: 'absolute',
+    top: 55,
+    left: 20,
+    zIndex: 1
   },
   eventImage: {
-    width: '100%',
-    height: 310,
-    alignSelf: 'center'
+    height: 350,
+    width: '100%'
   },
-  eventComponent: {
-    marginLeft: 20,
-    paddingHorizontal: 5,
-    paddingVertical: 18,
-    borderBottomWidth: 0.5,
-    borderColor: 'gray',
-    width: '88%'
+  eventContainer: {
+    backgroundColor: 'white',
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
+    top: -30
+  },
+  headerContainer: {
+    marginTop: 30,
+    width: '85%',
+    marginLeft: 30
+  },
+  eventTitle: {
+    fontFamily: 'Gill Sans',
+    fontSize: 36,
+    marginTop: 10
+  },
+  headerIcon: {
+    width: 30,
+    height: 30
+  },
+  headerText: {
+    fontFamily: 'Avenir',
+    width: '80%',
+    marginLeft: 14,
+    color: '#5A5A5A'
+  },
+  venueContainer: {
+    width: '39%',
+    marginLeft: 11,
+    marginTop: 25,
   },
   venueName: {
     fontFamily: 'Avenir',
-    fontSize: 27,
-    fontWeight: '300'
-  },
-  address: {
-    fontSize: 13,
+    fontSize: 18,
     fontWeight: '300',
-    marginTop: 5,
-    width: '80%'
+    marginTop: 11,
+    alignSelf: 'center'
   },
-  contact: {
-    fontSize: 13,
+  bodyContainer: {
+    marginTop: 30,
+    marginLeft: 30,
+    marginBottom: 0,
+    width: '85%',
+  },
+  title: {
+    fontFamily: 'Gill Sans',
+    fontSize: 20
+  },
+  bodyText: {
+    marginTop: 10,
     fontWeight: '300',
-    marginTop: 5
+    fontFamily: 'Avenir'
   },
-  eventDetail: {
+  eventIcon: {
+    alignSelf: 'center',
+    fontSize: 28,
+    color: '#1AB0A8'
+  },
+  promoIcon: {
+    height: 50,
+    width: 50
+  },
+  promoContainer: {
+    marginTop: 30,
+    width: '95%'
+  },
+  promoRow: {
     flexDirection: 'row',
-    marginLeft: 3,
     marginBottom: 20
   },
-  detailIcon: {
-    fontSize: 26
+  promoTitle: {
+    fontFamily: 'Gill Sans',
+    fontSize: 18
   },
-  detailText: {
-    marginLeft: 10,
-    marginTop: 6,
-    fontSize: 16,
-    fontWeight: '300',
-    fontFamily: 'Gill Sans'
-  },
-  description: {
+  promoDescription: {
     fontFamily: 'Avenir',
     fontWeight: '300',
-    marginTop: 5
+    top: 7
   },
-  backArrow: {
+  promoAsterisk: {
+    top: 15,
+    fontFamily: 'Avenir',
+    fontWeight: '300',
+    color: 'gray',
+    fontSize: 12
+  },
+  typeLabel: {
+    fontFamily: 'Avenir',
+    fontSize: 13,
+    fontWeight: '300'
+  },
+  typeIcon: {
+    fontSize: 11,
+    top: 1,
+    left: 4
+  },
+  socialContainer: {
+    marginTop: 30,
+    width: '97%'
+  },
+  comment: {
+    fontFamily: 'Avenir',
+    fontSize: 13,
+    color: '#535353',
+    marginTop: 5,
+    fontWeight: '300'
+  },
+  saveButtonContainer: {
     position: 'absolute',
-    top: 45,
-    left: 10,
-    zIndex: 1
+    zIndex: 1,
+    alignSelf: 'flex-end',
+    right: 30,
+    top: 55
   },
+  saveButton: {
+    fontSize: 22,
+    color: 'white'
+  }
+
 
 })
 

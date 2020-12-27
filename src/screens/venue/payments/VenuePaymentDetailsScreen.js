@@ -156,14 +156,9 @@ const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
                 <Text style={styles.title}>Prefer to pay your bill in cash?</Text>
                 <Text style={[styles.disclaimer, {fontSize: 20}]}>No problem. We've got you covered</Text>
                 <Text style={[styles.disclaimer, {marginTop: 20}]}>Select a pickup slot and we'll send someone to collect your payment. We charge a flat 5000 MMK fee for all pickups</Text>
-                <View style={[styles.container, {marginTop: 10}]}>
-                  <Text style={styles.label}>Pickup Address</Text>
-                  <View style={styles.addressContainer}>
-                    <Text style={{fontFamily: 'Avenir', fontWeight: '200', color: '#535353'}}>{venue.venueAddress}</Text>
-                  </View>
-                </View>
 
-                <View style={styles.container}>
+
+                <View style={[styles.container, {marginTop: 15}]}>
                   <Text style={styles.label}>Pickup Slot</Text>
                   {errorDate ?
                     (<Text style={[styles.detail, {color: 'red'}]}>Please select a pickup slot between 11 am and 10 pm</Text>) :
@@ -185,9 +180,9 @@ const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
                     (<Text style={[styles.detail, {color: 'red'}]}>A minimum pickup amount of 10000 MMK is required</Text>) :
                     <Text style={styles.detail}>The amount of your pending balance you want collected</Text>
                   }
-                  <View style={{flexDirection: 'row'}}>
-                    <TextInput mode="flat" keyboardType="numeric" onChangeText={(val) => setPickupAmount(val)} style={{backgroundColor: 'white', width: '30%'}} underlineColor="#19C2BD" value={pickupAmount + ""} theme={{colors: {primary: '#19C2BD'}}}></TextInput>
-                    <Text style={{fontFamily: 'Avenir', fontSize: 15, marginTop: 23, marginLeft: 10}}>MMK of {balance} MMK balance</Text>
+                  <View style={{flexDirection: 'row', marginTop: 10}}>
+                    <TextInput mode="outlined" keyboardType="numeric" onChangeText={(val) => setPickupAmount(val)} style={{backgroundColor: 'white', width: '25%', height: 45}} underlineColor="#19C2BD" value={pickupAmount + ""} theme={{colors: {primary: '#19C2BD', placeholder: '#E2E2E2'}}}></TextInput>
+                    <Text style={{fontFamily: 'Avenir', fontSize: 15, marginTop: 21, marginLeft: 15}}>MMK of {balance} MMK balance</Text>
                   </View>
                 </View>
 

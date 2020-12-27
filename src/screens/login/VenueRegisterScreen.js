@@ -5,26 +5,46 @@ import { faCocktail, faCheck } from '@fortawesome/free-solid-svg-icons'
 import { View, Text, Image, StyleSheet, TextInput, Picker, TouchableOpacity, ScrollView,
 KeyboardAvoidingView } from 'react-native';
 import { storeData, getData } from '../../utils/localStorage';
+import { FAB } from 'react-native-paper';
 import env from "../../utils/environment";
+import * as ImagePicker from 'expo-image-picker';
+
 
 const LoginVenueRegisterScreen = ({ navigation }) => {
   const [venueName, setVenueName] = useState("");
   const [category, setCategory] = useState("bar");
   const [venueAddress, setVenueAddress] = useState("");
+  const [venueImage, setVenueImage] = useState("");
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactPhone, setContactPhone] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        base64: true,
+        aspect: [6, 3],
+        quality: 1,
+      });
+
+      if (!result.cancelled) {
+        setVenueImage(result);
+      }
+   };
+
   const handleSubmit = () => {
     const formData = {
         venueName,
         venueCategory: category,
+        venueImage,
         venueAddress,
         venueContactName: contactName,
         venueContactEmail: contactEmail,
         venueContactPhone: contactPhone
     };
+
 
     for (let key in formData) {
       if (!formData[key]) {
@@ -99,7 +119,19 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
                           <Text style={styles.comment}>Street address of branch</Text>
                           <TextInput style={styles.input} value={venueAddress} onChangeText={(val) => setVenueAddress(val)} autoCapitalize="none" />
                         </View>
-                        <View style={styles.inputContainer}>
+                        <View style={[styles.inputContainer, {width: '87%'}]}>
+                          <Text style={styles.label}>Branch Logo</Text>
+                          <Text style={styles.comment}>Upload an image or logo for your venue</Text>
+                          <Image source={{uri: venueImage ? venueImage.uri : 'https://www.creativefabrica.com/wp-content/uploads/2019/04/Bar-icon-by-hellopixelzstudio-3.jpg'}} style={[styles.venueImage, {borderWidth: venueImage ? 0 : 0.5}]} />
+
+                          <FAB
+                            icon="image"
+                            label="Upload Image"
+                            style={styles.cameraButton}
+                            onPress={pickImage}
+                          />
+                        </View>
+                        <View style={[styles.inputContainer, {marginTop: 20}]}>
                           <Text style={styles.label}>Primary Contact Name</Text>
                           <Text style={styles.comment}>The primary point of contact for your venue, either your General Manager or a Business representative</Text>
                           <TextInput style={styles.input} value={contactName} onChangeText={(val) => setContactName(val)} autoCapitalize="words" />
@@ -165,7 +197,8 @@ const styles = StyleSheet.create({
     marginLeft: 30
   },
   inputContainer: {
-    margin: 8
+    marginHorizontal: 8,
+    marginVertical: 10,
   },
   selectInput: {
     width: '95%',
@@ -184,6 +217,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir',
     fontWeight: '300',
     width: '90%'
+  },
+  cameraButton: {
+    marginTop: 20,
+    marginBottom: 0,
+    backgroundColor: '#DFDFDF',
+    shadowOpacity: 0.06,
   },
   disclaimer: {
     alignSelf: 'center',
@@ -231,6 +270,14 @@ const styles = StyleSheet.create({
     marginLeft: 17,
     fontSize: 13,
     color: '#DB0B0B'
+  },
+  venueImage: {
+    height: 60,
+    width: 60,
+    alignSelf: 'center',
+    marginTop: 20,
+    marginBottom: 5,
+    borderRadius: 30
   }
 })
 

@@ -172,7 +172,6 @@ const PromoterProfileSetup = ({ route }) => {
                                         label="Upload Images"
                                         style={styles.cameraButton}
                                         onPress={pickImage}
-                                        color="white"
                                       />
                                       <Text style={styles.inputDisclaimer}>Upload up to 5 images to display on your profile</Text>
                                   </View>
@@ -378,7 +377,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     shadowOpacity: 0.15,
-    backgroundColor: '#22D2D1',
+    backgroundColor: '#DFDFDF',
   },
   closeButton: {
     position: 'absolute',
