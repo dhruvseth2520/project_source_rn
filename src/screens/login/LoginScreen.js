@@ -51,6 +51,7 @@ const LoginScreen = ({ navigation }) => {
     }
   }
 
+  // NOTE: JWT (done)
   const handleLoginJWT = async (callback) => {
     try {
       const callbackResponse = await callback()
@@ -154,14 +155,14 @@ const LoginScreen = ({ navigation }) => {
                     style={styles.googleLoginButton}
                     icon="google"
                     label="Sign In with Google"
-                    onPress={() => handleLogin(signInWithGoogleAsync)}
+                    onPress={() => handleLoginJWT(signInWithGoogleAsync)}
                     color="#DB4437"
                   />
                   <FAB
                     style={styles.facebookLoginButton}
                     icon="facebook"
                     label="Sign In with Facebook"
-                    onPress={() => handleLogin(signInWithFacebookAsync)}
+                    onPress={() => handleLoginJWT(signInWithFacebookAsync)}
                     color="white"
                   />
                 </View>
