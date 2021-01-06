@@ -48,8 +48,7 @@ const PromoterProfileSetup = ({ route }) => {
   const dot = <View style={{ backgroundColor: 'rgba(0,0,0,.2)', width: 6, height: 6, borderRadius: 3, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3 }} />;
   const activeDot = <View style={{ backgroundColor: '#007aff', width: 6, height: 6, borderRadius: 3, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3 }} />;
 
-  // NOTE: JWT (wip)
-  // Problem -> trouble searching for object id on the server side
+  // NOTE: JWT (done)
   const handleSubmitJWT = async () => {
     setLoading(true);
     const profileData = {
@@ -71,12 +70,15 @@ const PromoterProfileSetup = ({ route }) => {
 
     const response = await registerPromoter(accessToken, promoterData)
 
+    if (response.error) {
+      setLoading(false);
+      setFailure(true);
+      return
+    }
+
     if (response.status === "Success") {
       await storeData('@promoterFormData', response.promoter);
       navigation.navigate('PromoterTab');
-    } else if (response.status === "Failure") {
-      setLoading(false);
-      setFailure(true);
     }
   }
 

@@ -155,14 +155,14 @@ const LoginScreen = ({ navigation }) => {
                     style={styles.googleLoginButton}
                     icon="google"
                     label="Sign In with Google"
-                    onPress={() => handleLoginJWT(signInWithGoogleAsync)}
+                    onPress={() => handleLogin(signInWithGoogleAsync)}
                     color="#DB4437"
                   />
                   <FAB
                     style={styles.facebookLoginButton}
                     icon="facebook"
                     label="Sign In with Facebook"
-                    onPress={() => handleLoginJWT(signInWithFacebookAsync)}
+                    onPress={() => handleLogin(signInWithFacebookAsync)}
                     color="white"
                   />
                 </View>
