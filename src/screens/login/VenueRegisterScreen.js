@@ -8,6 +8,7 @@ import { storeData, getData } from '../../utils/localStorage';
 import { FAB } from 'react-native-paper';
 import env from "../../utils/environment";
 import * as ImagePicker from 'expo-image-picker';
+import { registerVenue } from 'project_source_rn/src/serverSDK/api/register';
 
 
 const LoginVenueRegisterScreen = ({ navigation }) => {
@@ -33,6 +34,48 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
         setVenueImage(result);
       }
    };
+
+   // NOTE: JWT (done)
+   const handleSubmitJWT = async () => {
+    const formData = {
+        venueName,
+        venueCategory: category,
+        venueImage,
+        venueAddress,
+        venueContactName: contactName,
+        venueContactEmail: contactEmail,
+        venueContactPhone: contactPhone
+    };
+
+
+    for (let key in formData) {
+      if (!formData[key]) {
+        setErrorMessage("Please fill in all fields");
+        return;
+      }
+    }
+
+    if (!contactEmail.includes('@') || !contactEmail.includes('.')) {
+      setErrorMessage("Please input a valid email");
+      return;
+    }
+
+    if (contactPhone.length < 8) {
+      setErrorMessage("Please input a valid phone number");
+      return;
+    }
+
+    const accessToken = await getData('@accessToken')
+
+    const response = await registerVenue(accessToken, formData)
+
+    if (response.status === "Success") {
+      setErrorMessage("");
+      storeData('@venueFormData', response.venue).then(() => {
+        navigation.navigate('VenueTab');
+      });
+    }
+  }
 
   const handleSubmit = () => {
     const formData = {

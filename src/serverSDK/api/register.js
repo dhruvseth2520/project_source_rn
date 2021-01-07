@@ -16,9 +16,9 @@ export const registerPromoter = async (accessToken, promoterData) => {
 }
 
 /**
- * Registers Promoter
+ * Registers Venue
  * @param {String} accessToken 
- * @param {Object} promoterData 
+ * @param {Object} venueData 
  */
 export const registerVenue = async (accessToken, venueData) => {
     return fetch(`${env.API_URL}/apx/register/venue`, {

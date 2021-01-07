@@ -51,6 +51,7 @@ const LoginScreen = ({ navigation }) => {
     }
   }
 
+  // NOTE: JWT (done)
   const handleLoginJWT = async (callback) => {
     try {
       const callbackResponse = await callback()
