@@ -32,6 +32,15 @@ const VenueLedgerScreen = () => {
     });
   }
 
+  const navigateProfile = (promoterId) => {
+    fetch(`${env.API_URL}/api/promoter/detail/${promoterId}`).then(response => response.json()).then(data => {
+      navigation.navigate('PromoterProfile', {
+        promoter: data
+      })
+
+    })
+  }
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       const currDate = new Date();
@@ -51,9 +60,9 @@ const VenueLedgerScreen = () => {
             data.forEach(el => {
               const eventName = el.eventName;
               if (eventName in tableData) {
-                tableData[eventName].push({promoterName: el.promoterName, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable});
+                tableData[eventName].push({promoterName: el.promoterName, promoterId: el.promoterId, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable});
               } else {
-                tableData[eventName] = [{promoterName: el.promoterName, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable}];
+                tableData[eventName] = [{promoterName: el.promoterName, promoterId: el.promoterId, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable}];
               }
 
               const eventMonth = new Date(el.date).toLocaleString('default', {month: 'short'});
@@ -99,7 +108,7 @@ const VenueLedgerScreen = () => {
   }, [])
 
   return (<ScrollView style={styles.background} showsVerticalScrollIndicator={false}>
-    <Text style={styles.title}>Ledger</Text>
+    <Text style={styles.title}>Activity</Text>
 
     {isLoading ? (<PulseIndicator color="#22D2C9" style={{alignSelf: 'center', left: -11, marginTop: 20, marginBottom: 20}}></PulseIndicator>) : (
       <>
@@ -133,10 +142,11 @@ const VenueLedgerScreen = () => {
                   }}
                   width={0.93 * screenWidth}
                   height={220}
+                  yAxisSuffix="ks"
                   withOuterLines={false}
                   withHorizontalLines={false}
                   withVerticalLines={false}
-                  yAxisSuffix="k"
+                  withVerticalLabels={true}
                   yAxisInterval={1} // optional, defaults to 1
                   chartConfig={{
                     backgroundColor: "#FFFFFF",
@@ -169,7 +179,7 @@ const VenueLedgerScreen = () => {
               <Text style={guestListVisible ? styles.btnText : styles.active}>Payment History</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setGuestListVisible(true)}>
-              <Text style={!guestListVisible ? styles.btnText : styles.active}>Guest List</Text>
+              <Text style={!guestListVisible ? styles.btnText : styles.active}>Event List</Text>
             </TouchableOpacity>
           </View>
 
@@ -188,14 +198,15 @@ const VenueLedgerScreen = () => {
                               </View>
                             <View>
                               {ledger[eventName].map(item => (
-                                <View style={[styles.tableRow, {backgroundColor: '#f3f3f3'}]}>
-                                  <Chip avatar={<Avatar.Image size={24} source={{uri: item.promoterAvatar}} />} style={styles.promoterChip} textStyle={{fontFamily: 'Avenir', top: 1, fontSize: 13}}>{item.promoterName.split(" ")[0]}</Chip>
-                                  <Text style={styles.tableCell}>{item.guestCount}</Text>
-                                  <Text style={styles.tableCell}>{item.payable}</Text>
-                                </View>
-                              ))}
+                                  <View style={[styles.tableRow, {backgroundColor: '#f3f3f3'}]}>
+                                    <Chip onPress={() => navigateProfile(item.promoterId)} avatar={<Avatar.Image size={24} source={{uri: item.promoterAvatar}} />} style={styles.promoterChip} textStyle={{fontFamily: 'Avenir', top: 1, fontSize: 13}}>{item.promoterName.split(" ")[0]}</Chip>
+                                    <Text style={styles.tableCell}>{item.guestCount}</Text>
+                                    <Text style={styles.tableCell}>{item.payable}</Text>
+                                  </View>
+                                )
+                              )}
                             </View>
-                            <View style={[styles.tableRow, {paddingVertical: 11}]}>
+                            <View style={[styles.tableRow, {paddingVertical: 11, marginBottom: 10}]}>
                               <Text style={[styles.tableCell, {top: 0, left: 0, marginLeft: 10, fontWeight: '500', width: '33%'}]}>Total</Text>
                               <Text style={[styles.tableCell, {top: 0, left: 1, width: '33%', fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.guestCount, 0)}</Text>
                               <Text style={[styles.tableCell, {top: 0, fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.payable, 0)}</Text>

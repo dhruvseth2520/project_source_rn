@@ -45,7 +45,7 @@ const VenueWireTransfer = ({ balance, isLoading, setLoading }) => {
                         "KBZ": {"name": "KBZ Bank", "image": "https://www.fintechfutures.com/files/2018/12/kbz-bank-Cropped.png", "bankAccountNumber": "0084-1001-0000-6588", "branch": "Ahlone"},
                         "CB": {"name": "CB Bank", "image": "https://yt3.ggpht.com/a/AATXAJxM0r4YPsMbnVk7iNNWmZFvSgCCtgJE9uMsWTmsSw=s900-c-k-c0x00ffffff-no-rj", "bankAccountNumber": "0084-1001-0000-6588", "branch": "Ahlone"},
                         "Yoma": {"name": "Yoma Bank", "image": "https://upload.wikimedia.org/wikipedia/en/thumb/3/3c/Yoma_Bank_Logo.svg/1200px-Yoma_Bank_Logo.svg.png", "bankAccountNumber": "0084-1001-0000-6588", "branch": "Ahlone"},
-                        "AYA": {"name": "AYA Bank", "image": "https://zenprospect-production.s3.amazonaws.com/uploads/pictures/5f666a0b4deeaa00019573bb/picture", "bankAccountNumber": "0084-1001-0000-6588", "branch": "Ahlone"}
+                        "AYA": {"name": "AYA Bank", "image": "https://pbs.twimg.com/profile_images/1763695111/mlogo_400x400.jpg", "bankAccountNumber": "0084-1001-0000-6588", "branch": "Ahlone"}
                       };
   const [activeButtons, setActiveButtons] = useState(initialState);
 
@@ -54,21 +54,21 @@ const VenueWireTransfer = ({ balance, isLoading, setLoading }) => {
     <View style={styles.grid}>
       <View style={{flexDirection: 'row', marginBottom: 25}}>
           <TouchableOpacity style={activeButtons["KBZ"] ? [styles.tile, styles.active] : styles.tile} onPress={() => setActiveButtons({...initialState, "KBZ": !activeButtons["KBZ"]})}>
-              <Image source={{uri: 'https://www.fintechfutures.com/files/2018/12/kbz-bank-Cropped.png'}} style={styles.icon} />
+              <Image source={{uri: bankDetails["KBZ"].image}} style={styles.icon} />
               <Text style={styles.tileLabel}>KBZ Bank</Text>
           </TouchableOpacity>
           <TouchableOpacity style={activeButtons["CB"] ? [styles.tile, styles.active] : styles.tile} onPress={() => setActiveButtons({...initialState, "CB": !activeButtons["CB"]})}>
-              <Image source={{uri: 'https://yt3.ggpht.com/a/AATXAJxM0r4YPsMbnVk7iNNWmZFvSgCCtgJE9uMsWTmsSw=s900-c-k-c0x00ffffff-no-rj'}} style={styles.icon} />
+              <Image source={{uri: bankDetails["CB"].image}} style={styles.icon} />
               <Text style={styles.tileLabel}>CB Bank</Text>
           </TouchableOpacity>
       </View>
       <View style={{flexDirection: 'row', marginBottom: 20}}>
           <TouchableOpacity style={activeButtons["Yoma"] ? [styles.tile, styles.active] : styles.tile} onPress={() => setActiveButtons({...initialState, "Yoma": !activeButtons["Yoma"]})}>
-              <Image source={{uri: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/3c/Yoma_Bank_Logo.svg/1200px-Yoma_Bank_Logo.svg.png'}} style={styles.icon} />
+              <Image source={{uri: bankDetails["Yoma"].image}} style={styles.icon} />
               <Text style={styles.tileLabel}>Yoma Bank</Text>
           </TouchableOpacity>
           <TouchableOpacity style={activeButtons["AYA"] ? [styles.tile, styles.active] : styles.tile} onPress={() => setActiveButtons({...initialState, "AYA": !activeButtons["AYA"]})}>
-              <Image source={{uri: 'https://zenprospect-production.s3.amazonaws.com/uploads/pictures/5f666a0b4deeaa00019573bb/picture'}} style={styles.icon} />
+              <Image source={{uri: bankDetails["AYA"].image}} style={styles.icon} />
               <Text style={styles.tileLabel}>AYA Bank</Text>
           </TouchableOpacity>
       </View>
@@ -138,7 +138,7 @@ const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
             navigation.navigate("VenuePaymentReceipt", {
               title: "Thank you, your pickup is confirmed",
               detail: `Your payment will be collected from ${venue.venueName} on ${pickupDate.toLocaleDateString()} at ${pickupDate.toLocaleTimeString()}`,
-              receipt: [{label: "Amount", amount: pickupAmount + " MMK"}, {label: "Pickup fee", amount: "5000 MMK"}, {label: "Total", amount: `${parseInt(pickupAmount) + 5000} MMK`}]
+              receipt: [{label: "Amount", amount: pickupAmount + " MMK"}, {label: "Pickup fee", amount: "1500 MMK"}, {label: "Total", amount: `${parseInt(pickupAmount) + 1500} MMK`}]
             });
           }
         })
@@ -155,8 +155,7 @@ const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
             <>
                 <Text style={styles.title}>Prefer to pay your bill in cash?</Text>
                 <Text style={[styles.disclaimer, {fontSize: 20}]}>No problem. We've got you covered</Text>
-                <Text style={[styles.disclaimer, {marginTop: 20}]}>Select a pickup slot and we'll send someone to collect your payment. We charge a flat 5000 MMK fee for all pickups</Text>
-
+                <Text style={[styles.disclaimer, {marginTop: 20, width: '80%'}]}>Select a pickup slot and we'll send someone to collect your payment. We charge a flat 1500 MMK fee for all pickups</Text>
 
                 <View style={[styles.container, {marginTop: 15}]}>
                   <Text style={styles.label}>Pickup Slot</Text>
@@ -167,6 +166,7 @@ const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
                   <DateTimePicker
                     style={styles.dateSelector}
                     mode="datetime"
+                    display="spinner"
                     minuteInterval={30}
                     value={pickupDate}
                     onChange={(event, val) => setPickupDate(val)}
@@ -177,7 +177,7 @@ const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
                 <View style={styles.container}>
                   <Text style={styles.label}>Pickup Amount</Text>
                   {errorAmount ?
-                    (<Text style={[styles.detail, {color: 'red'}]}>A minimum pickup amount of 10000 MMK is required</Text>) :
+                    <Text style={[styles.detail, {color: 'red'}]}>A minimum pickup amount of 10000 MMK is required</Text> :
                     <Text style={styles.detail}>The amount of your pending balance you want collected</Text>
                   }
                   <View style={{flexDirection: 'row', marginTop: 10}}>

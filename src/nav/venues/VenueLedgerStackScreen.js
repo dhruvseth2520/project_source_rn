@@ -5,6 +5,7 @@ import VenuePaymentScreen from "../../screens/venue/payments/VenuePaymentScreen"
 import VenuePaymentDetailsScreen from "../../screens/venue/payments/VenuePaymentDetailsScreen";
 import VenuePaymentReceipt from "../../screens/venue/payments/VenuePaymentReceipt";
 import VenueBankAccountDetails from "../../screens/venue/payments/VenueBankAccountDetails";
+import PromoterProfile from "../../screens/venue/promoters/PromoterProfile";
 
 const Stack = createStackNavigator();
 
@@ -15,6 +16,11 @@ const VenueLedgerStackScreen = () => {
         name="VenueLedger"
         options={{ headerShown: false }}
         component={VenueLedgerScreen}
+      />
+      <Stack.Screen
+        name="PromoterProfile"
+        options={{ headerShown: false }}
+        component={PromoterProfile}
       />
       <Stack.Screen
         name="VenuePayment"

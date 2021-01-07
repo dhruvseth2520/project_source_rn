@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ScrollView, View, StyleSheet, SafeAreaView, Text, Image, TouchableOpacity } from 'react-native';
 import { Chip } from 'react-native-paper';
 import Popover, { PopoverPlacement } from 'react-native-popover-view';
+import { AntDesign } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import { Button, RadioButton } from 'react-native-paper';
 import SelectMultiple from 'react-native-select-multiple';
@@ -38,8 +39,8 @@ const FilterRange = ({ state, setState, title, icon, unit, step, min, max, label
         minimumValue={min}
         maximumValue={max}
         step={step}
-        minimumTrackTintColor="#1AB0A8"
-        maximumTrackTintColor="#22D2C9"
+        minimumTrackTintColor="#22D2C9"
+        maximumTrackTintColor="#2ABCB4"
         value={state.displayValue}
         onSlidingComplete={val => setState({...state, displayValue: val})}
       />
@@ -130,10 +131,15 @@ const FilterSelect = ({ state, setState, icon, title, label, items }) => {
 }
 
 
-const PromotersFilterGrid = ({ price, setPrice, clients, setClients, availability, setAvailability, influenceBadge, setInfluenceBadge, languages, setLanguages }) => {
+const PromotersFilterGrid = ({ price, setPrice, clients, setClients, availability, setAvailability, influenceBadge, setInfluenceBadge, languages, setLanguages, clearFilters }) => {
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterGrid}>
+      {(price.active || clients.active || availability.active || influenceBadge.active || languages.active) ? (
+        <TouchableOpacity onPress={clearFilters}>
+          <AntDesign name="close" size={13} style={styles.clearFiltersButton} />
+        </TouchableOpacity>
+      ) : (<></>)}
       <FilterRange setState={setPrice} state={price} maxOrMin="max"
               icon="currency-usd" title="Promoter Fees"
               label="Maximum Promoter Fees"
@@ -164,16 +170,19 @@ const PromotersFilterGrid = ({ price, setPrice, clients, setClients, availabilit
          <FilterSelect state={languages} setState={setLanguages}
            items={["English", "Burmese"]}
            icon="alphabetical" title="Languages" label="Preferred Languages" />
-
-
     </ScrollView>
   )
 
 }
 
-const EventsFilterGrid = ({ price, setPrice, category, setCategory, date, setDate }) => {
+const EventsFilterGrid = ({ price, setPrice, category, setCategory, date, setDate, clearFilters }) => {
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterGrid}>
+        {(price.active || category.active || date.active) ? (
+          <TouchableOpacity onPress={clearFilters}>
+            <AntDesign name="close" size={13} style={styles.clearFiltersButton} />
+          </TouchableOpacity>
+        ) : (<></>)}
         <FilterRange setState={setPrice} state={price} maxOrMin="min"
                 icon="currency-usd" title="Promoter Fees"
                 label="Minimum Promoter Fees"
@@ -183,7 +192,7 @@ const EventsFilterGrid = ({ price, setPrice, category, setCategory, date, setDat
          <FilterRange state={date} setState={setDate} maxOrMin="max"
            icon="calendar" title="Event Date" label="Occuring in the next" unit="Days" min={0} max={30} step={1}/>
          <FilterSelect state={category} setState={setCategory}
-           icon="buffer" title="Event Category" label="Event Category" items={["Show", "Night Out", "Themed Event", "Couples Event", "Activity"]}/>
+           icon="buffer" title="Event Category" label="Event Category" items={["Live Show", "Night Out", "Themed Event", "Game Day", "Ladies Night", "Couples Event", "Holiday Special"]}/>
     </ScrollView>)
 
 }
@@ -201,6 +210,7 @@ const styles = StyleSheet.create({
   filterCard: {
     padding: 25,
     width: 255,
+    maxHeight: 255,
   },
   label: {
     fontFamily: 'Avenir',
@@ -214,6 +224,11 @@ const styles = StyleSheet.create({
     top: 10,
     left: 5
   },
+  clearFiltersButton: {
+    color: '#808080',
+    top: 11,
+    marginRight: 7
+  }
 
 })
 

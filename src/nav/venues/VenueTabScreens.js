@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 
 import VenuePromoterStackScreen from "./VenuePromoterStackScreen";
 import VenueEventStackScreen from "./VenueEventStackScreen";
@@ -20,7 +20,7 @@ const VenueTabScreens = () => {
           <VenueTabNav.Screen name="VenuePromoters"
             options={{
               tabBarIcon: ({ focused, size }) => (
-                  <Ionicons name="md-people" size={size} color={focused ? "#1AB0A8" : 'gray'} style={{"marginTop": 5}}/>
+                  <Ionicons name="md-people" size={size} color={focused ? "#1AB0A8" : 'gray'} />
               ),
               headerShown: false,
               title: "Promoters",
@@ -32,7 +32,7 @@ const VenueTabScreens = () => {
           <VenueTabNav.Screen name="VenueEvents"
             options={{
               tabBarIcon: ({ focused, size }) => (
-                <Ionicons name="ios-calendar" size={size} color={focused ? "#1AB0A8" : 'gray'} style={{"marginTop": 5}}/>
+                <Ionicons name="ios-calendar" size={size} color={focused ? "#1AB0A8" : 'gray'} />
               ),
               headerShown: false,
               title: "Events"
@@ -43,7 +43,7 @@ const VenueTabScreens = () => {
           <VenueTabNav.Screen name="VenueMessages"
             options={{
               tabBarIcon: ({ focused, size, color }) => (
-                <Ionicons name="ios-chatboxes" size={size} color={focused ? '#1AB0A8' : 'gray'} style={{"marginTop": 5}}/>
+                <Ionicons name="ios-chatboxes" size={size} color={focused ? '#1AB0A8' : 'gray'} />
               ),
               headerShown: false,
               title: "Inbox"
@@ -53,10 +53,10 @@ const VenueTabScreens = () => {
           <VenueTabNav.Screen name="VenueLedger"
             options={{
               tabBarIcon: ({ focused, size, color }) => (
-                <Ionicons name="ios-wallet" size={size} color={focused ? '#1AB0A8' : 'gray'} style={{"marginTop": 5}}/>
+                <FontAwesome5 name="chart-line" size={size} color={focused ? '#1AB0A8' : 'gray'} />
               ),
               headerShown: false,
-              title: "Ledger"
+              title: "Activity"
             }}
             component={VenueLedgerStackScreen} />
 
@@ -64,7 +64,7 @@ const VenueTabScreens = () => {
             name="VenueSettings"
             options={{
               tabBarIcon: ({ focused, size }) => (
-                <Ionicons name="md-settings" size={size} color={focused ? "#1AB0A8" : 'gray'} style={{"marginTop": 5}}/>
+                <Ionicons name="md-settings" size={size} color={focused ? "#1AB0A8" : 'gray'} />
               ),
               headerShown: false,
               title: "Settings"

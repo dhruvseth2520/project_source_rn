@@ -5,7 +5,7 @@ export * from './register'
 
 /**
  * Gets Promoter details based on the accessToken
- * @param {String} accessToken 
+ * @param {String} accessToken
  */
 export const getPromoterDetails = async (accessToken) => {
     return fetch(`${env.API_URL}/apx/promoter`,
@@ -15,7 +15,7 @@ export const getPromoterDetails = async (accessToken) => {
 
 /**
  * Gets Venue details based on the accessToken
- * @param {String} accessToken 
+ * @param {String} accessToken
  */
 export const getVenueDetails = async (accessToken) => {
     return fetch(`${env.API_URL}/apx/venue`,
@@ -25,7 +25,7 @@ export const getVenueDetails = async (accessToken) => {
 
 /**
  * Returns a list of Promoters
- * @param {String} accessToken 
+ * @param {String} accessToken
  */
 export const getPromoters = async (accessToken) => {
     return fetch(`${env.API_URL}/apx/promoters`,
@@ -35,8 +35,8 @@ export const getPromoters = async (accessToken) => {
 
 /**
  * Toggles Event to be saved or unsaved from the users saved list
- * @param {String} accessToken 
- * @param {String} eventId 
+ * @param {String} accessToken
+ * @param {String} eventId
  */
 export const saveUnsaveEvent = async (accessToken, eventId) => {
     return fetch(`${env.API_URL}/apx/promoters/saved`,
@@ -51,7 +51,7 @@ export const saveUnsaveEvent = async (accessToken, eventId) => {
 
 /**
  * Returns all saved events for current user
- * @param {String} accessToken 
+ * @param {String} accessToken
  */
 export const getSavedEventList = async (accessToken) => {
     return fetch(`${env.API_URL}/apx/promoters/saved`,
@@ -59,5 +59,5 @@ export const getSavedEventList = async (accessToken) => {
             headers: DefaultHeaders(accessToken),
             method: 'GET',
         }
-    ).then(response => response.json())
+    )
 }

@@ -86,7 +86,6 @@ const VenueEventsScreen = () => {
         image="https://lasvegasnightclubs.com/wp-content/uploads/2018/06/27067569_10155555444533043_9174124228487188550_n-min-2.jpg"
       />
 
-
       <Text style={styles.subTitle}>Your Events</Text>
       <ScrollView style={styles.eventContainer}>
         {isLoading ? (<MaterialIndicator size={28} color="#22D2C9" style={{alignSelf: 'center', left: -11, marginTop: 25, marginBottom: 20}}></MaterialIndicator>) : (<>

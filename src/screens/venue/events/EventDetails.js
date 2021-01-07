@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, Linking, Alert} from 'react-native';
 import { FontAwesome5, AntDesign, FontAwesome } from '@expo/vector-icons';
-import { getData } from "../utils/localStorage";
+import { getData } from "../../../utils/localStorage";
 import { PulseIndicator } from 'react-native-indicators';
 import { useNavigation } from "@react-navigation/native";
 import { FAB } from 'react-native-paper';
-import ShareButtons from './ShareButtons';
+import ShareButtons from '../../../components/ShareButtons';
 import * as Calendar from 'expo-calendar';
 import * as Permissions from 'expo-permissions';
-import env from "../utils/environment";
+import env from "../../../utils/environment";
 
 const EventDetails = ({ route }) => {
   const [venue, setVenue] = useState({});
@@ -25,6 +25,16 @@ const EventDetails = ({ route }) => {
   useEffect(() => {
     setSaved(isSaved);
   }, [isSaved]);
+
+  let promotionCondition = "";
+  if (event.promotionCondition && event.promotionCondition.condition && event.promotionCondition.amount) {
+    if (event.promotionCondition.condition === "Party Size") {
+      promotionCondition = "For every group of " + event.promotionCondition.amount;
+    } else if (event.promotionCondition.condition === "Amount Spent") {
+      promotionCondition = "If a minimum of " + event.promotionCondition.amount + " MMK is spent";
+    }
+  }
+
 
   const saveEvent = () => {
     getData('@promoterFormData').then(response => {
@@ -161,12 +171,16 @@ const EventDetails = ({ route }) => {
 
               <View style={{flexDirection: 'row', marginTop: 25, marginLeft: 0, width: '95%'}}>
                 <TouchableOpacity  style={{flexDirection: 'row', width: '53%'}} onPress={() => Linking.openURL(`https://maps.google.com/?q=${venue.venueName + ", " + venue.venueAddress}`)}>
-                  <Image source={{uri: 'https://www.mcsin-k12.org/images/links/map.png'}} style={styles.headerIcon} />
+                  <View style={styles.headerIconContainer}>
+                    <FontAwesome5 name="map-marker-alt" style={styles.headerIcon} />
+                  </View>
                   <Text style={[styles.headerText, {marginTop: -2}]}>{venue.venueAddress}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={createReminder} style={{flexDirection: 'row', width: '47%'}}>
-                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBf3AGHGFoOuCwnKXJo7odWksfP8YqC-M_kg&usqp=CAU'}} style={styles.headerIcon} />
+                  <View style={styles.headerIconContainer}>
+                    <FontAwesome5 name="calendar" style={styles.headerIcon} />
+                  </View>
                   <Text style={[styles.headerText, {marginTop: -2}]}>{new Date(event.date).toDateString() + " at " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
                 </TouchableOpacity>
               </View>
@@ -180,18 +194,23 @@ const EventDetails = ({ route }) => {
 
               <View style={[styles.promoContainer, {borderBottomWidth: view === 'Promoter' ? 0.5 : 0, borderColor: 'gray'}]}>
                 <View style={styles.promoRow}>
-                  <Image source={{uri: 'https://image.freepik.com/free-vector/cheers-wine-glasses-flat-icon-isolated-white-background_97231-304.jpg'}} style={styles.promoIcon}/>
-                  <View style={{marginLeft: 15}}>
+                  <View style={{width: '12%'}}>
+                    <FontAwesome5 name="wine-bottle" style={styles.promoIcon} />
+                  </View>
+                  <View style={{width: '80%', left: 20}}>
                     <Text style={styles.promoTitle}>Promotion</Text>
                     <Text style={styles.promoDescription}>{event.promotion}</Text>
+                    <Text style={styles.promoAsterisk}>*{promotionCondition}</Text>
                   </View>
                 </View>
-                <View style={[styles.promoRow, {marginBottom: 45}]}>
-                  <Image source={{uri: 'https://cdn2.iconfinder.com/data/icons/cinema-hall-and-movie-making/50/58-512.png'}} style={[styles.promoIcon, {width: 45, height: 45}]}/>
-                  <View style={{marginLeft: 20}}>
+                <View style={[styles.promoRow, {marginTop: 10, marginBottom: 45}]}>
+                  <View style={{width: '12%'}}>
+                    <FontAwesome5 name="search-dollar" style={[styles.promoIcon, {top: 10}]} />
+                  </View>
+                  <View style={{width: '80%', left: 20}}>
                     <Text style={styles.promoTitle}>Promoter Fees</Text>
                     <Text style={styles.promoDescription}>{event.promoterFees + " MMK per head"}</Text>
-                    <Text style={styles.promoAsterisk}>*{event.serviceFees + " MMK per head service fees"}</Text>
+                    {view === "Venue" ? (<Text style={styles.promoAsterisk}>*{event.serviceFees + " MMK per head service fees"}</Text>) : <></>}
                   </View>
                 </View>
               </View>
@@ -242,9 +261,19 @@ const styles = StyleSheet.create({
     fontSize: 36,
     marginTop: 10
   },
+  headerIconContainer: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: '#EAEAEA',
+    padding: 10,
+    top: -4
+  },
   headerIcon: {
-    width: 30,
-    height: 30
+    fontSize: 16,
+    alignSelf: 'center',
+    top: 1,
+    color: '#1AB0A8'
   },
   headerText: {
     fontFamily: 'Avenir',
@@ -285,8 +314,10 @@ const styles = StyleSheet.create({
     color: '#1AB0A8'
   },
   promoIcon: {
-    height: 50,
-    width: 50
+    fontSize: 28,
+    alignSelf: 'center',
+    top: 8,
+    color: '#1AB0A8'
   },
   promoContainer: {
     marginTop: 30,
@@ -319,8 +350,9 @@ const styles = StyleSheet.create({
   },
   typeIcon: {
     fontSize: 11,
-    top: 1,
-    left: 4
+    top: 2,
+    color: '#A2A2A2',
+    left: 5
   },
   socialContainer: {
     marginTop: 30,
@@ -344,8 +376,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: 'white'
   }
-
-
 })
 
 export default EventDetails;

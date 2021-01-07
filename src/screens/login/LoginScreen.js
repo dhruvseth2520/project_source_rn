@@ -144,21 +144,22 @@ const LoginScreen = ({ navigation }) => {
           <Text style={styles.loadingText}>Welcome Back</Text>
         </View> : (
             <>
-              <View style={{ flex: 4 }}>
-                <Image source={require('../../assets/glowlight2.png')} style={styles.banner} />
+              <View style={{flex: 3}}>
+
               </View>
-              <View style={{ flex: 3, width: '88%', alignSelf: 'center' }}>
-                <Text style={styles.slogan}>The new way to promote</Text>
+              <View style={{ flex: 3, marginTop: 50, width: '100%', alignSelf: 'center' }}>
+                <Text style={styles.slogan}>The new way</Text>
+                <Text style={[styles.slogan, {top: -8}]}>to promote.</Text>
                 <View style={styles.buttonArea}>
                   <FAB
-                    style={styles.googleLoginButton}
+                    style={styles.loginButton}
                     icon="google"
                     label="Sign In with Google"
                     onPress={() => handleLogin(signInWithGoogleAsync)}
-                    color="#DB4437"
+                    color="white"
                   />
                   <FAB
-                    style={styles.facebookLoginButton}
+                    style={styles.loginButton}
                     icon="facebook"
                     label="Sign In with Facebook"
                     onPress={() => handleLogin(signInWithFacebookAsync)}
@@ -179,30 +180,27 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column'
   },
-  banner: {
-    width: '60%',
-    height: '60%',
-    alignSelf: 'center',
-    marginTop: 20
-  },
   slogan: {
-    fontSize: 33,
-    fontFamily: 'Trebuchet MS',
-    fontWeight: '500',
+    fontSize: 37,
+    fontFamily: 'Avenir-Black',
     color: 'white',
-    marginLeft: 25,
-    alignSelf: 'center',
+    marginLeft: 65,
     width: '70%',
   },
   buttonArea: {
     justifyContent: 'flex-start',
-    alignSelf: "center",
+    width: '70%',
+    marginLeft: 65,
     height: 100,
     marginTop: 10
   },
-  googleLoginButton: {
-    backgroundColor: 'white',
-    marginTop: 30
+  loginButton: {
+    shadowOpacity: 0.1,
+    borderColor: 'white',
+    borderWidth: 1,
+    backgroundColor: 'transparent',
+    marginTop: 20,
+    marginBottom: 5
   },
   loadingText: {
     color: 'white',
@@ -212,11 +210,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 20
   },
-  facebookLoginButton: {
-    backgroundColor: '#3b5998',
-    borderColor: '#3b5998',
-    marginTop: 20
-  }
 });
 
 export default LoginScreen;

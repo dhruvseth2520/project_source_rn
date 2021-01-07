@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderStyle: 'dotted',
     position: 'absolute',
-    top: 11,
+    top: 15,
     width: 1,
     alignSelf: 'center',
     height: '200%'

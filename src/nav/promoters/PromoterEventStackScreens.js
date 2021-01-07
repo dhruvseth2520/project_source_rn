@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import PromoterEventsScreen from "../../screens/promoter/PromoterEventsScreen";
-import EventDetails from '../../components/EventDetails';
+import EventDetails from '../../screens/venue/events/EventDetails';
 import PromoterSavedEvents from "../../screens/promoter/PromoterSavedEvents";
 
 const PromoterEventStackNav = createStackNavigator();

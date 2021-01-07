@@ -28,6 +28,24 @@ const PromoterEventListScreen = ({ navigation }) => {
       filterValue: 100
     });
 
+    const clearFilters = () => {
+      setPrice({
+        active: false,
+        displayValue: 0,
+        filterValue: 0
+      });
+      setCategory({
+        active: false,
+        displayValue: [],
+        filterValue: []
+      });
+      setDate({
+        active: false,
+        displayValue: 30,
+        filterValue: 100
+      });
+    }
+
     const sortByDate = (arr) => {
       return arr.sort(function(a, b) {
           var keyA = new Date(a.date);
@@ -123,6 +141,7 @@ const PromoterEventListScreen = ({ navigation }) => {
             <EventsFilterGrid price={price} setPrice={setPrice}
               category={category} setCategory={setCategory}
               date={date} setDate={setDate}
+              clearFilters={clearFilters}
             />
 
             <FlatList

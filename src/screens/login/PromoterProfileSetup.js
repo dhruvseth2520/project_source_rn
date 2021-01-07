@@ -170,6 +170,7 @@ const PromoterProfileSetup = ({ route }) => {
                                       <FAB
                                         icon="image"
                                         label="Upload Images"
+                                        color="white"
                                         style={styles.cameraButton}
                                         onPress={pickImage}
                                       />

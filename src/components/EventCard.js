@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { FAB } from 'react-native-paper';
 import RegisterGuestsModal from "./RegisterGuestsModal";
 import { getData } from '../utils/localStorage';
 import GuestListModal from "./GuestListModal";
-import ErrorModal from "./ErrorModal";
 import env from "../utils/environment";
 
 const EventCard = ({ event, refreshEvents, view, isSaved }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [isCurrentEvent, setIsCurrentEvent] = useState(false);
+  const [isPastEvent, setIsPastEvent] = useState(false);
   const [guestListVisible, setGuestListVisible] = useState(false);
-  const [errorModalVisible, setErrorModalVisible] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+
   const [guests, setGuests] = useState([]);
 
   const saveEvent = () => {
@@ -42,7 +42,18 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
 
   useEffect(() => {
     fetchData();
-  }, [modalVisible]);
+  }, [guestListVisible]);
+
+  useEffect(() => {
+     const difference = (new Date(event.date) - new Date()) / 86400000;
+     if (difference <= 1 && difference > -0.5) {
+       setIsCurrentEvent(true);
+     } else if (difference < 0) {
+       setIsPastEvent(true);
+     } else if (difference > 1) {
+       setIsCurrentEvent(false);
+     }
+  }, [event, navigation])
 
   const fetchData = () => {
     fetch(`${env.API_URL}/api/events/attendance/event/${event._id}`)
@@ -61,23 +72,36 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
 
   const deleteEvent = () => {
     const currentDate = new Date();
-    const difference = (new Date(event.date).getTime() - currentDate.getTime()) / (1000 * 3600 * 24);
+    const difference = (new Date(event.date) - currentDate) / (1000 * 3600 * 24);
 
-    if (difference >= 0 && difference <= 3) {
-      setErrorMessage("Events can't be deleted within 3 days of the event date");
-      setErrorModalVisible(true);
+    if (difference >= 0 && difference <= 2) {
+      Alert.alert("We're Sorry", "Events can't be deleted less than 2 days before they occur");
     } else {
-      fetch(`${env.API_URL}/api/events/${event._id}`, {
-        method: "DELETE",
-        mode: "cors",
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(response => response.json()).then(data => {
-        if (data.status === "Success") {
-          refreshEvents();
-        }
-      })
+      Alert.alert(
+      "Are you sure you want to delete this event?",
+      "This cannot be undone",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => {
+          fetch(`${env.API_URL}/api/events/${event._id}`, {
+            method: "DELETE",
+            mode: "cors",
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(response => response.json()).then(data => {
+            if (data.status === "Success") {
+              refreshEvents();
+            }
+          })
+        } }
+        ],
+        { cancelable: false }
+      );
+
     }
   }
 
@@ -101,30 +125,15 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
         <>
           <TouchableOpacity onPress={viewEvent} activeOpacity={0.7}>
               <View style={styles.card}>
-                <Image style={styles.eventImage} source={{uri: event.imageURL}}></Image>
+                <View>
+                  <Image style={styles.eventImage} source={{uri: event.imageURL}}></Image>
+                </View>
+
                 <View style={styles.cardContent}>
                     <View style={styles.leftCol}>
                       <Text style={styles.eventName}>{event.eventName}</Text>
                       <Text style={styles.eventDate}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
-
-                      <View style={{flexDirection: 'row', marginTop: 5, marginBottom: 5, marginLeft: -11}}>
-                        <TouchableOpacity style={styles.registerBtn} onPress={() => setModalVisible(true)}>
-                          <View style={{flexDirection: 'row'}}>
-                            <FontAwesome5 style={styles.btnIcon} name="edit"></FontAwesome5>
-                            <Text style={styles.btnText}>Register Guests</Text>
-                          </View>
-                        </TouchableOpacity>
-                        {guests.length > 0 ? (
-                          <TouchableOpacity style={[styles.registerBtn, { marginLeft: 8, width: 125 }]} onPress={() => setGuestListVisible(true)}>
-                              <View style={{flexDirection: 'row'}}>
-                                <FontAwesome5 style={[styles.btnIcon, { top: 5, color: '#1A7DB0'}]} name="receipt"></FontAwesome5>
-                                <Text style={[styles.btnText, {left: 19, color: '#1A7DB0'}]}>View Guest List</Text>
-                              </View>
-                          </TouchableOpacity>
-                        ) : <></>}
-                      </View>
                     </View>
-
 
                     <View style={styles.rightCol}>
                       <View style={styles.btnContainer}>
@@ -140,6 +149,29 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
                           </TouchableOpacity>
                       </View>
                     </View>
+
+                    {isCurrentEvent ? (
+                      <View style={styles.buttonContainer}>
+                        <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.eventButton}>
+                          <FontAwesome5 style={styles.btnIcon} name="user-plus" />
+                          <Text style={styles.btnText}>Register Guests</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => setGuestListVisible(true)} style={styles.eventButton}>
+                          <FontAwesome5 style={styles.btnIcon} name="clipboard-list" />
+                          <Text style={styles.btnText}>Guest List</Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : (
+                      <></>
+                    )}
+                    {isPastEvent ? (
+                      <View style={styles.buttonContainer}>
+                        <TouchableOpacity onPress={() => setGuestListVisible(true)} style={styles.eventButton}>
+                          <FontAwesome5 style={styles.btnIcon} name="clipboard-list" />
+                          <Text style={styles.btnText}>Guest List</Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : <></>}
                 </View>
               </View>
           </TouchableOpacity>
@@ -155,11 +187,7 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
             event={event}
           />
 
-          <ErrorModal
-            modalVisible={errorModalVisible}
-            setModalVisible={setErrorModalVisible}
-            errorMessage={errorMessage}
-          />
+
         </>
     )
   } else if (view === "Promoter") {
@@ -167,7 +195,7 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
         <TouchableOpacity onPress={viewEvent} activeOpacity={0.8}>
             <View style={styles.card}>
               <Image style={styles.eventImage} source={{uri: event.imageURL}}></Image>
-              <View style={styles.cardContent}>
+              <View style={[styles.cardContent, {marginBottom: 0}]}>
                   <View style={styles.leftCol}>
                     <Text style={[styles.eventName, {fontSize: 20}]}>{event.eventName}</Text>
                     <Text style={[styles.eventName, {fontSize: 15, marginTop: 0}]}>{event.venueName}</Text>
@@ -184,7 +212,11 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
                           </View>
                         </TouchableOpacity>
                     </View>
+                    <View style={styles.promoterFeesContainer}>
+                      <Text style={styles.promoterFees}>{event.promoterFees} MMK / head</Text>
+                    </View>
                   </View>
+
               </View>
             </View>
         </TouchableOpacity>
@@ -214,6 +246,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
+    marginBottom: 10,
     justifyContent: 'space-between',
   },
   leftCol: {
@@ -246,6 +279,7 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     flexDirection: 'row',
+    alignSelf: 'flex-end',
     top: -4
   },
   circularBtn: {
@@ -259,33 +293,59 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     top: 10
   },
-  registerBtn: {
-    width: 120,
-    height: 40,
-    marginRight: 7
-  },
-  btnText: {
-    fontFamily: 'Avenir',
-    alignSelf: 'flex-start',
-    fontSize: 15,
-    top: 7,
-    left: 16,
-    fontWeight: '300',
-    color: '#069A91'
-  },
   cardIcon: {
     alignSelf: 'center',
     fontSize: 20,
     marginTop: 10,
     color: '#1AB0A8'
   },
-  btnIcon: {
-    alignSelf: 'flex-end',
-    fontSize: 16,
-    color: '#069A91',
-    top: 4,
-    left: 12
+  promoterFeesContainer: {
+    marginTop: 19,
+    marginRight: 16
   },
+  promoterFees: {
+    fontFamily: 'Avenir',
+    fontWeight: '400',
+    fontSize: 13,
+    color: '#535353'
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    marginTop: 15,
+    left: 15
+  },
+  eventButton: {
+    flexDirection: 'row',
+    borderColor: '#1AB0A8',
+    borderWidth: 1,
+    backgroundColor: 'white',
+    shadowColor: "#000",
+    shadowOffset: {
+    	width: 0,
+    	height: 1,
+    },
+    shadowOpacity: 0.10,
+    shadowRadius: 2.22,
+    elevation: 3,
+    borderRadius: 25,
+    padding: 12,
+    marginRight: 10,
+  },
+  btnIcon: {
+    marginLeft: 3,
+    fontSize: 14,
+    top: 1,
+    color: '#1AB0A8',
+  },
+  btnText: {
+    fontSize: 13,
+    color: '#1AB0A8',
+    marginLeft: 8,
+    fontFamily: 'Avenir',
+    marginRight: 2
+  },
+
 })
 
 export default EventCard;

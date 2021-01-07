@@ -46,6 +46,34 @@ const VenuePromotersHome = () => {
 
   const navigation = useNavigation();
 
+  const clearFilters = () => {
+    setPrice({
+      active: false,
+      displayValue: 5000,
+      filterValue: 5000
+    });
+    setAvailability({
+        active: false,
+        displayValue: 3,
+        filterValue: 3
+    });
+    setInfluenceBadge({
+      active: false,
+      displayValue: [],
+      filterValue: []
+    });
+    setLanguages({
+      active: false,
+      displayValue: [],
+      filterValue: []
+    });
+    setClients({
+      active: false,
+      displayValue: 0,
+      filterValue: 0
+    });
+  }
+
   useEffect(() => {
       fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
         setPromoterData(data);
@@ -114,6 +142,7 @@ const VenuePromotersHome = () => {
                     influenceBadge={influenceBadge} setInfluenceBadge={setInfluenceBadge}
                     languages={languages} setLanguages={setLanguages}
                     clients={clients} setClients={setClients}
+                    clearFilters={clearFilters}
                   />
 
                   <FlatList horizontal
@@ -169,7 +198,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     fontSize: 16
-  },
+  }
 })
 
 export default VenuePromotersHome;

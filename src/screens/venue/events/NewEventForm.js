@@ -5,10 +5,12 @@ import { PulseIndicator, UIActivityIndicator } from 'react-native-indicators';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { View, Image, ScrollView, Text, StyleSheet, TextInput, Picker, TouchableOpacity,
 KeyboardAvoidingView } from 'react-native';
+
 import { getData } from '../../../utils/localStorage';
 import * as ImagePicker from 'expo-image-picker';
 
 import { FAB } from 'react-native-paper';
+import { TextInput as Input }  from 'react-native-paper';
 import env from '../../../utils/environment';
 
 const VenueNewEventForm = ({ route }) => {
@@ -28,6 +30,8 @@ const VenueNewEventForm = ({ route }) => {
   const [image, setImage] = useState(event ? {uri: event.imageURL} : null);
   const [description, setDescription] = useState(event ? event.description : "");
   const [promotion, setPromotion] = useState(event ? event.promotion : "");
+  const [condition, setCondition] = useState(event ? event.promotionCondition.condition : "None");
+  const [conditionAmount, setConditionAmount] = useState(event ? event.promotionCondition.amount : "None");
   const [fees, setFees] = useState(event ? (event.promoterFees + event.serviceFees).toString() : "");
   const [date, setDate] = useState(event ? event.date : new Date());
 
@@ -54,6 +58,10 @@ const VenueNewEventForm = ({ route }) => {
           eventName: eventName.trim(),
           category,
           description,
+          promotionCondition: {
+            condition,
+            amount: conditionAmount
+          },
           image,
           promotion,
           fees,
@@ -121,7 +129,6 @@ const VenueNewEventForm = ({ route }) => {
                   <Picker.Item label="Ladies Night" value="Ladies Night" />
                   <Picker.Item label="Couples Event" value="Couples Event" />
                   <Picker.Item label="Holiday Special" value="Holiday Special" />
-
                 </Picker>
               </View>
 
@@ -139,7 +146,6 @@ const VenueNewEventForm = ({ route }) => {
                 <DateTimePicker
                   style={styles.dateSelector}
                   mode="datetime"
-                  testID="dateTimePicker"
                   value={new Date(date)}
                   onChange={(event, val) => setDate(val)}
                   minimumDate={new Date()}
@@ -160,6 +166,7 @@ const VenueNewEventForm = ({ route }) => {
                 <FAB
                   icon="image"
                   label="Upload Image"
+                
                   style={styles.cameraButton}
                   onPress={pickImage}
                 />
@@ -167,15 +174,52 @@ const VenueNewEventForm = ({ route }) => {
 
 
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>Promotion</Text>
-                <Text style={styles.comment}>A promotion for customers eg. Free shot on entry, Buy 1 bottle get 1 bottle free.
-                  This helps attract customers
-                </Text>
+                <Text style={styles.label}>Promotion (Optional)</Text>
+                <Text style={styles.comment}>A promotion to attract customers eg. Free shot on entry, Buy 1 bottle get 1 bottle free</Text>
                 <TextInput
                   onChangeText={(val) => setPromotion(val)}
                   value={promotion}
                   style={styles.input} autoCapitalize="sentences" />
               </View>
+
+              {promotion ? (<View style={styles.inputContainer}>
+                <Text style={styles.label}>Promotion Condition</Text>
+                <Text style={styles.comment}>Promotion only applies if this condition is met</Text>
+
+                <View style={{flexDirection: 'row'}}>
+                  <Picker
+                    selectedValue={condition}
+                    mode="dropdown"
+                    onValueChange={(val) => {
+                      setCondition(val);
+                      setConditionAmount("");
+                    }}
+                    itemStyle={{fontSize: 18}}
+                    style={[styles.selectInput, {marginTop: condition === 'None' ? -70 : -40, marginBottom: -30, width: condition === 'None' ? '95%' : '50%'}]}>
+                    <Picker.Item label="None" value="None" />
+                    <Picker.Item label="Amount Spent" value="Amount Spent" />
+                    <Picker.Item label="Party Size" value="Party Size" />
+                  </Picker>
+                  {condition !== 'None' ? (
+                    <>
+                      <Text style={{fontFamily: 'Avenir', fontSize: 15, marginTop: 49, width: '9%', marginLeft: 5}}>is at least</Text>
+
+                      <View style={{width: condition === 'Amount Spent' ? '18%' : '11%', marginTop: 41, marginLeft: 12}}>
+                        <Input
+                          theme={{colors: {primary: '#19C2BD', underlineColor: 'transparent'}}}
+                          placeholder={condition === "Amount Spent" ? "5000" : "4"}
+                          value={conditionAmount}
+                          onChangeText={(val) => setConditionAmount(val)}
+                          keyboardType="numeric"
+                          mode="outlined" style={styles.conditionInput}></Input>
+                      </View>
+
+                      <Text style={{fontFamily: 'Avenir', fontSize: 15, marginTop: 60, marginLeft: 10}}>{condition === "Amount Spent" ? "MMK" : "guests"}</Text>
+                    </>
+                  ) : <></>}
+                </View>
+
+              </View>) : <></>}
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Promoter Fees</Text>
                 <Text style={styles.comment}>The per head fee promoters will get for bringing guests to your event. This incentivizes promoters to share your event with their network</Text>
@@ -259,7 +303,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     margin: 8,
-    marginBottom: 15
+    marginBottom: 20
   },
   selectInput: {
     width: '95%',
@@ -309,7 +353,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     marginLeft: 40,
-    marginTop: 10,
+    marginTop: 0,
     marginBottom: 50,
     width: '90%'
   },
@@ -317,8 +361,9 @@ const styles = StyleSheet.create({
     height: 50,
     width: '44%',
     shadowOpacity: 0.11,
-    backgroundColor: '#22D2C9',
-    borderColor: '#22D2C9',
+    backgroundColor: '#1AB0A8',
+    borderColor: '#1AB0A8',
+    shadowOpacity: 0.1,
     borderWidth: 1,
     marginTop: 15,
     alignSelf: 'center',
@@ -332,6 +377,10 @@ const styles = StyleSheet.create({
     marginLeft: -20,
     color: 'white',
     fontWeight: '500'
+  },
+  conditionInput: {
+    height: 40,
+    backgroundColor: 'white'
   },
   check: {
     color: 'white',

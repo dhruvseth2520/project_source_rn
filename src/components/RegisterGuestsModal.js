@@ -31,48 +31,43 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
 
   const handleSubmit = () => {
     setErrorMessage("");
-    const difference = Math.floor((new Date(event.date) - new Date()) / 86400000);
 
-    if (difference >= 1) {
-      setErrorMessage("This event doesn't occur for another " + difference + " day(s)");
-    } else {
-      for (let i = 0; i < promoters.length; i++) {
-        let promoter = promoters[i];
-        let promoterName = promoter.firstName + " " + promoter.lastName[0] + ". (" + promoter.promoterCode + ")";
-        if (promoterName.toLowerCase() === query.toLowerCase()) {
-            getData('@venueFormData').then(response => {
-              const attendance = {
-                venueId: response._id,
-                venueName: response.venueName,
-                promoterId: promoter._id,
-                promoterName,
-                promoterAvatar: promoter.promoterProfile.images[0],
-                eventId: event._id,
-                eventName: event.eventName,
-                guestCount: count,
-                amount: (event.serviceFees + event.promoterFees) * count
+    for (let i = 0; i < promoters.length; i++) {
+      let promoter = promoters[i];
+      let promoterName = promoter.firstName + " " + promoter.lastName[0] + ". (" + promoter.promoterCode + ")";
+      if (promoterName.toLowerCase() === query.toLowerCase()) {
+          getData('@venueFormData').then(response => {
+            const attendance = {
+              venueId: response._id,
+              venueName: response.venueName,
+              promoterId: promoter._id,
+              promoterName,
+              promoterAvatar: promoter.promoterProfile.images[0],
+              eventId: event._id,
+              eventName: event.eventName,
+              guestCount: count,
+              amount: (event.serviceFees + event.promoterFees) * count
+            }
+
+            fetch(`${env.API_URL}/api/events/attendance`, {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(attendance)
+            }).then(response => response.json()).then(data => {
+              if (data.status === "Success") {
+                setQuery("");
+                setCount(1);
+                setModalVisible(!modalVisible);
               }
-
-              fetch(`${env.API_URL}/api/events/attendance`, {
-                  method: "POST",
-                  mode: "cors",
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify(attendance)
-              }).then(response => response.json()).then(data => {
-                if (data.status === "Success") {
-                  setQuery("");
-                  setCount(1);
-                  setModalVisible(!modalVisible);
-                }
-              })
             })
-            return null;
-        }
+          })
+          return null;
       }
-      setErrorMessage("Promoter not found");
     }
+    setErrorMessage("Promoter not found");
   }
 
   return (

@@ -38,7 +38,7 @@ const VenuePromoterProfile = ({ route }) => {
       break;
     case "Influencer":
       imageURL = 'https://digitalprworld.com/wp-content/uploads/2017/11/influencer-marketing-package.jpg';
-      content = "The Influencer has an established and an avid following on social media. They have the reach and influence to get hordes of people excited about your events and through your front door";
+      content = "The Influencer has an established and an avid following on social media. They have the reach and influence to get hoards of people excited about your events and through your front door";
       imageWidth = 200; imageHeight = 100;
       break;
   }
@@ -94,8 +94,8 @@ const VenuePromoterProfile = ({ route }) => {
         <Text style={{fontFamily: 'Avenir', fontSize: 15, color: 'white', marginTop: -5}}>Influence Badge</Text>
         <View style={{flexDirection: 'row'}}>
           <Text style={styles.badgeTitle}>{promoterProfile.influence}</Text>
-          <TouchableOpacity onPress={() => setModalVisible(true)} style={{borderWidth: 1, height: 21, width: 21, borderRadius: 11, borderColor: 'white', marginTop: 9, marginLeft: 7}}>
-            <FontAwesome5 name="info" style={{color: 'white', alignSelf: 'center', fontSize: 10, top: 3}}></FontAwesome5>
+          <TouchableOpacity onPress={() => setModalVisible(true)} style={{height: 20, width: 20, marginTop: 7, marginLeft: 7}}>
+            <FontAwesome5 name="info-circle" style={{color: 'white', alignSelf: 'center', fontSize: 19, top: 3}}></FontAwesome5>
           </TouchableOpacity>
         </View>
 
