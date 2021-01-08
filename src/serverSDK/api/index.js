@@ -10,7 +10,7 @@ export * from './register'
 export const getPromoterDetails = async (accessToken) => {
     return fetch(`${env.API_URL}/apx/promoter`,
         { headers: DefaultHeaders(accessToken) }
-    )
+    ).then(response => response.json())
 }
 
 /**
@@ -20,7 +20,7 @@ export const getPromoterDetails = async (accessToken) => {
 export const getVenueDetails = async (accessToken) => {
     return fetch(`${env.API_URL}/apx/venue`,
         { headers: DefaultHeaders(accessToken) }
-    )
+    ).then(response => response.json())
 }
 
 /**
@@ -30,7 +30,7 @@ export const getVenueDetails = async (accessToken) => {
 export const getPromoters = async (accessToken) => {
     return fetch(`${env.API_URL}/apx/promoters`,
         { headers: DefaultHeaders(accessToken) }
-    )
+    ).then(response => response.json())
 }
 
 /**
@@ -46,7 +46,7 @@ export const saveUnsaveEvent = async (accessToken, eventId) => {
             mode: 'cors',
             body: JSON.stringify({ eventId: eventId })
         }
-    )
+    ).then(response => response.json())
 }
 
 /**
@@ -59,5 +59,5 @@ export const getSavedEventList = async (accessToken) => {
             headers: DefaultHeaders(accessToken),
             method: 'GET',
         }
-    )
+    ).then(response => response.json())
 }

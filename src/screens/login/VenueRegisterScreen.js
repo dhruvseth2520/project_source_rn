@@ -35,8 +35,8 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
       }
    };
 
-   // NOTE: JWT (done)
-   const handleSubmitJWT = async () => {
+   // NOTE: JWTx (done)
+   const handleSubmitX = async () => {
     const formData = {
         venueName,
         venueCategory: category,
@@ -77,6 +77,7 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
     }
   }
 
+  // NOTE: deprecation JWTy
   const handleSubmit = () => {
     const formData = {
         venueName,

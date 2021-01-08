@@ -12,7 +12,7 @@ export const createEvent = async (accessToken, eventData) => {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify(eventData)
-    })
+    }).then(response => response.json())
 }
 
 /**
@@ -26,7 +26,7 @@ export const updateEvent = async (accessToken, eventData) => {
         method: 'PUT',
         mode: 'cors',
         body: JSON.stringify(eventData)
-    })
+    }).then(response => response.json())
 }
 
 /**
@@ -36,7 +36,7 @@ export const updateEvent = async (accessToken, eventData) => {
 export const getAllEvents = async (accessToken) => {
     return fetch(`${env.API_URL}/apx/events`, {
         headers: DefaultHeaders(accessToken),
-    })
+    }).then(response => response.json())
 }
 
 /**
@@ -47,20 +47,14 @@ export const getAllEvents = async (accessToken) => {
 export const getEvent = async (accessToken, eventId) => {
     return fetch(`${env.API_URL}/apx/events/${eventId}`, {
         headers: DefaultHeaders(accessToken),
-    })
+    }).then(response => response.json())
 }
 
 /**
-<<<<<<< HEAD
- * Returns all events from a Venue using it's venueId
- * @param {String} accessToken
- * @param {String} venueId
-=======
  * Returns all events from a Venue using it's accessToken
  * @param {String} accessToken
->>>>>>> 0efc15f7efc28202bd2f6ab513a6ae3f66526d56
  */
-export const getEventfromVenueId = async (accessToken) => {
+export const getEventfromAccessToken = async (accessToken) => {
     return fetch(`${env.API_URL}/apx/events/venue`, {
         headers: DefaultHeaders(accessToken),
     }).then(response => response.json())
@@ -77,7 +71,7 @@ export const deleteEvent = async (accessToken, eventId) => {
         method: 'DELETE',
         mode: 'cors',
         body: JSON.stringify({ eventId: eventId })
-    })
+    }).then(response => response.json())
 }
 
 /**
@@ -91,7 +85,7 @@ export const registerAttendance = async (accessToken, attendanceData) => {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify({ attendanceData })
-    })
+    }).then(response => response.json())
 }
 
 /**
@@ -102,7 +96,7 @@ export const registerAttendance = async (accessToken, attendanceData) => {
 export const getAttendanceFromEventId = async (accessToken, eventId) => {
     return fetch(`${env.API_URL}/apx/events/attendance/${eventId}`, {
         headers: DefaultHeaders(accessToken)
-    })
+    }).then(response => response.json())
 }
 
 /**
@@ -112,5 +106,5 @@ export const getAttendanceFromEventId = async (accessToken, eventId) => {
 export const getAttendanceForVenueFromAccessToken = async (accessToken) => {
     return fetch(`${env.API_URL}/apx/events/attendance/venue`, {
         headers: DefaultHeaders(accessToken)
-    })
+    }).then(response => response.json())
 }

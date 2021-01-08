@@ -48,8 +48,8 @@ const PromoterProfileSetup = ({ route }) => {
   const dot = <View style={{ backgroundColor: 'rgba(0,0,0,.2)', width: 6, height: 6, borderRadius: 3, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3 }} />;
   const activeDot = <View style={{ backgroundColor: '#007aff', width: 6, height: 6, borderRadius: 3, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3 }} />;
 
-  // NOTE: JWT (done)
-  const handleSubmitJWT = async () => {
+  // NOTE: JWTx (done)
+  const handleSubmitX = async () => {
     setLoading(true);
     const profileData = {
       images,
@@ -82,6 +82,7 @@ const PromoterProfileSetup = ({ route }) => {
     }
   }
 
+  // NOTE: deprecation JWTy
   const handleSubmit = () => {
     setLoading(true);
     const profileData = {
