@@ -6,8 +6,8 @@ import { storeData, removeData, getData } from '../../utils/localStorage';
 import env from "../../utils/environment";
 import { FAB } from 'react-native-paper';
 
-import { authLogin } from 'project_source_rn/src/serverSDK/auth'
-import { getPromoterDetails, getVenueDetails } from 'project_source_rn/src/serverSDK/api'
+import { authLogin } from '../../serverSDK/auth'
+import { getPromoterDetails, getVenueDetails } from '../../serverSDK/api'
 
 
 const LoginScreen = ({ navigation }) => {
@@ -52,12 +52,12 @@ const LoginScreen = ({ navigation }) => {
   }
 
   // NOTE: JWTd (done)
-  const handleLogin = async (callback) => {
+  const handleLogin = async (callback, loginService) => {
     try {
       const callbackResponse = await callback()
       if (callbackResponse.cancelled) return
 
-      const loginApiResponse = await authLogin(callbackResponse.id)
+      const loginApiResponse = await authLogin(callbackResponse.id, loginService)
 
       var user = loginApiResponse.user;
       storeData('@accessToken', loginApiResponse.accessToken);
@@ -110,14 +110,14 @@ const LoginScreen = ({ navigation }) => {
                     style={styles.loginButton}
                     icon="google"
                     label="Sign In with Google"
-                    onPress={() => handleLogin(signInWithGoogleAsync)}
+                    onPress={() => handleLogin(signInWithGoogleAsync, "Google")}
                     color="white"
                   />
                   <FAB
                     style={styles.loginButton}
                     icon="facebook"
                     label="Sign In with Facebook"
-                    onPress={() => handleLogin(signInWithFacebookAsync)}
+                    onPress={() => handleLogin(signInWithFacebookAsync, "Facebook")}
                     color="white"
                   />
                 </View>
