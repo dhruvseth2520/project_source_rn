@@ -74,11 +74,37 @@ const PromoterProfileSetup = ({ route }) => {
     fontSize = 14;
   }
 
+<<<<<<< HEAD
+=======
+  const dot = <View style={{ backgroundColor: 'rgba(0,0,0,.2)', width: 6, height: 6, borderRadius: 3, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3 }} />;
+  const activeDot = <View style={{ backgroundColor: '#007aff', width: 6, height: 6, borderRadius: 3, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3 }} />;
+
+  // NOTE: JWTx (done)
+  const handleSubmitX = async () => {
+    setLoading(true);
+    const profileData = {
+      images,
+      bio,
+      occupation,
+      education,
+      languages,
+      hobbies,
+      favoriteDrink: drink,
+      numConnections: connections,
+      socialMediaURLs,
+      availability,
+      expectedRate: rate
+    }
+
+    const accessToken = await getData('@accessToken')
+    const promoterData = { ...formData, ...profileData };
+>>>>>>> 1a8e029bbb98fe1ef50686169827721f024b1c8a
 
 
   const dot = <View style={{backgroundColor:'rgba(0,0,0,.2)', width: 6, height: 6,borderRadius: 3, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />;
   const activeDot = <View style={{backgroundColor: '#007aff', width: 6, height: 6, borderRadius: 3, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3}} />;
 
+  // NOTE: deprecation JWTy
   const handleSubmit = () => {
     setLoading(true);
     const profileData = {
@@ -166,6 +192,7 @@ const PromoterProfileSetup = ({ route }) => {
                       <Text style={styles.loadingText}>Please wait a moment while we finish setting up your profile</Text>
                       <ActivityIndicator size="large" color="#1AA2B0" style={{top: 30}}></ActivityIndicator>
                     </View>
+<<<<<<< HEAD
                   ) : (<>
                         <Text style={styles.title}>Finish setting up your profile</Text>
                               <Swiper loop={false} paginationStyle={{marginBottom: 50}} dot={dot} activeDot={activeDot}>
@@ -374,6 +401,118 @@ const PromoterProfileSetup = ({ route }) => {
                                       <Text style={styles.sectionTitle}>Almost there!</Text>
                                       <Text style={styles.disclaimer}>
                                         By tapping Finish below, you confirm that all the information provided is accurate and allow Source to share your profile with Venues in your area.
+=======
+                  </ScrollView>
+                </KeyboardAvoidingView>
+
+                <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column', justifyContent: 'center' }} behavior="padding" enabled keyboardVerticalOffset={120}>
+                  <ScrollView>
+                    <View style={styles.slide}>
+                      <View style={styles.formCard}>
+                        <Text style={styles.sectionTitle}>Social Media (Optional)</Text>
+                        <Text style={[styles.sectionDescription, { fontSize: fontSize }]}>All promoters on our platform are given a badge based on their level of influence when they register</Text>
+
+                        <View style={styles.badgeContainer}>
+                          <Chip selected style={styles.badge} textStyle={{ fontFamily: 'Avenir', fontSize: chipFontSize }} avatar={<Avatar.Image size={24} source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbn2m0-XcAwPXkBNWZtO3-hr5vAAQqknKCxg&usqp=CAU' }} />}>Loyalist</Chip>
+                          <Chip style={styles.badge} textStyle={{ fontFamily: 'Avenir', fontSize: chipFontSize }} avatar={<Avatar.Image size={24} source={{ uri: 'https://i.pinimg.com/736x/fe/43/e0/fe43e01f8b4603eada483bf7c8523de1.jpg' }} />}>Advocate</Chip>
+                          <Chip style={styles.badge} textStyle={{ fontFamily: 'Avenir', fontSize: chipFontSize }} avatar={<Avatar.Image size={24} source={{ uri: 'https://image.freepik.com/free-vector/influencer-concept-illustration_114360-681.jpg' }} />}>Influencer</Chip>
+                        </View>
+
+                        <Text style={[styles.sectionDescription, { marginTop: 20, fontSize: fontSize }]}>The default badge for all promoters is the Loyalist. If you would like to be considered for another badge please provide any of your social media handles below so we can evaluate whether you are eligible</Text>
+
+                        {isSmall ? (
+                          <View style={{ flexDirection: 'row', marginTop: -20 }}>
+                            <TextInput mode='outlined'
+                              label='Facebook URL'
+                              theme={{ colors: { primary: '#3b5998', underlineColor: 'transparent' } }}
+                              autoCapitalize="none"
+                              autoCorrect={false}
+                              selectionColor="#3b5998"
+                              style={[styles.formInput, { width: '50%', marginLeft: -5, marginRight: 5 }]}
+                              value={socialMediaURLs.facebookURL} onChangeText={(val) => setSocialMediaURLs({ ...socialMediaURLs, facebookURL: val })} />
+                            <TextInput mode='outlined'
+                              label='Instagram Handle'
+                              theme={{ colors: { primary: '#E1306C', underlineColor: 'transparent' } }}
+                              selectionColor="#E1306C"
+                              autoCapitalize="none"
+                              autoCorrect={false}
+                              style={[styles.formInput, { width: '50%', marginLeft: -5 }]}
+                              value={socialMediaURLs.instagramHandle} onChangeText={(val) => setSocialMediaURLs({ ...socialMediaURLs, instagramHandle: val })} />
+                          </View>
+                        ) : (
+                            <View style={{ marginTop: -15 }}>
+                              <View style={{ flexDirection: 'row' }}>
+                                <TextInput mode='outlined'
+                                  label='Facebook URL'
+                                  theme={{ colors: { primary: '#3b5998', underlineColor: 'transparent' } }}
+                                  selectionColor="#3b5998"
+                                  autoCapitalize="none"
+                                  autoCorrect={false}
+                                  style={[styles.formInput, { width: '49%', marginLeft: -5, marginBottom: -5 }]}
+                                  value={socialMediaURLs.facebookURL} onChangeText={(val) => setSocialMediaURLs({ ...socialMediaURLs, facebookURL: val })} />
+                                <TextInput mode='outlined'
+                                  label='@ Instagram Handle'
+                                  theme={{ colors: { primary: '#E1306C', underlineColor: 'transparent' } }}
+                                  autoCapitalize="none"
+                                  autoCorrect={false}
+                                  selectionColor="#E1306C"
+                                  style={[styles.formInput, { width: '49%', marginLeft: 0, marginBottom: -5 }]}
+                                  value={socialMediaURLs.instagramHandle} onChangeText={(val) => setSocialMediaURLs({ ...socialMediaURLs, instagramHandle: val })} />
+                              </View>
+
+                              <View style={{ flexDirection: 'row' }}>
+                                <TextInput mode='outlined'
+                                  label='@ Twitter Handle'
+                                  theme={{ colors: { primary: '#1DA1F2', underlineColor: 'transparent' } }}
+                                  autoCapitalize="none"
+                                  autoCorrect={false}
+                                  selectionColor="#1DA1F2"
+                                  style={[styles.formInput, { width: '49%', marginLeft: -5, marginBottom: -5 }]}
+                                  value={socialMediaURLs.twitterHandle} onChangeText={(val) => setSocialMediaURLs({ ...socialMediaURLs, twitterHandle: val })} />
+                                <TextInput mode='outlined'
+                                  label='Youtube URL'
+                                  theme={{ colors: { primary: '#FF0000', underlineColor: 'transparent' } }}
+                                  autoCapitalize="none"
+                                  autoCorrect={false}
+                                  selectionColor="#FF0000"
+                                  style={[styles.formInput, { width: '49%', marginLeft: 0, marginBottom: -5 }]}
+                                  value={socialMediaURLs.youtubeURL} onChangeText={(val) => setSocialMediaURLs({ ...socialMediaURLs, youtubeURL: val })} />
+                              </View>
+                            </View>
+                          )}
+                        <Text style={[styles.socialDisclaimer, { fontSize: fontSize, marginTop: (isSmall ? 10 : 20) }]}>Don't fret, this part is totally optional and will not affect your standing on our platform</Text>
+                      </View>
+                    </View>
+                  </ScrollView>
+                </KeyboardAvoidingView>
+
+                <View style={styles.slide}>
+                  <View style={styles.formCard}>
+                    <Text style={styles.sectionTitle}>Preferences</Text>
+
+                    <TextInput mode='outlined'
+                      label='Weekly Availability (hours per week)'
+                      theme={{ colors: { primary: '#19C2BD', underlineColor: 'transparent' } }}
+                      selectionColor="#1AA2B0"
+                      keyboardType="numeric"
+                      style={styles.formInput}
+                      value={availability} onChangeText={(val) => setAvailability(val)} />
+
+                    <TextInput mode='outlined'
+                      label='Expected Rate (MMK per head)'
+                      theme={{ colors: { primary: '#19C2BD', underlineColor: 'transparent' } }}
+                      selectionColor="#1AA2B0"
+                      keyboardType="numeric"
+                      style={styles.formInput}
+                      value={rate} onChangeText={(val) => setRate(val)} />
+                  </View>
+                </View>
+                <View style={styles.slide}>
+                  <View style={styles.formCard}>
+                    <Text style={styles.sectionTitle}>Almost there!</Text>
+                    <Text style={styles.disclaimer}>
+                      By tapping Finish below, you confirm that all the information provided is accurate and allow Source to share your profile with Venues in your area.
+>>>>>>> 1a8e029bbb98fe1ef50686169827721f024b1c8a
                                       </Text>
                                       <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
                                         <Text style={{alignSelf: 'center', fontSize: 15, color: 'white', fontFamily: 'Helvetica Neue', fontWeight: '400'}}>Finish</Text>

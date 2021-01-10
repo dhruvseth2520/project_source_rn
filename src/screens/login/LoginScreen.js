@@ -51,8 +51,8 @@ const LoginScreen = ({ navigation }) => {
     }
   }
 
-  // NOTE: JWT (done)
-  const handleLoginJWT = async (callback) => {
+  // NOTE: JWTx (done)
+  const handleLoginX = async (callback) => {
     try {
       const callbackResponse = await callback()
       if (callbackResponse.cancelled) return
@@ -88,6 +88,7 @@ const LoginScreen = ({ navigation }) => {
     }
   }
 
+  // NOTE: deprecation JWTy
   const handleLogin = (callback) => {
     callback().then(response => {
       if (!response.cancelled) {

@@ -14,6 +14,7 @@ import env from "../../../utils/environment";
 import { getData } from "../../../utils/localStorage";
 import Jumbotron from "../../../components/Jumbotron";
 import { FAB } from 'react-native-paper';
+import { getEventfromAccessToken } from '../../../serverSDK/api/event';
 
 
 const VenueEventsScreen = () => {
@@ -32,16 +33,17 @@ const VenueEventsScreen = () => {
   }, [])
 
   const sortByDate = (arr) => {
-    return arr.sort(function(a, b) {
-                        var keyA = new Date(a.date);
-                        var keyB = new Date(b.date);
-                        // Compare the 2 dates
-                        if (keyA < keyB) return -1;
-                        if (keyA > keyB) return 1;
-                        return 0;
-                    });
+    return arr.sort(function (a, b) {
+      var keyA = new Date(a.date);
+      var keyB = new Date(b.date);
+      // Compare the 2 dates
+      if (keyA < keyB) return -1;
+      if (keyA > keyB) return 1;
+      return 0;
+    });
   }
 
+  // NOTE: deprecation JWTy
   const fetchData = () => {
     getData('@venueFormData').then(response => {
       fetch(`${env.API_URL}/api/events/venue/${response._id}`).then(response => response.json()).then(data => {
@@ -61,6 +63,28 @@ const VenueEventsScreen = () => {
         setLoading(false);
       })
     })
+  }
+
+  // NOTE: JWTx (done)
+  const fetchDataX = async () => {
+    const accessToken = await getData('@accessToken')
+
+    const response = await getEventfromAccessToken(accessToken)
+
+    const currentDate = new Date();
+    let upcomingArr = [];
+    let pastArr = [];
+    response.forEach(event => {
+      const difference = (new Date(event.date) - currentDate) / 86400000;
+      if (difference >= -0.5) {
+        upcomingArr.push(event);
+      } else {
+        pastArr.push(event);
+      }
+    })
+    setUpcomingEvents(sortByDate(upcomingArr));
+    setPastEvents(sortByDate(pastArr));
+    setLoading(false);
   }
 
   const handlePress = (btn) => {
@@ -88,30 +112,30 @@ const VenueEventsScreen = () => {
 
       <Text style={styles.subTitle}>Your Events</Text>
       <ScrollView style={styles.eventContainer}>
-        {isLoading ? (<MaterialIndicator size={28} color="#22D2C9" style={{alignSelf: 'center', left: -11, marginTop: 25, marginBottom: 20}}></MaterialIndicator>) : (<>
+        {isLoading ? (<MaterialIndicator size={28} color="#22D2C9" style={{ alignSelf: 'center', left: -11, marginTop: 25, marginBottom: 20 }}></MaterialIndicator>) : (<>
           {upcomingEvents.length === 0 && pastEvents.length === 0
             ? <Text style={{fontFamily: "Avenir", fontWeight: '400', fontSize: 14, marginTop: 5, marginLeft: 3, color: '#5A5A5A'}}>You have no events to show yet. Add your first now!</Text>
             :
             <>
-                <View style={styles.btnContainer}>
-                  <TouchableOpacity style={styles.tabButton} onPress={() => handlePress('Upcoming')}>
-                    <Text style={isUpcoming ? styles.active : styles.btnText}>Upcoming</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.tabButton} onPress={() => handlePress('Past')}>
-                    <Text style={isPast ? styles.active : styles.btnText}>Past</Text>
-                  </TouchableOpacity>
-                </View>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity style={styles.tabButton} onPress={() => handlePress('Upcoming')}>
+                  <Text style={isUpcoming ? styles.active : styles.btnText}>Upcoming</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.tabButton} onPress={() => handlePress('Past')}>
+                  <Text style={isPast ? styles.active : styles.btnText}>Past</Text>
+                </TouchableOpacity>
+              </View>
 
-                {isUpcoming && upcomingEvents.length === 0 ? (
-                  <Text style={{fontFamily: "Avenir", fontWeight: '300', marginTop: 5, marginLeft: 2, color: '#5A5A5A'}}>You have no upcoming events. Add one now!</Text>
-                ) : (
+              {isUpcoming && upcomingEvents.length === 0 ? (
+                <Text style={{ fontFamily: "Avenir", fontWeight: '300', marginTop: 5, marginLeft: 2, color: '#5A5A5A' }}>You have no upcoming events. Add one now!</Text>
+              ) : (
                   <FlatList
-                      showsVerticalScrollIndicator={false}
-                      data={isUpcoming ? upcomingEvents : pastEvents}
-                      keyExtractor={event => event.eventName}
-                      renderItem={({ item }) => {
-                        return <EventCard event={item} refreshEvents={fetchData} view="Venue" />
-                      }}
+                    showsVerticalScrollIndicator={false}
+                    data={isUpcoming ? upcomingEvents : pastEvents}
+                    keyExtractor={event => event.eventName}
+                    renderItem={({ item }) => {
+                      return <EventCard event={item} refreshEvents={fetchData} view="Venue" />
+                    }}
                   ></FlatList>
                 )}
             </>}

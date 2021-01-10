@@ -9,7 +9,7 @@ import { DefaultHeaders } from "project_source_rn/src/utils/api";
 export const getVenueReceivedPayments = async (accessToken) => {
     return fetch(`${env.API_URL}/apx/payments`, {
         headers: DefaultHeaders(accessToken),
-    })
+    }).then(response => response.json())
 }
 
 /**
@@ -23,7 +23,7 @@ export const createPayment = async (accessToken, paymentData) => {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify(paymentData)
-    })
+    }).then(response => response.json())
 }
 
 /**
@@ -33,7 +33,7 @@ export const createPayment = async (accessToken, paymentData) => {
 export const getDuePayments = async (accessToken) => {
     return fetch(`${env.API_URL}/apx/payments/due`, {
         headers: DefaultHeaders(accessToken),
-    })
+    }).then(response => response.json())
 }
 
 
@@ -48,5 +48,5 @@ export const createScheduledCashEmail = async (accessToken, venueData) => {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify(venueData)
-    })
+    }).then(response => response.json())
 }
