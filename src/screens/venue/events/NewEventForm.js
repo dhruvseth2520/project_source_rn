@@ -1,21 +1,18 @@
-import React, { useState } from 'react';
+
+import React, {useState} from 'react';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { PulseIndicator, UIActivityIndicator } from 'react-native-indicators';
 import { FontAwesome5 } from '@expo/vector-icons';
-import {
-  View, Image, ScrollView, Text, StyleSheet, TextInput, Picker, TouchableOpacity,
-  KeyboardAvoidingView
-} from 'react-native';
+import { View, Image, ScrollView, Text, StyleSheet, TextInput, Picker, TouchableOpacity,
+KeyboardAvoidingView } from 'react-native';
 
 import { getData } from '../../../utils/localStorage';
 import * as ImagePicker from 'expo-image-picker';
 
 import { FAB } from 'react-native-paper';
-import { TextInput as Input } from 'react-native-paper';
+import { TextInput as Input }  from 'react-native-paper';
 import env from '../../../utils/environment';
-
-import { createEvent, updateEvent } from '../../../serverSDK/api/event';
 
 const VenueNewEventForm = ({ route }) => {
   const navigation = useNavigation();
@@ -31,7 +28,7 @@ const VenueNewEventForm = ({ route }) => {
 
   const [eventName, setEventName] = useState(event ? event.eventName : "");
   const [category, setCategory] = useState(event ? event.category : "Themed Event");
-  const [image, setImage] = useState(event ? { uri: event.imageURL } : null);
+  const [image, setImage] = useState(event ? {uri: event.imageURL} : null);
   const [description, setDescription] = useState(event ? event.description : "");
   const [promotion, setPromotion] = useState(event ? event.promotion : "");
   const [condition, setCondition] = useState(event ? event.promotionCondition.condition : "None");
@@ -40,162 +37,122 @@ const VenueNewEventForm = ({ route }) => {
   const [date, setDate] = useState(event ? event.date : new Date());
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      base64: true,
-      aspect: [6, 3],
-      quality: 1,
-    });
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        base64: true,
+        aspect: [6, 3],
+        quality: 1,
+      });
 
-    if (!result.cancelled) {
-      setImage(result);
-    }
-  };
+      if (!result.cancelled) {
+        setImage(result);
+      }
+   };
 
-  // NOTE: JWTx (done)
-  const handleSubmitX = async () => {
-    setLoading(true);
-    const venueData = await getData('@venueFormData')
-    const eventForm = {
-      venueId: venueData._id,
-      venueName: venueData.venueName,
-      eventName: eventName.trim(),
-      category,
-      description,
-      promotionCondition: {
-        condition,
-        amount: conditionAmount
-      },
-      image,
-      promotion,
-      fees,
-      date
-    }
-
-    const accessToken = await getData('@accessToken')
-    var response = {}
-    if (action === 'Create Event') {
-      response = await createEvent(accessToken, eventForm)
-    } else if (action === 'Update Event') {
-      eventForm['eventId'] = event._id;
-      response = await updateEvent(accessToken, eventForm)
-    }
-
-    if (response.status === "Success") {
-      navigation.navigate('VenueEventsHome');
-    }
-  }
-
-  // NOTE: deprecation JWTy
   const handleSubmit = () => {
-    setLoading(true);
-    getData('@venueFormData').then(response => {
-      const eventForm = {
-        venueId: response._id,
-        venueName: response.venueName,
-        eventName: eventName.trim(),
-        category,
-        description,
-        promotionCondition: {
-          condition,
-          amount: conditionAmount
-        },
-        image,
-        promotion,
-        fees,
-        date
-      }
-
-      let method = "";
-      if (action === 'Create Event') {
-        method = "POST";
-      } else if (action === 'Update Event') {
-        method = "PUT";
-        eventForm['eventId'] = event._id;
-      }
-
-      fetch(`${env.API_URL}/api/events`, {
-        method: method,
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(eventForm)
-      }).then(response => response.json()).then(data => {
-        if (data.status === "Success") {
-          navigation.navigate('VenueEventsHome');
+      setLoading(true);
+      getData('@venueFormData').then(response => {
+        const eventForm = {
+          venueId: response._id,
+          venueName: response.venueName,
+          eventName: eventName.trim(),
+          category,
+          description,
+          promotionCondition: {
+            condition,
+            amount: conditionAmount
+          },
+          image,
+          promotion,
+          fees,
+          date
         }
+
+        let method = "";
+        if (action === 'Create Event') {
+          method = "POST";
+        } else if (action === 'Update Event') {
+          method = "PUT";
+          eventForm['eventId'] = event._id;
+        }
+
+        fetch(`${env.API_URL}/api/events`, {
+          method: method,
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(eventForm)
+        }).then(response => response.json()).then(data => {
+          if (data.status === "Success") {
+            navigation.navigate('VenueEventsHome');
+          }
+        })
       })
-    })
   }
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-      <ScrollView style={styles.background}>
-        {isLoading ? (
-          <View style={styles.loadingContainer}>
-            <Text style={styles.loadingText}>{action === "Create Event" ? 'Please wait a moment while we finish publishing your event' : 'Please wait a moment while we finish updating your event'}</Text>
-            <PulseIndicator size={36} color="#1AB0A8" style={{ top: 30 }}></PulseIndicator>
-          </View>
-        ) : (<>
-          <View style={styles.header}>
-            <Text style={styles.title}>New Event</Text>
-            <FontAwesome5 name="calendar-alt" style={styles.headerIcon} size={24} />
-          </View>
-          <View style={styles.form}>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Event Name</Text>
-
-              <TextInput style={styles.input}
-                onChangeText={(val) => setEventName(val)}
-                value={eventName}
-                autoCapitalize="words" placeholder="Eg. Wine Wednesday, Tequila Thursday, Game Day"
-              />
+    <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+        <ScrollView style={styles.background}>
+          {isLoading ? (
+            <View style={styles.loadingContainer}>
+              <Text style={styles.loadingText}>{action === "Create Event" ? 'Please wait a moment while we finish publishing your event' : 'Please wait a moment while we finish updating your event'}</Text>
+              <PulseIndicator size={36} color="#1AB0A8" style={{top: 30}}></PulseIndicator>
             </View>
-
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Event Type</Text>
-              <Picker
-                selectedValue={category}
-                mode="dropdown"
-                onValueChange={(val) => setCategory(val)}
-                style={styles.selectInput}>
-                <Picker.Item label="Live Show" value="Live Show" />
-                <Picker.Item label="Night Out" value="Night Out" />
-                <Picker.Item label="Themed Event" value="Themed Event" />
-                <Picker.Item label="Game Day" value="Game Day" />
-                <Picker.Item label="Ladies Night" value="Ladies Night" />
-                <Picker.Item label="Couples Event" value="Couples Event" />
-                <Picker.Item label="Holiday Special" value="Holiday Special" />
-              </Picker>
+          ) : (<>
+            <View style={styles.header}>
+              <Text style={styles.title}>New Event</Text>
+              <FontAwesome5 name="calendar-alt" style={styles.headerIcon} size={24} />
             </View>
+            <View style={styles.form}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Event Name</Text>
 
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Event Description</Text>
-              <TextInput
-                onChangeText={(val) => setDescription(val)}
-                value={description}
-                style={styles.input} autoCapitalize="sentences" />
-            </View>
+                <TextInput style={styles.input}
+                  onChangeText={(val) => setEventName(val)}
+                  value={eventName}
+                  autoCapitalize="words" placeholder="Eg. Wine Wednesday, Tequila Thursday, Game Day"
+                />
+              </View>
 
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Event Date</Text>
-              <Text style={styles.comment}>The date and time of the event</Text>
-              <DateTimePicker
-                style={styles.dateSelector}
-                mode="datetime"
-                value={new Date(date)}
-                onChange={(event, val) => setDate(val)}
-                minimumDate={new Date()}
-              />
-            </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Event Type</Text>
+                <Picker
+                  selectedValue={category}
+                  mode="dropdown"
+                  onValueChange={(val) => setCategory(val)}
+                  style={styles.selectInput}>
+                  <Picker.Item label="Live Show" value="Live Show" />
+                  <Picker.Item label="Night Out" value="Night Out" />
+                  <Picker.Item label="Themed Event" value="Themed Event" />
+                  <Picker.Item label="Game Day" value="Game Day" />
+                  <Picker.Item label="Ladies Night" value="Ladies Night" />
+                  <Picker.Item label="Couples Event" value="Couples Event" />
+                  <Picker.Item label="Holiday Special" value="Holiday Special" />
+                </Picker>
+              </View>
 
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Event Image</Text>
-              <Text style={styles.comment}>Banner or Poster for the event</Text>
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Event Description</Text>
+                <TextInput
+                  onChangeText={(val) => setDescription(val)}
+                  value={description}
+                  style={styles.input} autoCapitalize="sentences"/>
+              </View>
 
-<<<<<<< HEAD
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Event Date</Text>
+                <Text style={styles.comment}>The date and time of the event</Text>
+                <DateTimePicker
+                  style={styles.dateSelector}
+                  mode="datetime"
+                  value={new Date(date)}
+                  onChange={(event, val) => setDate(val)}
+                  minimumDate={new Date()}
+                />
+              </View>
+
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Event Image</Text>
                 <Text style={styles.comment}>Banner or Poster for the event</Text>
@@ -213,25 +170,19 @@ const VenueNewEventForm = ({ route }) => {
                   color="white"
                   style={styles.cameraButton}
                   onPress={pickImage}
-=======
-              {image ? (
-                <Image
-                  source={{ uri: image.uri }}
-                  style={styles.eventImage}
->>>>>>> 1a8e029bbb98fe1ef50686169827721f024b1c8a
                 />
-              ) : (<></>)}
+              </View>
 
-              <FAB
-                icon="image"
-                label="Upload Image"
 
-                style={styles.cameraButton}
-                onPress={pickImage}
-              />
-            </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Promotion (Optional)</Text>
+                <Text style={styles.comment}>A promotion to attract customers eg. Free shot on entry, Buy 1 bottle get 1 bottle free</Text>
+                <TextInput
+                  onChangeText={(val) => setPromotion(val)}
+                  value={promotion}
+                  style={styles.input} autoCapitalize="sentences" />
+              </View>
 
-<<<<<<< HEAD
               {promotion ? (<View style={styles.inputContainer}>
                 <Text style={styles.label}>Promotion Condition</Text>
                 <Text style={styles.comment}>Promotion only applies if this condition is met</Text>
@@ -283,91 +234,27 @@ const VenueNewEventForm = ({ route }) => {
                 </View>
                 <Text style={[styles.comment, {marginTop: 15, color: 'gray'}]}>10% of this fee is a fixed charge for our services. The remaining 90% goes to the promoter</Text>
               </View>
-=======
->>>>>>> 1a8e029bbb98fe1ef50686169827721f024b1c8a
 
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Promotion (Optional)</Text>
-              <Text style={styles.comment}>A promotion to attract customers eg. Free shot on entry, Buy 1 bottle get 1 bottle free</Text>
-              <TextInput
-                onChangeText={(val) => setPromotion(val)}
-                value={promotion}
-                style={styles.input} autoCapitalize="sentences" />
             </View>
 
-            {promotion ? (<View style={styles.inputContainer}>
-              <Text style={styles.label}>Promotion Condition</Text>
-              <Text style={styles.comment}>Promotion only applies if this condition is met</Text>
-
-              <View style={{ flexDirection: 'row' }}>
-                <Picker
-                  selectedValue={condition}
-                  mode="dropdown"
-                  onValueChange={(val) => {
-                    setCondition(val);
-                    setConditionAmount("");
-                  }}
-                  itemStyle={{ fontSize: 18 }}
-                  style={[styles.selectInput, { marginTop: condition === 'None' ? -70 : -40, marginBottom: -30, width: condition === 'None' ? '95%' : '50%' }]}>
-                  <Picker.Item label="None" value="None" />
-                  <Picker.Item label="Amount Spent" value="Amount Spent" />
-                  <Picker.Item label="Party Size" value="Party Size" />
-                </Picker>
-                {condition !== 'None' ? (
-                  <>
-                    <Text style={{ fontFamily: 'Avenir', fontSize: 15, marginTop: 49, width: '9%', marginLeft: 5 }}>is at least</Text>
-
-                    <View style={{ width: condition === 'Amount Spent' ? '18%' : '11%', marginTop: 41, marginLeft: 12 }}>
-                      <Input
-                        theme={{ colors: { primary: '#19C2BD', underlineColor: 'transparent' } }}
-                        placeholder={condition === "Amount Spent" ? "5000" : "4"}
-                        value={conditionAmount}
-                        onChangeText={(val) => setConditionAmount(val)}
-                        keyboardType="numeric"
-                        mode="outlined" style={styles.conditionInput}></Input>
-                    </View>
-
-                    <Text style={{ fontFamily: 'Avenir', fontSize: 15, marginTop: 60, marginLeft: 10 }}>{condition === "Amount Spent" ? "MMK" : "guests"}</Text>
-                  </>
-                ) : <></>}
-              </View>
-
-            </View>) : <></>}
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Promoter Fees</Text>
-              <Text style={styles.comment}>The per head fee promoters will get for bringing guests to your event. This incentivizes promoters to share your event with their network</Text>
-              <View style={{ flexDirection: 'row' }}>
-                <TextInput
-                  onChangeText={(val) => setFees(val)}
-                  value={fees}
-                  style={[styles.input, { width: '60%', color: (action === 'Create Event' ? 'black' : '#727272') }]} autoCapitalize="none" keyboardType="numeric"
-                  editable={action === 'Create Event' ? true : false}
+            <View style={styles.buttonContainer}>
+                <FAB
+                  style={[styles.submitButton, {backgroundColor: '#DFDFDF', borderColor: '#DFDFDF'}]}
+                  label="Cancel"
+                  icon="cancel"
+                  onPress={() => navigation.navigate('VenueEventsHome')}
                 />
-                <TextInput style={[styles.input, { width: '25%', marginLeft: 18 }]} autoCapitalize="none" value="MMK" editable={false} />
-              </View>
-              <Text style={[styles.comment, { marginTop: 15, color: 'gray' }]}>10% of this fee is a fixed charge for our services. The remaining 90% goes to the promoter</Text>
+
+                <FAB
+                  style={styles.submitButton}
+                  label="Submit"
+                  icon="check"
+                  color="white"
+                  onPress={handleSubmit}
+                />
             </View>
-
-          </View>
-
-          <View style={styles.buttonContainer}>
-            <FAB
-              style={[styles.submitButton, { backgroundColor: '#DFDFDF', borderColor: '#DFDFDF' }]}
-              label="Cancel"
-              icon="cancel"
-              onPress={() => navigation.navigate('VenueEventsHome')}
-            />
-
-            <FAB
-              style={styles.submitButton}
-              label="Submit"
-              icon="check"
-              color="white"
-              onPress={handleSubmit}
-            />
-          </View>
-        </>)}
-      </ScrollView>
+          </>)}
+        </ScrollView>
     </KeyboardAvoidingView>
   )
 }
