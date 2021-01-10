@@ -45,6 +45,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
               promoterAvatar: promoter.promoterProfile.images[0],
               eventId: event._id,
               eventName: event.eventName,
+              eventDate: event.date,
               guestCount: count,
               amount: (event.serviceFees + event.promoterFees) * count
             }
@@ -121,7 +122,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
                         </FlatList>
               : <></>}
 
-              <Text style={styles.inputLabel}>Number in party</Text>
+              <Text style={[styles.inputLabel, {marginTop: query ? 25 : 10}]}>Number in party</Text>
               <NumericInput
                   value={count}
                   onChange={value => setCount(value)}
@@ -209,16 +210,15 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   numericInput: {
-    marginTop: 52,
+    marginTop: 18,
     marginBottom: 20
   },
   inputLabel: {
     fontFamily: 'Avenir',
     fontSize: 15,
-    top: 40,
     left: 5,
     alignSelf: 'flex-start',
-    marginTop: -20,
+    marginTop: 20,
     fontWeight: '400'
   },
   error: {

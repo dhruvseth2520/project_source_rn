@@ -166,7 +166,7 @@ const VenueNewEventForm = ({ route }) => {
                 <FAB
                   icon="image"
                   label="Upload Image"
-                
+                  color="white"
                   style={styles.cameraButton}
                   onPress={pickImage}
                 />
@@ -195,7 +195,7 @@ const VenueNewEventForm = ({ route }) => {
                       setConditionAmount("");
                     }}
                     itemStyle={{fontSize: 18}}
-                    style={[styles.selectInput, {marginTop: condition === 'None' ? -70 : -40, marginBottom: -30, width: condition === 'None' ? '95%' : '50%'}]}>
+                    style={[styles.selectInput, {marginTop: condition === 'None' ? -70 : -40, marginBottom: condition !== "Party Size" ? -30 : -50, width: condition === 'None' ? '95%' : '50%'}]}>
                     <Picker.Item label="None" value="None" />
                     <Picker.Item label="Amount Spent" value="Amount Spent" />
                     <Picker.Item label="Party Size" value="Party Size" />
@@ -227,8 +227,7 @@ const VenueNewEventForm = ({ route }) => {
                     <TextInput
                       onChangeText={(val) => setFees(val)}
                       value={fees}
-                      style={[styles.input, { width: '60%', color: (action === 'Create Event' ? 'black' : '#727272')}]} autoCapitalize="none" keyboardType="numeric"
-                      editable={action === 'Create Event' ? true : false}
+                      style={[styles.input, { width: '60%'}]} autoCapitalize="none" keyboardType="numeric"
                     />
                     <TextInput style={[styles.input, { width: '25%', marginLeft: 18}]} autoCapitalize="none" value="MMK" editable={false}/>
                 </View>
@@ -275,7 +274,7 @@ const styles = StyleSheet.create({
     width: '92%',
     marginTop: 20,
     marginBottom: 0,
-    backgroundColor: '#DFDFDF',
+    backgroundColor: '#20CFC0',
     shadowOpacity: 0.06,
   },
   eventImage: {
@@ -361,8 +360,8 @@ const styles = StyleSheet.create({
     height: 50,
     width: '44%',
     shadowOpacity: 0.11,
-    backgroundColor: '#1AB0A8',
-    borderColor: '#1AB0A8',
+    backgroundColor: '#20CFC0',
+    borderColor: '#20CFC0',
     shadowOpacity: 0.1,
     borderWidth: 1,
     marginTop: 15,

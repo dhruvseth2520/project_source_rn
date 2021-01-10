@@ -5,8 +5,8 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "splash": {
-      "image": "./src/assets/splash-screen.png",
-      "resizeMode": "contain",
+      "image": "./src/assets/splash-screen.jpg",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "facebookScheme": "fb2126657990894930",

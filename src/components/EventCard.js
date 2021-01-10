@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, Dimensions } from 'react-native';
 import { FAB } from 'react-native-paper';
 import RegisterGuestsModal from "./RegisterGuestsModal";
-import { getData } from '../utils/localStorage';
 import GuestListModal from "./GuestListModal";
+import QuickCreateEventModal from "./QuickCreateEventModal";
+import { getData } from '../utils/localStorage';
 import env from "../utils/environment";
 
 const EventCard = ({ event, refreshEvents, view, isSaved }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
+  const [quickCreateVisible, setQuickCreateVisible] = useState(false);
   const [saved, setSaved] = useState(false);
   const [isCurrentEvent, setIsCurrentEvent] = useState(false);
   const [isPastEvent, setIsPastEvent] = useState(false);
@@ -46,11 +48,11 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
 
   useEffect(() => {
      const difference = (new Date(event.date) - new Date()) / 86400000;
-     if (difference <= 1 && difference > -0.5) {
+     if (difference <= 0.5 && difference >= -0.5) {
        setIsCurrentEvent(true);
-     } else if (difference < 0) {
+     } else if (difference < -0.5) {
        setIsPastEvent(true);
-     } else if (difference > 1) {
+     } else if (difference > 0.5) {
        setIsCurrentEvent(false);
      }
   }, [event, navigation])
@@ -59,22 +61,36 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
     fetch(`${env.API_URL}/api/events/attendance/event/${event._id}`)
     .then(response => response.json())
     .then(data => {
-      setGuests(data);
+      const currentGuestList = [];
+      data.forEach(el => {
+        if (el.eventDate === event.date) {
+          currentGuestList.push(el);
+        }
+      })
+      setGuests(currentGuestList);
     })
   }
 
   const editEvent = () => {
-    navigation.navigate('VenueEventForm', {
-      action: 'Update Event',
-      event
-    })
+    const currentDate = new Date();
+    const difference = (new Date(event.date) - currentDate) / (1000 * 3600 * 24);
+
+    if (difference >= -0.5 && difference <= 2) {
+      Alert.alert("We're Sorry", "Events can't be edited less than 2 days before they occur");
+    } else {
+      navigation.navigate('VenueEventForm', {
+        action: 'Update Event',
+        event
+      })
+    }
+
   }
 
   const deleteEvent = () => {
     const currentDate = new Date();
     const difference = (new Date(event.date) - currentDate) / (1000 * 3600 * 24);
 
-    if (difference >= 0 && difference <= 2) {
+    if (difference >= -0.5 && difference <= 2) {
       Alert.alert("We're Sorry", "Events can't be deleted less than 2 days before they occur");
     } else {
       Alert.alert(
@@ -137,11 +153,20 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
 
                     <View style={styles.rightCol}>
                       <View style={styles.btnContainer}>
-                          <TouchableOpacity onPress={editEvent}>
-                            <View style={styles.circularBtn}>
-                              <FontAwesome5 name="pen-alt" style={styles.cardIcon}/>
-                            </View>
-                          </TouchableOpacity>
+                          {isPastEvent ? (
+                            <TouchableOpacity onPress={() => setQuickCreateVisible(true)}>
+                              <View style={styles.circularBtn}>
+                                <FontAwesome5 name="clone" style={styles.cardIcon}/>
+                              </View>
+                            </TouchableOpacity>
+                          ) : (
+                            <TouchableOpacity onPress={editEvent}>
+                              <View style={styles.circularBtn}>
+                                <FontAwesome5 name="pen-alt" style={styles.cardIcon}/>
+                              </View>
+                            </TouchableOpacity>
+                          )}
+
                           <TouchableOpacity onPress={deleteEvent}>
                             <View style={styles.circularBtn}>
                               <FontAwesome5 name="trash" style={styles.cardIcon}/>
@@ -152,7 +177,7 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
 
                     {isCurrentEvent ? (
                       <View style={styles.buttonContainer}>
-                        <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.eventButton}>
+                        <TouchableOpacity onPress={() => setModalVisible(true)} style={[styles.eventButton, {paddingHorizontal: Dimensions.get('window').width > 400 ? 39 : 16 }]}>
                           <FontAwesome5 style={styles.btnIcon} name="user-plus" />
                           <Text style={styles.btnText}>Register Guests</Text>
                         </TouchableOpacity>
@@ -187,7 +212,10 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
             event={event}
           />
 
-
+          <QuickCreateEventModal
+            modalVisible={quickCreateVisible} setModalVisible={setQuickCreateVisible}
+            event={event} refreshEvents={refreshEvents}
+          />
         </>
     )
   } else if (view === "Promoter") {
@@ -216,7 +244,6 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
                       <Text style={styles.promoterFees}>{event.promoterFees} MMK / head</Text>
                     </View>
                   </View>
-
               </View>
             </View>
         </TouchableOpacity>
@@ -230,7 +257,7 @@ const styles = StyleSheet.create({
   card: {
     marginTop: 10,
     width: '90%',
-    marginBottom: 10,
+    marginBottom: 0,
     shadowColor: "#000",
     shadowOffset: {
     	width: 0,
@@ -317,17 +344,9 @@ const styles = StyleSheet.create({
   },
   eventButton: {
     flexDirection: 'row',
-    borderColor: '#1AB0A8',
-    borderWidth: 1,
     backgroundColor: 'white',
-    shadowColor: "#000",
-    shadowOffset: {
-    	width: 0,
-    	height: 1,
-    },
-    shadowOpacity: 0.10,
-    shadowRadius: 2.22,
-    elevation: 3,
+    borderColor: '#1AB0A8',
+    borderWidth: 1.5,
     borderRadius: 25,
     padding: 12,
     marginRight: 10,
@@ -342,6 +361,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#1AB0A8',
     marginLeft: 8,
+    fontWeight: '400',
     fontFamily: 'Avenir',
     marginRight: 2
   },

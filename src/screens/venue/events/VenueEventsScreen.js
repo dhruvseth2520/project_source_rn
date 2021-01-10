@@ -90,7 +90,7 @@ const VenueEventsScreen = () => {
       <ScrollView style={styles.eventContainer}>
         {isLoading ? (<MaterialIndicator size={28} color="#22D2C9" style={{alignSelf: 'center', left: -11, marginTop: 25, marginBottom: 20}}></MaterialIndicator>) : (<>
           {upcomingEvents.length === 0 && pastEvents.length === 0
-            ? <Text style={{fontFamily: "Avenir", fontWeight: '300', marginTop: 5, marginLeft: 3, color: '#5A5A5A'}}>You have no events to show yet. Add your first now!</Text>
+            ? <Text style={{fontFamily: "Avenir", fontWeight: '400', fontSize: 14, marginTop: 5, marginLeft: 3, color: '#5A5A5A'}}>You have no events to show yet. Add your first now!</Text>
             :
             <>
                 <View style={styles.btnContainer}>
@@ -118,12 +118,14 @@ const VenueEventsScreen = () => {
         </>)}
 
       </ScrollView>
-      <FAB
-        style={styles.fab}
-        icon="plus"
-        color="white"
-        onPress={() => navigation.navigate('VenueEventForm')}
-      />
+      {isUpcoming ? (
+        <FAB
+          style={styles.fab}
+          icon="plus"
+          color="white"
+          onPress={() => navigation.navigate('VenueEventForm')}
+        />
+      ) : <></>}
     </ScrollView>
   )
 }
@@ -153,7 +155,8 @@ const styles = StyleSheet.create({
   },
   eventContainer: {
     marginTop: 7,
-    marginLeft: 35
+    marginLeft: 35,
+    marginBottom: 25
   },
   btnContainer: {
     flexDirection: 'row',
@@ -162,14 +165,14 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontFamily: 'Avenir',
-    fontWeight: '300',
+    fontWeight: '400',
     fontSize: 15
   },
   tabButton: {
     marginRight: 10
   },
   active: {
-    color: '#1AA2B0',
+    color: '#1AB0A8',
     fontFamily: 'Avenir',
     fontWeight: '300',
     fontSize: 15
@@ -178,7 +181,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#1AB0A8',
     width: 56,
     height: 56,
-    marginTop: 25,
     marginBottom: 60,
     elevation: 5,
     left: 5,

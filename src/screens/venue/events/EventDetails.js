@@ -200,7 +200,9 @@ const EventDetails = ({ route }) => {
                   <View style={{width: '80%', left: 20}}>
                     <Text style={styles.promoTitle}>Promotion</Text>
                     <Text style={styles.promoDescription}>{event.promotion}</Text>
-                    <Text style={styles.promoAsterisk}>*{promotionCondition}</Text>
+                    {promotionCondition !== "" ? (
+                      <Text style={styles.promoAsterisk}>*{promotionCondition}</Text>
+                    ) : <></>}
                   </View>
                 </View>
                 <View style={[styles.promoRow, {marginTop: 10, marginBottom: 45}]}>
@@ -351,7 +353,7 @@ const styles = StyleSheet.create({
   typeIcon: {
     fontSize: 11,
     top: 2,
-    color: '#A2A2A2',
+    color: '#565656',
     left: 5
   },
   socialContainer: {

@@ -32,6 +32,7 @@ const VenueLedgerScreen = () => {
     });
   }
 
+
   const navigateProfile = (promoterId) => {
     fetch(`${env.API_URL}/api/promoter/detail/${promoterId}`).then(response => response.json()).then(data => {
       navigation.navigate('PromoterProfile', {
@@ -58,11 +59,16 @@ const VenueLedgerScreen = () => {
           } else {
             let tableData = {};
             data.forEach(el => {
-              const eventName = el.eventName;
-              if (eventName in tableData) {
-                tableData[eventName].push({promoterName: el.promoterName, promoterId: el.promoterId, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable});
+              const eventId = el.eventId;
+              if (eventId in tableData) {
+                if (el.eventDate in tableData[eventId]) {
+                  tableData[eventId][el.eventDate].push({promoterName: el.promoterName, promoterId: el.promoterId, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable});
+                } else {
+                  tableData[eventId][el.eventDate] = [{eventName: el.eventName, promoterName: el.promoterName, promoterId: el.promoterId, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable}];
+                }
               } else {
-                tableData[eventName] = [{promoterName: el.promoterName, promoterId: el.promoterId, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable}];
+                tableData[eventId] = {};
+                tableData[eventId][el.eventDate] = [{eventName: el.eventName, promoterName: el.promoterName, promoterId: el.promoterId, promoterAvatar: el.promoterAvatar, guestCount: el.guestCount, payable: el.recievable}];
               }
 
               const eventMonth = new Date(el.date).toLocaleString('default', {month: 'short'});
@@ -187,32 +193,40 @@ const VenueLedgerScreen = () => {
             <View style={{marginBottom: 80}}>
               {Object.keys(ledger).length !== 0 ? (
                 <>
-                    {Object.keys(ledger).map(eventName => (
-                        <View style={styles.eventCard}>
-                            <Text style={styles.header}>{eventName}</Text>
-                            <View>
-                              <View style={{flexDirection: 'row', marginTop: 15}}>
-                                <Text style={[styles.subheader, {width: '28%', left: 5}]}>Promoter</Text>
-                                <Text style={[styles.subheader, {width: '33%', left: 22}]}>Guest Count</Text>
-                                <Text style={[styles.subheader, {width: '33%', left: 16}]}>Payable (MMK)</Text>
-                              </View>
-                            <View>
-                              {ledger[eventName].map(item => (
-                                  <View style={[styles.tableRow, {backgroundColor: '#f3f3f3'}]}>
-                                    <Chip onPress={() => navigateProfile(item.promoterId)} avatar={<Avatar.Image size={24} source={{uri: item.promoterAvatar}} />} style={styles.promoterChip} textStyle={{fontFamily: 'Avenir', top: 1, fontSize: 13}}>{item.promoterName.split(" ")[0]}</Chip>
-                                    <Text style={styles.tableCell}>{item.guestCount}</Text>
-                                    <Text style={styles.tableCell}>{item.payable}</Text>
+                    {Object.keys(ledger).map(eventId => (
+                      <View style={styles.eventCard}>
+                        {Object.keys(ledger[eventId]).map((eventDate, index) => (
+                              <>
+                                  <View style={{flexDirection: 'row'}}>
+                                    <Text style={[styles.header, {marginTop: index === 0 ? 5 : 30}]}>{ledger[eventId][eventDate][0].eventName}</Text>
+                                    <Text style={[styles.eventDate, {marginTop: index === 0 ? 11 : 36}]}>{new Date(eventDate).toDateString()}</Text>
                                   </View>
-                                )
-                              )}
-                            </View>
-                            <View style={[styles.tableRow, {paddingVertical: 11, marginBottom: 10}]}>
-                              <Text style={[styles.tableCell, {top: 0, left: 0, marginLeft: 10, fontWeight: '500', width: '33%'}]}>Total</Text>
-                              <Text style={[styles.tableCell, {top: 0, left: 1, width: '33%', fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.guestCount, 0)}</Text>
-                              <Text style={[styles.tableCell, {top: 0, fontWeight: '500'}]}>{ledger[eventName].reduce((acc, curr) => acc + curr.payable, 0)}</Text>
-                            </View>
-                          </View>
-                        </View>
+                                  <View>
+                                    <View style={{flexDirection: 'row', marginTop: 15}}>
+                                      <Text style={[styles.subheader, {width: '28%', left: 5}]}>Promoter</Text>
+                                      <Text style={[styles.subheader, {width: '33%', left: 22}]}>Guest Count</Text>
+                                      <Text style={[styles.subheader, {width: '33%', left: 16}]}>Payable (MMK)</Text>
+                                    </View>
+                                  <View>
+                                    {ledger[eventId][eventDate].map(item => (
+                                        <View style={[styles.tableRow, {backgroundColor: '#f3f3f3'}]}>
+                                          <Chip onPress={() => navigateProfile(item.promoterId)} avatar={<Avatar.Image size={24} source={{uri: item.promoterAvatar}} />} style={styles.promoterChip} textStyle={{fontFamily: 'Avenir', top: 1, fontSize: 13}}>{item.promoterName.split(" ")[0]}</Chip>
+                                          <Text style={styles.tableCell}>{item.guestCount}</Text>
+                                          <Text style={styles.tableCell}>{item.payable}</Text>
+                                        </View>
+                                      )
+                                    )}
+                                  </View>
+                                  <View style={[styles.tableRow, {paddingVertical: 11}]}>
+                                    <Text style={[styles.tableCell, {top: 0, left: 0, marginLeft: 10, fontWeight: '500', width: '33%'}]}>Total</Text>
+                                    <Text style={[styles.tableCell, {top: 0, left: 1, width: '33%', fontWeight: '500'}]}>{ledger[eventId][eventDate].reduce((acc, curr) => acc + curr.guestCount, 0)}</Text>
+                                    <Text style={[styles.tableCell, {top: 0, fontWeight: '500'}]}>{ledger[eventId][eventDate].reduce((acc, curr) => acc + curr.payable, 0)}</Text>
+                                  </View>
+                                </View>
+                            </>
+                        ))}
+                      </View>
+
                     ))}
                 </>
               ) : (<Text style={[styles.caption, {marginTop: 0}]}>No guests registered yet</Text>)}
@@ -289,6 +303,7 @@ const styles = StyleSheet.create({
   caption: {
     fontFamily: 'Avenir',
     padding: 10,
+    fontWeight: '400',
     width: '85%',
     marginTop: 10,
     marginLeft: 24,
@@ -347,7 +362,7 @@ const styles = StyleSheet.create({
   promoterChip: {
     width: '33%',
     marginLeft: 10,
-    left: -6,
+    left: -10,
     backgroundColor: '#F3F3F3'
   },
   btnText: {
@@ -375,6 +390,12 @@ const styles = StyleSheet.create({
     shadowRadius: 3.5,
     elevation: 5,
   },
+  eventDate: {
+    fontFamily: 'Avenir',
+    fontSize: 12,
+    fontWeight: '300',
+    left: 10
+  }
 
 })
 

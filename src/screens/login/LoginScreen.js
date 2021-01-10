@@ -145,10 +145,10 @@ const LoginScreen = ({ navigation }) => {
           <Text style={styles.loadingText}>Welcome Back</Text>
         </View> : (
             <>
-              <View style={{flex: 3}}>
-
+              <View style={styles.logoContainer}>
+                <Image source={require('../../assets/Source_Logo_Final-06.png')} style={styles.logo} />
               </View>
-              <View style={{ flex: 3, marginTop: 50, width: '100%', alignSelf: 'center' }}>
+              <View style={{ flex: 4, width: '100%', alignSelf: 'center' }}>
                 <Text style={styles.slogan}>The new way</Text>
                 <Text style={[styles.slogan, {top: -8}]}>to promote.</Text>
                 <View style={styles.buttonArea}>
@@ -183,6 +183,7 @@ const styles = StyleSheet.create({
   },
   slogan: {
     fontSize: 37,
+    marginTop: 10,
     fontFamily: 'Avenir-Black',
     color: 'white',
     marginLeft: 65,
@@ -211,6 +212,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 20
   },
+  logoContainer: {
+    flex: 4,
+    top: 140,
+    alignSelf: 'center'
+  },
+  logo: {
+    width: 260,
+    height: 53
+  }
 });
 
 export default LoginScreen;
