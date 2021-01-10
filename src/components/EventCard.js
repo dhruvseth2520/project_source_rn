@@ -8,6 +8,8 @@ import GuestListModal from "./GuestListModal";
 import QuickCreateEventModal from "./QuickCreateEventModal";
 import { getData } from '../utils/localStorage';
 import env from "../utils/environment";
+import {saveUnsaveEvent} from "../serverSDK/api"
+import {getAttendanceFromEventId} from "../serverSDK/api/event"
 
 const EventCard = ({ event, refreshEvents, view, isSaved }) => {
   const navigation = useNavigation();
@@ -20,22 +22,15 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
 
   const [guests, setGuests] = useState([]);
 
-  const saveEvent = () => {
-    getData('@promoterFormData').then(response => {
-      fetch(`${env.API_URL}/api/promoters/saved`, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({promoterId: response._id, eventId: event._id})
-      }).then(response => response.json()).then(data => {
-        if (data.status === "Success") {
-          setSaved(!saved);
-          refreshEvents();
-        }
-      })
-    })
+  // NOTE: JWTd (done)
+  const saveEvent = async () => {
+    const accessToken = await getData('@accessToken')
+    const response = await saveUnsaveEvent(accessToken, event._id)
+
+    if (response.status === "Success") {
+      setSaved(!saved);
+      refreshEvents();
+    }
   }
 
   useEffect(() => {
@@ -47,45 +42,31 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
   }, [guestListVisible]);
 
   useEffect(() => {
-     const difference = (new Date(event.date) - new Date()) / 86400000;
-     if (difference <= 0.5 && difference >= -0.5) {
-       setIsCurrentEvent(true);
-     } else if (difference < -0.5) {
-       setIsPastEvent(true);
-     } else if (difference > 0.5) {
-       setIsCurrentEvent(false);
-     }
+    const difference = (new Date(event.date) - new Date()) / 86400000;
+    if (difference <= 0.5 && difference >= -0.5) {
+      setIsCurrentEvent(true);
+    } else if (difference < -0.5) {
+      setIsPastEvent(true);
+    } else if (difference > 0.5) {
+      setIsCurrentEvent(false);
+    }
   }, [event, navigation])
 
-  const fetchData = () => {
-    fetch(`${env.API_URL}/api/events/attendance/event/${event._id}`)
-    .then(response => response.json())
-    .then(data => {
-      const currentGuestList = [];
-      data.forEach(el => {
-        if (el.eventDate === event.date) {
-          currentGuestList.push(el);
-        }
-      })
-      setGuests(currentGuestList);
-    })
+  // NOTE: JWTd (done)
+  const fetchData = async () => {
+    const accessToken = await getData('@accessToken')
+    const response = await getAttendanceFromEventId(accessToken, event._id)
+    setGuests(response)
   }
 
   const editEvent = () => {
-    const currentDate = new Date();
-    const difference = (new Date(event.date) - currentDate) / (1000 * 3600 * 24);
-
-    if (difference >= -0.5 && difference <= 2) {
-      Alert.alert("We're Sorry", "Events can't be edited less than 2 days before they occur");
-    } else {
-      navigation.navigate('VenueEventForm', {
-        action: 'Update Event',
-        event
-      })
-    }
-
+    navigation.navigate('VenueEventForm', {
+      action: 'Update Event',
+      event
+    })
   }
 
+  // NOTE: JWTd (done)
   const deleteEvent = () => {
     const currentDate = new Date();
     const difference = (new Date(event.date) - currentDate) / (1000 * 3600 * 24);
@@ -94,26 +75,28 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
       Alert.alert("We're Sorry", "Events can't be deleted less than 2 days before they occur");
     } else {
       Alert.alert(
-      "Are you sure you want to delete this event?",
-      "This cannot be undone",
-      [
-        {
-          text: "Cancel",
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => {
-          fetch(`${env.API_URL}/api/events/${event._id}`, {
-            method: "DELETE",
-            mode: "cors",
-            headers: {
-              'Content-Type': 'application/json'
+        "Are you sure you want to delete this event?",
+        "This cannot be undone",
+        [
+          {
+            text: "Cancel",
+            style: "cancel"
+          },
+          {
+            text: "OK", onPress: () => {
+              fetch(`${env.API_URL}/api/events/${event._id}`, {
+                method: "DELETE",
+                mode: "cors",
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              }).then(response => response.json()).then(data => {
+                if (data.status === "Success") {
+                  refreshEvents();
+                }
+              })
             }
-          }).then(response => response.json()).then(data => {
-            if (data.status === "Success") {
-              refreshEvents();
-            }
-          })
-        } }
+          }
         ],
         { cancelable: false }
       );
@@ -138,116 +121,117 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
 
   if (view === "Venue") {
     return (
-        <>
-          <TouchableOpacity onPress={viewEvent} activeOpacity={0.7}>
-              <View style={styles.card}>
-                <View>
-                  <Image style={styles.eventImage} source={{uri: event.imageURL}}></Image>
-                </View>
+      <>
+        <TouchableOpacity onPress={viewEvent} activeOpacity={0.7}>
+          <View style={styles.card}>
+            <View>
+              <Image style={styles.eventImage} source={{ uri: event.imageURL }}></Image>
+            </View>
 
-                <View style={styles.cardContent}>
-                    <View style={styles.leftCol}>
-                      <Text style={styles.eventName}>{event.eventName}</Text>
-                      <Text style={styles.eventDate}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
-                    </View>
+            <View style={styles.cardContent}>
+              <View style={styles.leftCol}>
+                <Text style={styles.eventName}>{event.eventName}</Text>
+                <Text style={styles.eventDate}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+              </View>
 
-                    <View style={styles.rightCol}>
-                      <View style={styles.btnContainer}>
-                          {isPastEvent ? (
-                            <TouchableOpacity onPress={() => setQuickCreateVisible(true)}>
-                              <View style={styles.circularBtn}>
-                                <FontAwesome5 name="clone" style={styles.cardIcon}/>
-                              </View>
-                            </TouchableOpacity>
-                          ) : (
-                            <TouchableOpacity onPress={editEvent}>
-                              <View style={styles.circularBtn}>
-                                <FontAwesome5 name="pen-alt" style={styles.cardIcon}/>
-                              </View>
-                            </TouchableOpacity>
-                          )}
-
-                          <TouchableOpacity onPress={deleteEvent}>
-                            <View style={styles.circularBtn}>
-                              <FontAwesome5 name="trash" style={styles.cardIcon}/>
-                            </View>
-                          </TouchableOpacity>
+              <View style={styles.rightCol}>
+                <View style={styles.btnContainer}>
+                  {isPastEvent ? (
+                    <TouchableOpacity onPress={() => setQuickCreateVisible(true)}>
+                      <View style={styles.circularBtn}>
+                        <FontAwesome5 name="clone" style={styles.cardIcon} />
                       </View>
-                    </View>
-
-                    {isCurrentEvent ? (
-                      <View style={styles.buttonContainer}>
-                        <TouchableOpacity onPress={() => setModalVisible(true)} style={[styles.eventButton, {paddingHorizontal: Dimensions.get('window').width > 400 ? 39 : 16 }]}>
-                          <FontAwesome5 style={styles.btnIcon} name="user-plus" />
-                          <Text style={styles.btnText}>Register Guests</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setGuestListVisible(true)} style={styles.eventButton}>
-                          <FontAwesome5 style={styles.btnIcon} name="clipboard-list" />
-                          <Text style={styles.btnText}>Guest List</Text>
-                        </TouchableOpacity>
-                      </View>
-                    ) : (
-                      <></>
+                    </TouchableOpacity>
+                  ) : (
+                      <TouchableOpacity onPress={editEvent}>
+                        <View style={styles.circularBtn}>
+                          <FontAwesome5 name="pen-alt" style={styles.cardIcon} />
+                        </View>
+                      </TouchableOpacity>
                     )}
-                    {isPastEvent ? (
-                      <View style={styles.buttonContainer}>
-                        <TouchableOpacity onPress={() => setGuestListVisible(true)} style={styles.eventButton}>
-                          <FontAwesome5 style={styles.btnIcon} name="clipboard-list" />
-                          <Text style={styles.btnText}>Guest List</Text>
-                        </TouchableOpacity>
-                      </View>
-                    ) : <></>}
+
+                  <TouchableOpacity onPress={deleteEvent}>
+                    <View style={styles.circularBtn}>
+                      <FontAwesome5 name="trash" style={styles.cardIcon} />
+                    </View>
+                  </TouchableOpacity>
                 </View>
               </View>
-          </TouchableOpacity>
 
-          <RegisterGuestsModal
-            event={event}
-            modalVisible={modalVisible} setModalVisible={setModalVisible}
-          />
+              {isCurrentEvent ? (
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity onPress={() => setModalVisible(true)} style={[styles.eventButton, { paddingHorizontal: Dimensions.get('window').width > 400 ? 39 : 16 }]}>
+                    <FontAwesome5 style={styles.btnIcon} name="user-plus" />
+                    <Text style={styles.btnText}>Register Guests</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setGuestListVisible(true)} style={styles.eventButton}>
+                    <FontAwesome5 style={styles.btnIcon} name="clipboard-list" />
+                    <Text style={styles.btnText}>Guest List</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                  <></>
+                )}
+              {isPastEvent ? (
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity onPress={() => setGuestListVisible(true)} style={styles.eventButton}>
+                    <FontAwesome5 style={styles.btnIcon} name="clipboard-list" />
+                    <Text style={styles.btnText}>Guest List</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : <></>}
+            </View>
+          </View>
+        </TouchableOpacity>
 
-          <GuestListModal
-            modalVisible={guestListVisible} setModalVisible={setGuestListVisible}
-            guests={guests} setGuests={setGuests}
-            event={event}
-          />
+        <RegisterGuestsModal
+          event={event}
+          modalVisible={modalVisible} setModalVisible={setModalVisible}
+        />
 
-          <QuickCreateEventModal
-            modalVisible={quickCreateVisible} setModalVisible={setQuickCreateVisible}
-            event={event} refreshEvents={refreshEvents}
-          />
-        </>
+        <GuestListModal
+          modalVisible={guestListVisible} setModalVisible={setGuestListVisible}
+          guests={guests} setGuests={setGuests}
+          event={event}
+        />
+
+        <QuickCreateEventModal
+          modalVisible={quickCreateVisible} setModalVisible={setQuickCreateVisible}
+          event={event} refreshEvents={refreshEvents}
+        />
+      </>
     )
   } else if (view === "Promoter") {
-      return (
-        <TouchableOpacity onPress={viewEvent} activeOpacity={0.8}>
-            <View style={styles.card}>
-              <Image style={styles.eventImage} source={{uri: event.imageURL}}></Image>
-              <View style={[styles.cardContent, {marginBottom: 0}]}>
-                  <View style={styles.leftCol}>
-                    <Text style={[styles.eventName, {fontSize: 20}]}>{event.eventName}</Text>
-                    <Text style={[styles.eventName, {fontSize: 15, marginTop: 0}]}>{event.venueName}</Text>
-                    <Text style={[styles.eventDate, {marginBottom: 18, marginTop: 3}]}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
-                  </View>
+    return (
+      <TouchableOpacity onPress={viewEvent} activeOpacity={0.8}>
+        <View style={styles.card}>
+          <Image style={styles.eventImage} source={{ uri: event.imageURL }}></Image>
+          <View style={[styles.cardContent, { marginBottom: 0 }]}>
+            <View style={styles.leftCol}>
+              <Text style={[styles.eventName, { fontSize: 20 }]}>{event.eventName}</Text>
+              <Text style={[styles.eventName, { fontSize: 15, marginTop: 0 }]}>{event.venueName}</Text>
+              <Text style={[styles.eventDate, { marginBottom: 18, marginTop: 3 }]}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
+            </View>
 
-                  <View style={styles.rightCol}>
-                    <View style={styles.btnContainer}>
-                        <TouchableOpacity onPress={saveEvent}>
-                          <View style={styles.circularBtn}>
-                            {saved ? (<FontAwesome name="bookmark" style={styles.cardIcon}  />) : (
-                              <FontAwesome name="bookmark-o" style={styles.cardIcon}  />
-                            )}
-                          </View>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.promoterFeesContainer}>
-                      <Text style={styles.promoterFees}>{event.promoterFees} MMK / head</Text>
-                    </View>
+            <View style={styles.rightCol}>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity onPress={saveEvent}>
+                  <View style={styles.circularBtn}>
+                    {saved ? (<FontAwesome name="bookmark" style={styles.cardIcon} />) : (
+                      <FontAwesome name="bookmark-o" style={styles.cardIcon} />
+                    )}
                   </View>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.promoterFeesContainer}>
+                <Text style={styles.promoterFees}>{event.promoterFees} MMK / head</Text>
               </View>
             </View>
-        </TouchableOpacity>
-  )}
+          </View>
+        </View>
+      </TouchableOpacity>
+    )
+  }
 }
 
 
@@ -260,8 +244,8 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     shadowColor: "#000",
     shadowOffset: {
-    	width: 0,
-    	height: 5,
+      width: 0,
+      height: 5,
     },
     shadowOpacity: 0.20,
     elevation: 8,

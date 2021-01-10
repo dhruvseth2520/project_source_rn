@@ -94,7 +94,7 @@ export const registerAttendance = async (accessToken, attendanceData) => {
  * @param {Object} eventId
  */
 export const getAttendanceFromEventId = async (accessToken, eventId) => {
-    return fetch(`${env.API_URL}/apx/events/attendance/${eventId}`, {
+    return fetch(`${env.API_URL}/apx/events/attendance/event/${eventId}`, {
         headers: DefaultHeaders(accessToken)
     }).then(response => response.json())
 }
