@@ -6,8 +6,8 @@ import { storeData, removeData, getData } from '../../utils/localStorage';
 import env from "../../utils/environment";
 import { FAB } from 'react-native-paper';
 
-import { authLogin } from 'project_source_rn/src/serverSDK/auth'
-import { getPromoterDetails, getVenueDetails } from 'project_source_rn/src/serverSDK/api'
+import { authLogin } from '../../serverSDK/auth'
+import { getPromoterDetails, getVenueDetails } from '../../serverSDK/api'
 
 
 const LoginScreen = ({ navigation }) => {
@@ -51,13 +51,13 @@ const LoginScreen = ({ navigation }) => {
     }
   }
 
-  // NOTE: JWTx (done)
-  const handleLoginX = async (callback) => {
+  // NOTE: JWTd (done)
+  const handleLogin = async (callback, loginService) => {
     try {
       const callbackResponse = await callback()
       if (callbackResponse.cancelled) return
 
-      const loginApiResponse = await authLogin(callbackResponse.id)
+      const loginApiResponse = await authLogin(callbackResponse.id, loginService)
 
       var user = loginApiResponse.user;
       storeData('@accessToken', loginApiResponse.accessToken);
@@ -88,53 +88,6 @@ const LoginScreen = ({ navigation }) => {
     }
   }
 
-  // NOTE: deprecation JWTy
-  const handleLogin = (callback) => {
-    callback().then(response => {
-      if (!response.cancelled) {
-        fetch(`${env.API_URL}/api/auth/user`, {
-          method: 'POST',
-          mode: 'cors',
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            userId: response.id
-          })
-        }).then(response => response.json()).then(data => {
-          if (!data.registered) {
-            storeData('@userId', data.id).then(() => {
-              navigation.navigate('VoP');
-            });
-          } else {
-            setLoading(true);
-            if (data.type === "Promoter") {
-              fetch(`${env.API_URL}/api/promoter/${data.id}`)
-                .then(response => response.json())
-                .then(data => {
-                  storeData('@promoterFormData', data).then(() => {
-                    removeData('@venueFormData').then(() => {
-                      navigation.navigate('PromoterTab');
-                    });
-                  });
-                })
-            } else if (data.type === "Venue") {
-              fetch(`${env.API_URL}/api/venue/${data.id}`)
-                .then(response => response.json())
-                .then(data => {
-                  storeData('@venueFormData', data).then(() => {
-                    removeData('@promoterFormData').then(() => {
-                      navigation.navigate('VenueTab');
-                    })
-                  });
-                })
-            }
-          }
-        })
-      }
-    });
-  }
-
   return (
     <View style={styles.screen}>
       <StatusBar barStyle={'dark-content'} />
@@ -151,20 +104,20 @@ const LoginScreen = ({ navigation }) => {
               </View>
               <View style={{ flex: 4, width: '100%', alignSelf: 'center' }}>
                 <Text style={styles.slogan}>The new way</Text>
-                <Text style={[styles.slogan, {top: -8}]}>to promote.</Text>
+                <Text style={[styles.slogan, { top: -8 }]}>to promote.</Text>
                 <View style={styles.buttonArea}>
                   <FAB
                     style={styles.loginButton}
                     icon="google"
                     label="Sign In with Google"
-                    onPress={() => handleLogin(signInWithGoogleAsync)}
+                    onPress={() => handleLogin(signInWithGoogleAsync, "Google")}
                     color="white"
                   />
                   <FAB
                     style={styles.loginButton}
                     icon="facebook"
                     label="Sign In with Facebook"
-                    onPress={() => handleLogin(signInWithFacebookAsync)}
+                    onPress={() => handleLogin(signInWithFacebookAsync, "Facebook")}
                     color="white"
                   />
                 </View>

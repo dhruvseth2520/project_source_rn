@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCocktail, faCheck } from '@fortawesome/free-solid-svg-icons'
-import { View, Text, Image, StyleSheet, TextInput, Picker, TouchableOpacity, ScrollView,
-KeyboardAvoidingView } from 'react-native';
+import {
+  View, Text, Image, StyleSheet, TextInput, Picker, TouchableOpacity, ScrollView,
+  KeyboardAvoidingView
+} from 'react-native';
 import { storeData, getData } from '../../utils/localStorage';
 import { FAB } from 'react-native-paper';
 import env from "../../utils/environment";
@@ -22,29 +24,29 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const pickImage = async () => {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        base64: true,
-        aspect: [6, 3],
-        quality: 1,
-      });
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      base64: true,
+      aspect: [6, 3],
+      quality: 1,
+    });
 
-      if (!result.cancelled) {
-        setVenueImage(result);
-      }
-   };
+    if (!result.cancelled) {
+      setVenueImage(result);
+    }
+  };
 
-   // NOTE: JWTx (done)
-   const handleSubmitX = async () => {
+  // NOTE: JWTd (done)
+  const handleSubmit = async () => {
     const formData = {
-        venueName,
-        venueCategory: category,
-        venueImage,
-        venueAddress,
-        venueContactName: contactName,
-        venueContactEmail: contactEmail,
-        venueContactPhone: contactPhone
+      venueName,
+      venueCategory: category,
+      venueImage,
+      venueAddress,
+      venueContactName: contactName,
+      venueContactEmail: contactEmail,
+      venueContactPhone: contactPhone
     };
 
 
@@ -77,129 +79,77 @@ const LoginVenueRegisterScreen = ({ navigation }) => {
     }
   }
 
-  // NOTE: deprecation JWTy
-  const handleSubmit = () => {
-    const formData = {
-        venueName,
-        venueCategory: category,
-        venueImage,
-        venueAddress,
-        venueContactName: contactName,
-        venueContactEmail: contactEmail,
-        venueContactPhone: contactPhone
-    };
-
-
-    for (let key in formData) {
-      if (!formData[key]) {
-        setErrorMessage("Please fill in all fields");
-        return;
-      }
-    }
-
-    if (!contactEmail.includes('@') || !contactEmail.includes('.')) {
-      setErrorMessage("Please input a valid email");
-      return;
-    }
-
-    if (contactPhone.length < 8) {
-      setErrorMessage("Please input a valid phone number");
-      return;
-    }
-
-    getData('@userId').then(response => {
-      const venueData = {...formData, venueId: response};
-      fetch(`${env.API_URL}/api/register/venue`, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(venueData)
-      }).then(response => response.json()).then(data => {
-        if (data.status === "Success") {
-          setErrorMessage("");
-          storeData('@venueFormData', data.venue).then(() => {
-            navigation.navigate('VenueTab');
-          });
-        }
-      })
-    });
-
-
-  }
-
   return (
-              <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
-                  <ScrollView style={styles.background}>
-                      <TouchableOpacity onPress={() => navigation.navigate('VoP')}>
-                        <Entypo style={styles.backButton} name="chevron-small-left" size={24} color="black" />
-                      </TouchableOpacity>
-                      <View style={styles.header}>
-                        <Text style={styles.title}>Venue Details</Text>
-                        <FontAwesomeIcon style={styles.cocktailIcon} size={30} icon={ faCocktail } />
-                      </View>
+    <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+      <ScrollView style={styles.background}>
+        <TouchableOpacity onPress={() => navigation.navigate('VoP')}>
+          <Entypo style={styles.backButton} name="chevron-small-left" size={24} color="black" />
+        </TouchableOpacity>
+        <View style={styles.header}>
+          <Text style={styles.title}>Venue Details</Text>
+          <FontAwesomeIcon style={styles.cocktailIcon} size={30} icon={faCocktail} />
+        </View>
 
-                      <View style={styles.form}>
-                        <View style={styles.inputContainer}>
-                          <Text style={styles.label}>Branch Name</Text>
-                          <TextInput style={styles.input} value={venueName} autoCapitalize="words" onChangeText={(val) => setVenueName(val)} />
-                        </View>
-                        <View style={styles.inputContainer}>
-                          <Text style={styles.label}>Category</Text>
-                          <Text style={styles.comment}>Type of establishment</Text>
-                          <Picker
-                            selectedValue={category}
-                            mode="dialog"
-                            onValueChange={(val) => setCategory(val)}
-                            style={styles.selectInput}>
-                            <Picker.Item label="Bar" value="bar" />
-                            <Picker.Item label="Restaurant" value="restaurant" />
-                            <Picker.Item label="Club" value="club" />
-                          </Picker>
-                        </View>
-                        <View style={styles.inputContainer}>
-                          <Text style={styles.label}>Branch Address</Text>
-                          <Text style={styles.comment}>Street address of branch</Text>
-                          <TextInput style={styles.input} value={venueAddress} onChangeText={(val) => setVenueAddress(val)} autoCapitalize="none" />
-                        </View>
-                        <View style={[styles.inputContainer, {width: '87%'}]}>
-                          <Text style={styles.label}>Branch Logo</Text>
-                          <Text style={styles.comment}>Upload an image or logo for your venue</Text>
-                          <Image source={{uri: venueImage ? venueImage.uri : 'https://www.creativefabrica.com/wp-content/uploads/2019/04/Bar-icon-by-hellopixelzstudio-3.jpg'}} style={[styles.venueImage, {borderWidth: venueImage ? 0 : 0.5}]} />
+        <View style={styles.form}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Branch Name</Text>
+            <TextInput style={styles.input} value={venueName} autoCapitalize="words" onChangeText={(val) => setVenueName(val)} />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Category</Text>
+            <Text style={styles.comment}>Type of establishment</Text>
+            <Picker
+              selectedValue={category}
+              mode="dialog"
+              onValueChange={(val) => setCategory(val)}
+              style={styles.selectInput}>
+              <Picker.Item label="Bar" value="bar" />
+              <Picker.Item label="Restaurant" value="restaurant" />
+              <Picker.Item label="Club" value="club" />
+            </Picker>
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Branch Address</Text>
+            <Text style={styles.comment}>Street address of branch</Text>
+            <TextInput style={styles.input} value={venueAddress} onChangeText={(val) => setVenueAddress(val)} autoCapitalize="none" />
+          </View>
+          <View style={[styles.inputContainer, { width: '87%' }]}>
+            <Text style={styles.label}>Branch Logo</Text>
+            <Text style={styles.comment}>Upload an image or logo for your venue</Text>
+            <Image source={{ uri: venueImage ? venueImage.uri : 'https://www.creativefabrica.com/wp-content/uploads/2019/04/Bar-icon-by-hellopixelzstudio-3.jpg' }} style={[styles.venueImage, { borderWidth: venueImage ? 0 : 0.5 }]} />
 
-                          <FAB
-                            icon="image"
-                            label="Upload Image"
-                            style={styles.cameraButton}
-                            onPress={pickImage}
-                          />
-                        </View>
-                        <View style={[styles.inputContainer, {marginTop: 20}]}>
-                          <Text style={styles.label}>Primary Contact Name</Text>
-                          <Text style={styles.comment}>The primary point of contact for your venue, either your General Manager or a Business representative</Text>
-                          <TextInput style={styles.input} value={contactName} onChangeText={(val) => setContactName(val)} autoCapitalize="words" />
-                        </View>
-                        <View style={styles.inputContainer}>
-                          <Text style={styles.label}>Contact Email</Text>
-                          <TextInput style={styles.input} keyboardType="email-address" value={contactEmail} onChangeText={(val) => setContactEmail(val)} autoCapitalize="none" />
-                        </View>
-                        <View style={styles.inputContainer}>
-                          <Text style={styles.label}>Contact Number</Text>
-                          <TextInput style={styles.input} value={contactPhone} keyboardType="phone-pad" onChangeText={(val) => setContactPhone(val)} autoCapitalize="none" />
-                        </View>
-                      </View>
+            <FAB
+              icon="image"
+              label="Upload Image"
+              style={styles.cameraButton}
+              onPress={pickImage}
+            />
+          </View>
+          <View style={[styles.inputContainer, { marginTop: 20 }]}>
+            <Text style={styles.label}>Primary Contact Name</Text>
+            <Text style={styles.comment}>The primary point of contact for your venue, either your General Manager or a Business representative</Text>
+            <TextInput style={styles.input} value={contactName} onChangeText={(val) => setContactName(val)} autoCapitalize="words" />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Contact Email</Text>
+            <TextInput style={styles.input} keyboardType="email-address" value={contactEmail} onChangeText={(val) => setContactEmail(val)} autoCapitalize="none" />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Contact Number</Text>
+            <TextInput style={styles.input} value={contactPhone} keyboardType="phone-pad" onChangeText={(val) => setContactPhone(val)} autoCapitalize="none" />
+          </View>
+        </View>
 
-                      <Text style={styles.disclaimer}>By pressing Continue, you agree to our Terms of Service, Privacy Policy and Payment Policy</Text>
-                      <TouchableOpacity style={styles.submitButton} title="Submit" onPress={handleSubmit}>
-                         <Text style={styles.buttonText}>
-                           Agree & Continue
+        <Text style={styles.disclaimer}>By pressing Continue, you agree to our Terms of Service, Privacy Policy and Payment Policy</Text>
+        <TouchableOpacity style={styles.submitButton} title="Submit" onPress={handleSubmit}>
+          <Text style={styles.buttonText}>
+            Agree & Continue
                          </Text>
-                         <FontAwesomeIcon icon={ faCheck } style={styles.check}/>
-                      </TouchableOpacity>
-                      <Text style={styles.error}>{errorMessage}</Text>
-                </ScrollView>
-            </KeyboardAvoidingView>
+          <FontAwesomeIcon icon={faCheck} style={styles.check} />
+        </TouchableOpacity>
+        <Text style={styles.error}>{errorMessage}</Text>
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 

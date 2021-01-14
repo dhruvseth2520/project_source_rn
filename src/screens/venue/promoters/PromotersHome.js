@@ -11,6 +11,7 @@ import { Searchbar } from 'react-native-paper';
 import { Button } from 'react-native-paper';
 import env from "../../../utils/environment";
 import { PromotersFilterGrid } from "../../../components/FilterGrid";
+import { getPromoters } from '../../../serverSDK/api'
 
 
 const VenuePromotersHome = () => {
@@ -53,9 +54,9 @@ const VenuePromotersHome = () => {
       filterValue: 5000
     });
     setAvailability({
-        active: false,
-        displayValue: 3,
-        filterValue: 3
+      active: false,
+      displayValue: 3,
+      filterValue: 3
     });
     setInfluenceBadge({
       active: false,
@@ -74,11 +75,14 @@ const VenuePromotersHome = () => {
     });
   }
 
+  // NOTE: JWTd (done)
   useEffect(() => {
-      fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
+    getData('@accessToken').then(accessToken => {
+      getPromoters(accessToken).then(data => {
         setPromoterData(data);
         setPromoters(data);
       })
+    })
   }, [])
 
   useEffect(() => {
@@ -90,72 +94,72 @@ const VenuePromotersHome = () => {
   }, [query, price.filterValue, availability.filterValue, influenceBadge.filterValue, languages.filterValue, clients.filterValue])
 
   const handleSearch = () => {
-      let filteredPromoters = [];
-      promoterData.forEach(promoter => {
-        const nameMatch = (promoter.firstName.toLowerCase() + " " + promoter.lastName[0].toLowerCase()).trim().startsWith(query.toLowerCase().trim());
-        const priceMatch = promoter.promoterProfile.expectedRate <= price.filterValue;
-        const availabilityMatch = promoter.promoterProfile.availability >= availability.filterValue;
-        const clientsMatch = promoter.promoterProfile.guestCount >= clients.filterValue;
+    let filteredPromoters = [];
+    promoterData.forEach(promoter => {
+      const nameMatch = (promoter.firstName.toLowerCase() + " " + promoter.lastName[0].toLowerCase()).trim().startsWith(query.toLowerCase().trim());
+      const priceMatch = promoter.promoterProfile.expectedRate <= price.filterValue;
+      const availabilityMatch = promoter.promoterProfile.availability >= availability.filterValue;
+      const clientsMatch = promoter.promoterProfile.guestCount >= clients.filterValue;
 
-        let languagesMatch = true;
-        const filteredLanguages = languages.filterValue.map(lang => lang.value);
-        filteredLanguages.forEach(lang => {
-          if (!promoter.promoterProfile.languages.includes(lang)) {
-            languagesMatch = false;
-          }
-        })
-
-        const filteredBadges = influenceBadge.filterValue.map(badge => badge.value);
-        let badgeMatch = filteredBadges.length === 0 || filteredBadges.includes(promoter.promoterProfile.influence);
-
-        if (nameMatch && priceMatch && clientsMatch && availabilityMatch && languagesMatch && badgeMatch) {
-          filteredPromoters.push(promoter);
+      let languagesMatch = true;
+      const filteredLanguages = languages.filterValue.map(lang => lang.value);
+      filteredLanguages.forEach(lang => {
+        if (!promoter.promoterProfile.languages.includes(lang)) {
+          languagesMatch = false;
         }
       })
-      return filteredPromoters;
+
+      const filteredBadges = influenceBadge.filterValue.map(badge => badge.value);
+      let badgeMatch = filteredBadges.length === 0 || filteredBadges.includes(promoter.promoterProfile.influence);
+
+      if (nameMatch && priceMatch && clientsMatch && availabilityMatch && languagesMatch && badgeMatch) {
+        filteredPromoters.push(promoter);
+      }
+    })
+    return filteredPromoters;
   }
 
   return (
-          <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
-            <ScrollView style={styles.background} showsVerticalScrollIndicator={false}>
-                  <Text style={styles.title}>Promoters</Text>
-                  <Jumbotron
-                    title="Find the best fit"
-                    caption={`Our promoters use their social media influence and network to get you the traffic you seek`}
-                    image="https://media.istockphoto.com/photos/young-woman-with-mask-at-mardi-gras-night-club-party-picture-id972174058?k=6&m=972174058&s=170667a&w=0&h=y4tA36T_srRh2qSrkMK2P9HtBjQUtAjYwiZcdQzmDqU="
-                  />
+    <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+      <ScrollView style={styles.background} showsVerticalScrollIndicator={false}>
+        <Text style={styles.title}>Promoters</Text>
+        <Jumbotron
+          title="Find the best fit"
+          caption={`Our promoters use their social media influence and network to get you the traffic you seek`}
+          image="https://media.istockphoto.com/photos/young-woman-with-mask-at-mardi-gras-night-club-party-picture-id972174058?k=6&m=972174058&s=170667a&w=0&h=y4tA36T_srRh2qSrkMK2P9HtBjQUtAjYwiZcdQzmDqU="
+        />
 
-                  <Text style={styles.subTitle}>Top Promoters in the area</Text>
-                  <Searchbar
-                    style={styles.searchInput}
-                    inputStyle={styles.inputText}
-                    placeholder="Search Promoters"
-                    value={query}
-                    iconColor="#1AB0A8"
-                    selectionColor="#1AB0A8"
-                    onChangeText={(val) => setQuery(val)}
-                  />
+        <Text style={styles.subTitle}>Top Promoters in the area</Text>
+        <Searchbar
+          style={styles.searchInput}
+          inputStyle={styles.inputText}
+          placeholder="Search Promoters"
+          value={query}
+          iconColor="#1AB0A8"
+          selectionColor="#1AB0A8"
+          onChangeText={(val) => setQuery(val)}
+        />
 
-                  <PromotersFilterGrid
-                    price={price} setPrice={setPrice}
-                    availability={availability} setAvailability={setAvailability}
-                    influenceBadge={influenceBadge} setInfluenceBadge={setInfluenceBadge}
-                    languages={languages} setLanguages={setLanguages}
-                    clients={clients} setClients={setClients}
-                    clearFilters={clearFilters}
-                  />
+        <PromotersFilterGrid
+          price={price} setPrice={setPrice}
+          availability={availability} setAvailability={setAvailability}
+          influenceBadge={influenceBadge} setInfluenceBadge={setInfluenceBadge}
+          languages={languages} setLanguages={setLanguages}
+          clients={clients} setClients={setClients}
+          clearFilters={clearFilters}
+        />
 
-                  <FlatList horizontal
-                    style={styles.promoterList}
-                    showsHorizontalScrollIndicator={false}
-                    data={promoters}
-                    keyExtractor={promoter => promoter._id}
-                    renderItem={({ item }) => {
-                      return <PromoterCard promoter={item}></PromoterCard>
-                    }}
-                  />
-              </ScrollView>
-          </KeyboardAvoidingView>
+        <FlatList horizontal
+          style={styles.promoterList}
+          showsHorizontalScrollIndicator={false}
+          data={promoters}
+          keyExtractor={promoter => promoter._id}
+          renderItem={({ item }) => {
+            return <PromoterCard promoter={item}></PromoterCard>
+          }}
+        />
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 

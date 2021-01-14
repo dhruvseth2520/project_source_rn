@@ -61,3 +61,17 @@ export const getSavedEventList = async (accessToken) => {
         }
     ).then(response => response.json())
 }
+
+/**
+ * Gets Venue details based on venueId
+ * @param {String} accessToken
+ * @param {String} venueId
+ */
+export const getVenueDetailsFromVenueId = async (accessToken, venueId) => {
+    return fetch(`${env.API_URL}/apx/venue/detail/${venueId}`,
+        {
+            headers: DefaultHeaders(accessToken),
+            method: 'GET',
+        }
+    ).then(response => response.json())
+}
