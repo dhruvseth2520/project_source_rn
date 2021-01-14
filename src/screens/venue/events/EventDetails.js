@@ -177,11 +177,11 @@ const EventDetails = ({ route }) => {
                   <Text style={[styles.headerText, {marginTop: -2}]}>{venue.venueAddress}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={createReminder} style={{flexDirection: 'row', width: '47%'}}>
+                <TouchableOpacity onPress={createReminder} style={{marginLeft: 12, flexDirection: 'row', width: '47%'}}>
                   <View style={styles.headerIconContainer}>
                     <FontAwesome5 name="calendar" style={styles.headerIcon} />
                   </View>
-                  <Text style={[styles.headerText, {marginTop: -2}]}>{new Date(event.date).toDateString() + " at " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
+                  <Text style={[styles.headerText, {marginTop: -2}]}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontFamily: 'Avenir',
     width: '80%',
-    marginLeft: 14,
+    marginLeft: 10,
     color: '#5A5A5A'
   },
   venueContainer: {

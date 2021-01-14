@@ -31,7 +31,7 @@ const VenueNewEventForm = ({ route }) => {
   const [image, setImage] = useState(event ? {uri: event.imageURL} : null);
   const [description, setDescription] = useState(event ? event.description : "");
   const [promotion, setPromotion] = useState(event ? event.promotion : "");
-  const [condition, setCondition] = useState(event ? event.promotionCondition.condition : "None");
+  const [condition, setCondition] = useState(event && event.promotionCondition ? event.promotionCondition.condition : "None");
   const [conditionAmount, setConditionAmount] = useState(event ? event.promotionCondition.amount : "None");
   const [fees, setFees] = useState(event ? (event.promoterFees + event.serviceFees).toString() : "");
   const [date, setDate] = useState(event ? event.date : new Date());

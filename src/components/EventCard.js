@@ -177,7 +177,7 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
 
                     {isCurrentEvent ? (
                       <View style={styles.buttonContainer}>
-                        <TouchableOpacity onPress={() => setModalVisible(true)} style={[styles.eventButton, {paddingHorizontal: Dimensions.get('window').width > 400 ? 39 : 16 }]}>
+                        <TouchableOpacity onPress={() => setModalVisible(true)} style={[styles.eventButton, {paddingHorizontal: Dimensions.get('window').width > 400 ? 37 : 16 }]}>
                           <FontAwesome5 style={styles.btnIcon} name="user-plus" />
                           <Text style={styles.btnText}>Register Guests</Text>
                         </TouchableOpacity>
