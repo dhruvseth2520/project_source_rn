@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
   fab: {
     backgroundColor: '#1AB0A8',
     width: 56,
+    shadowOpacity: 0.12,
     height: 56,
     marginBottom: 60,
     elevation: 5,

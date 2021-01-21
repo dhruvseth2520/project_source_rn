@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+
 import { PulseIndicator, UIActivityIndicator } from 'react-native-indicators';
 import { FontAwesome5 } from '@expo/vector-icons';
 import {
@@ -11,16 +10,16 @@ import {
 
 import { getData } from '../../../utils/localStorage';
 import * as ImagePicker from 'expo-image-picker';
-
 import { FAB } from 'react-native-paper';
 import { TextInput as Input } from 'react-native-paper';
 import env from '../../../utils/environment';
-
+import DatePicker from "../../../components/DatePicker";
 import { createEvent, updateEvent } from '../../../serverSDK/api/event'
 
 const VenueNewEventForm = ({ route }) => {
   const navigation = useNavigation();
   const [isLoading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   let action = 'Create Event';
   let event = null;
@@ -38,7 +37,7 @@ const VenueNewEventForm = ({ route }) => {
   const [condition, setCondition] = useState(event && event.promotionCondition ? event.promotionCondition.condition : "None");
   const [conditionAmount, setConditionAmount] = useState(event && event.promotionCondition ? event.promotionCondition.amount : "None");
   const [fees, setFees] = useState(event ? (event.promoterFees + event.serviceFees).toString() : "");
-  const [date, setDate] = useState(event ? event.date : new Date());
+  const [date, setDate] = useState(event ? new Date(event.date) : new Date());
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -56,36 +55,42 @@ const VenueNewEventForm = ({ route }) => {
 
   // NOTE: JWTd (done)
   const handleSubmit = async () => {
-    setLoading(true);
-    const venueData = await getData('@venueFormData')
-    const eventForm = {
-      venueId: venueData._id,
-      venueName: venueData.venueName,
-      eventName: eventName.trim(),
-      category,
-      description,
-      promotionCondition: {
-        condition,
-        amount: conditionAmount
-      },
-      image,
-      promotion,
-      fees,
-      date
+    if ((date - new Date()) < 0) {
+      setErrorMessage("Please select a valid date and time");
+    } else {
+      setErrorMessage("");
+      setLoading(true);
+      const venueData = await getData('@venueFormData')
+      const eventForm = {
+        venueId: venueData._id,
+        venueName: venueData.venueName,
+        eventName: eventName.trim(),
+        category,
+        description,
+        promotionCondition: {
+          condition,
+          amount: conditionAmount
+        },
+        image,
+        promotion,
+        fees,
+        date
+      }
+
+      const accessToken = await getData('@accessToken')
+      var response = {}
+      if (action === 'Create Event') {
+        response = await createEvent(accessToken, eventForm)
+      } else if (action === 'Update Event') {
+        eventForm['eventId'] = event._id;
+        response = await updateEvent(accessToken, eventForm)
+      }
+
+      if (response.status === "Success") {
+        navigation.navigate('VenueEventsHome');
+      }
     }
 
-    const accessToken = await getData('@accessToken')
-    var response = {}
-    if (action === 'Create Event') {
-      response = await createEvent(accessToken, eventForm)
-    } else if (action === 'Update Event') {
-      eventForm['eventId'] = event._id;
-      response = await updateEvent(accessToken, eventForm)
-    }
-
-    if (response.status === "Success") {
-      navigation.navigate('VenueEventsHome');
-    }
   }
 
   return (
@@ -104,7 +109,6 @@ const VenueNewEventForm = ({ route }) => {
           <View style={styles.form}>
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Event Name</Text>
-
               <TextInput style={styles.input}
                 onChangeText={(val) => setEventName(val)}
                 value={eventName}
@@ -139,14 +143,13 @@ const VenueNewEventForm = ({ route }) => {
 
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Event Date</Text>
-              <Text style={styles.comment}>The date and time of the event</Text>
-              <DateTimePicker
-                style={styles.dateSelector}
-                mode="datetime"
-                value={new Date(date)}
-                onChange={(event, val) => setDate(val)}
-                minimumDate={new Date()}
-              />
+              {errorMessage === "" ? (
+                <Text style={styles.comment}>The date and time of the event</Text>
+              ) : (
+                <Text style={[styles.comment, {color: '#DB0B0B'}]}>{errorMessage}</Text>
+              )}
+              <DatePicker date={date} setDate={setDate} />
+
             </View>
 
             <View style={styles.inputContainer}>
@@ -263,9 +266,7 @@ const styles = StyleSheet.create({
   },
   dateSelector: {
     marginTop: 15,
-    marginBottom: 5,
-    width: '90%',
-    height: 50
+    height: 40,
   },
   cameraButton: {
     width: '92%',

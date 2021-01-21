@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, KeyboardAvoidingView, Image, ScrollView, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+// import DateTimePicker from '@react-native-community/datetimepicker';
 import { FAB, TextInput } from 'react-native-paper';
 import { getData } from '../../../utils/localStorage';
 import env from "../../../utils/environment";
@@ -89,6 +89,18 @@ const VenueWireTransfer = ({ balance, isLoading, setLoading }) => {
   </ScrollView>)
 }
 
+/*
+<DateTimePicker
+  style={styles.dateSelector}
+  mode="datetime"
+  display="spinner"
+  minuteInterval={30}
+  value={pickupDate}
+  onChange={(event, val) => setPickupDate(val)}
+  minimumDate={earliestPickupDate}
+/> 
+
+*/
 
 
 const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
@@ -163,15 +175,7 @@ const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
                     (<Text style={[styles.detail, {color: 'red'}]}>Please select a pickup slot between 11 am and 10 pm</Text>) :
                     <></>
                   }
-                  <DateTimePicker
-                    style={styles.dateSelector}
-                    mode="datetime"
-                    display="spinner"
-                    minuteInterval={30}
-                    value={pickupDate}
-                    onChange={(event, val) => setPickupDate(val)}
-                    minimumDate={earliestPickupDate}
-                  />
+
                 </View>
 
                 <View style={styles.container}>

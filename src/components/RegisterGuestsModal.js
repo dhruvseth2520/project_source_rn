@@ -16,7 +16,8 @@ import NumericInput from 'react-native-numeric-input'
 import { getData } from "../utils/localStorage";
 import { FAB } from 'react-native-paper';
 import env from '../utils/environment';
-import { getPromoters } from '../serverSDK/api'
+import { getPromoters } from '../serverSDK/api/index';
+import { registerAttendance } from '../serverSDK/api/event';
 
 const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
   const [query, setQuery] = useState("");
@@ -25,20 +26,15 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   // // NOTE: JWTy
-  useEffect(() => {
-    fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
-      setPromoters(data);
-    })
-  }, []);
 
-  // // NOTE: JWTx (wip)
-  // useEffect(() => {
-  //   getData('@accessToken').then(accessToken => {
-  //     getPromoters(accessToken).then(promoters => {
-  //       setPromoters(promoters);
-  //     })
-  //   })
-  // }, []);
+  useEffect(() => {
+    getData('@accessToken').then(response => {
+      getPromoters(response).then(data => {
+        setPromoters(data);
+      })
+    })
+  }, [modalVisible]);
+
 
   const handleSubmit = () => {
     setErrorMessage("");
@@ -60,19 +56,14 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
             amount: (event.serviceFees + event.promoterFees) * count
           }
 
-          fetch(`${env.API_URL}/api/events/attendance`, {
-            method: "POST",
-            mode: "cors",
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(attendance)
-          }).then(response => response.json()).then(data => {
-            if (data.status === "Success") {
-              setQuery("");
-              setCount(1);
-              setModalVisible(!modalVisible);
-            }
+          getData('@accessToken').then(response => {
+            registerAttendance(response, attendance).then(data => {
+              if (data.status === "Success") {
+                setQuery("");
+                setCount(1);
+                setModalVisible(!modalVisible);
+              }
+            })
           })
         })
         return null;

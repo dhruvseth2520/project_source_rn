@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, Linking, Alert } from 'react-native';
+import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, Linking, Alert} from 'react-native';
 import { FontAwesome5, AntDesign, FontAwesome } from '@expo/vector-icons';
 import { getData } from "../../../utils/localStorage";
 import { PulseIndicator } from 'react-native-indicators';
@@ -9,7 +9,6 @@ import ShareButtons from '../../../components/ShareButtons';
 import * as Calendar from 'expo-calendar';
 import * as Permissions from 'expo-permissions';
 import env from "../../../utils/environment";
-import { saveUnsaveEvent, getVenueDetailsFromVenueId } from "../../../serverSDK/api"
 
 const EventDetails = ({ route }) => {
   const [venue, setVenue] = useState({});
@@ -36,40 +35,46 @@ const EventDetails = ({ route }) => {
     }
   }
 
-  // NOTE: JWTd (done)
-  const saveEvent = async () => {
 
-    const accessToken = await getData('@accessToken')
-
-    const response = await saveUnsaveEvent(accessToken, event._id)
-
-    if (response.status === 'Success') {
-      setSaved(!saved);
-    }
+  const saveEvent = () => {
+    getData('@promoterFormData').then(response => {
+      fetch(`${env.API_URL}/api/promoters/saved`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({promoterId: response._id, eventId: event._id})
+      }).then(response => response.json()).then(data => {
+        if (data.status === "Success") {
+          setSaved(!saved);
+        }
+      })
+    })
   }
 
   useEffect(() => {
     switch (event.category) {
       case "Night Out":
-        setEventType({ name: "Night Out", icon: "moon" })
+        setEventType({name: "Night Out", icon: "moon"})
         break;
       case "Live Show":
-        setEventType({ name: "Live Show", icon: "microphone-alt" })
+        setEventType({name: "Live Show", icon: "microphone-alt"})
         break;
       case "Themed Event":
-        setEventType({ name: "Themed Event", icon: "mask" })
+        setEventType({name: "Themed Event", icon: "mask"})
         break;
       case "Game Day":
-        setEventType({ name: "Game Day", icon: "futbol" })
+        setEventType({name: "Game Day", icon: "futbol"})
         break;
       case "Holiday Special":
-        setEventType({ name: "Holiday Special", icon: "candy-cane" })
+        setEventType({name: "Holiday Special", icon: "candy-cane"})
         break;
       case "Ladies Night":
-        setEventType({ name: "Ladies Night", icon: "glass-cheers" })
+        setEventType({name: "Ladies Night", icon: "glass-cheers"})
         break;
       case "Couples Event":
-        setEventType({ name: "Couples Event", icon: "restroom" })
+        setEventType({name: "Couples Event", icon: "restroom"})
         break;
       default:
         break;
@@ -79,35 +84,34 @@ const EventDetails = ({ route }) => {
 
 
   async function createReminder() {
-    Calendar.requestCalendarPermissionsAsync().then(() => {
-      Calendar.requestRemindersPermissionsAsync().then(() => {
-        Alert.alert(
-          'Event Reminder',
-          `Set a reminder for ${event.eventName} on ${new Date(event.date).toDateString()}?`,
-          [
-            {
-              text: 'Cancel',
-              style: 'cancel'
-            },
-            {
-              text: 'OK', onPress: () => {
-                Calendar.createReminderAsync(null, {
-                  title: `Reminder for ${event.eventName}`,
-                  startDate: new Date(),
-                  dueDate: new Date(event.date),
-                  location: venue.venueName + ", " + venue.venueAddress,
-                  notes: event.description,
-                  completed: false
-                }).then(() => {
-                  Alert.alert('Success', `A reminder has been created for ${event.eventName}`)
-                })
-              }
-            }
-          ],
-          { cancelable: false }
-        );
+      Calendar.requestCalendarPermissionsAsync().then(() => {
+        Calendar.requestRemindersPermissionsAsync().then(() => {
+          Alert.alert(
+            'Event Reminder',
+            `Set a reminder for ${event.eventName} on ${new Date(event.date).toDateString()}?`,
+            [
+              {
+                text: 'Cancel',
+                style: 'cancel'
+              },
+              {
+                text: 'OK', onPress: () => {
+                  Calendar.createReminderAsync(null, {
+                    title: `Reminder for ${event.eventName}`,
+                    startDate: new Date(),
+                    dueDate: new Date(event.date),
+                    location: venue.venueName + ", " + venue.venueAddress,
+                    notes: event.description,
+                    completed: false
+                  }).then(() => {
+                    Alert.alert('Success', `A reminder has been created for ${event.eventName}`)
+                  })
+                }}
+            ],
+            { cancelable: false }
+          );
+        });
       });
-    });
   }
 
   useEffect(() => {
@@ -117,12 +121,9 @@ const EventDetails = ({ route }) => {
         setLoading(false);
       });
     } else if (view === "Promoter") {
-      // NOTE: JWTd (done)
-      getData('@accessToken').then(accessToken => {
-        getVenueDetailsFromVenueId(accessToken, event.venueId).then(response => {
-          setVenue(response);
-          setLoading(false);
-        })
+      fetch(`${env.API_URL}/api/venue/detail/${event.venueId}`).then(response => response.json()).then(data => {
+        setVenue(data);
+        setLoading(false);
       });
     }
   }, [])
@@ -135,46 +136,46 @@ const EventDetails = ({ route }) => {
         <AntDesign name="arrowleft" size={25} color="black" />
       </TouchableOpacity>
       {isLoading ? (
-        <PulseIndicator color="#22D2C9" style={{ alignSelf: 'center', left: -11, marginTop: 120, marginBottom: 20 }}></PulseIndicator>
+        <PulseIndicator color="#22D2C9" style={{alignSelf: 'center', left: -11, marginTop: 120, marginBottom: 20}}></PulseIndicator>
       ) : (
-          <>
-            {view === 'Promoter' ? (
-              <TouchableOpacity style={styles.saveButtonContainer} onPress={saveEvent}>
-                <View>
-                  {saved ? (<FontAwesome name="bookmark" style={styles.saveButton} />) : (<FontAwesome name="bookmark-o" style={styles.saveButton} />)}
-                </View>
-              </TouchableOpacity>
-            ) : <></>}
+        <>
+          {view === 'Promoter' ? (
+            <TouchableOpacity style={styles.saveButtonContainer} onPress={saveEvent}>
+              <View>
+                {saved ? (<FontAwesome name="bookmark" style={styles.saveButton} />) : (<FontAwesome name="bookmark-o" style={styles.saveButton}  />)}
+              </View>
+            </TouchableOpacity>
+          ) : <></>}
 
-            <View style={styles.imageContainer}>
-              <Image source={{ uri: event.imageURL }} style={styles.eventImage} />
-            </View>
+          <View style={styles.imageContainer}>
+            <Image source={{uri: event.imageURL}} style={styles.eventImage} />
+          </View>
 
-            <View style={styles.eventContainer}>
-              <View style={styles.headerContainer}>
-                <View style={{ flexDirection: 'row' }}>
-                  <View style={{ width: '61%' }}>
-                    <Text style={{ fontFamily: 'Avenir', fontSize: 16, color: 'gray' }}>Event</Text>
-                    <Text style={styles.eventTitle}>{event.eventName}</Text>
-                    <View style={{ flexDirection: 'row', marginTop: 10, left: 3 }}>
-                      <Text style={styles.typeLabel}>{eventType.name}</Text>
-                      <FontAwesome5 name={eventType.icon} style={styles.typeIcon}></FontAwesome5>
-                    </View>
-                  </View>
-
-                  <View style={[styles.venueContainer, { marginTop: event.eventName.length > 13 ? 25 : 13 }]}>
-                    <Image source={{ uri: venue.venueImage }} style={{ height: 50, width: 50, borderRadius: 25, alignSelf: 'center' }}></Image>
-                    <Text style={styles.venueName}>{venue.venueName}</Text>
+          <View style={styles.eventContainer}>
+            <View style={styles.headerContainer}>
+              <View style={{flexDirection: 'row'}}>
+                <View style={{width: '61%'}}>
+                  <Text style={{fontFamily: 'Avenir', fontSize: 16, color: 'gray'}}>Event</Text>
+                  <Text style={styles.eventTitle}>{event.eventName}</Text>
+                  <View style={{flexDirection: 'row', marginTop: 10, left: 3}}>
+                    <Text style={styles.typeLabel}>{eventType.name}</Text>
+                    <FontAwesome5 name={eventType.icon} style={styles.typeIcon}></FontAwesome5>
                   </View>
                 </View>
 
-                <View style={{ flexDirection: 'row', marginTop: 25, marginLeft: 0, width: '95%' }}>
-                  <TouchableOpacity style={{ flexDirection: 'row', width: '53%' }} onPress={() => Linking.openURL(`https://maps.google.com/?q=${venue.venueName + ", " + venue.venueAddress}`)}>
-                    <View style={styles.headerIconContainer}>
-                      <FontAwesome5 name="map-marker-alt" style={styles.headerIcon} />
-                    </View>
-                    <Text style={[styles.headerText, { marginTop: -2 }]}>{venue.venueAddress}</Text>
-                  </TouchableOpacity>
+                <View style={[styles.venueContainer, {marginTop: event.eventName.length > 13 ? 25 : 13}]}>
+                  <Image source={{uri: venue.venueImage}} style={{height: 50, width: 50, borderRadius: 25, alignSelf: 'center'}}></Image>
+                  <Text style={styles.venueName}>{venue.venueName}</Text>
+                </View>
+              </View>
+
+              <View style={{flexDirection: 'row', marginTop: 25, marginLeft: 0, width: '95%'}}>
+                <TouchableOpacity  style={{flexDirection: 'row', width: '53%'}} onPress={() => Linking.openURL(`https://maps.google.com/?q=${venue.venueName + ", " + venue.venueAddress}`)}>
+                  <View style={styles.headerIconContainer}>
+                    <FontAwesome5 name="map-marker-alt" style={styles.headerIcon} />
+                  </View>
+                  <Text style={[styles.headerText, {marginTop: -2}]}>{venue.venueAddress}</Text>
+                </TouchableOpacity>
 
                 <TouchableOpacity onPress={createReminder} style={{marginLeft: 12, flexDirection: 'row', width: '47%'}}>
                   <View style={styles.headerIconContainer}>
@@ -182,50 +183,50 @@ const EventDetails = ({ route }) => {
                   </View>
                   <Text style={[styles.headerText, {marginTop: -2}]}>{new Date(event.date).toDateString() + " " + new Date(event.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
                 </TouchableOpacity>
-
-              </View>
-
-              <View style={styles.bodyContainer}>
-                <View style={{ borderBottomWidth: 0.5, borderColor: 'gray', width: '95%' }}>
-                  <Text style={styles.title}>Description</Text>
-                  <Text style={[styles.bodyText, { marginBottom: 30 }]}>{event.description}</Text>
-                </View>
-
-                <View style={[styles.promoContainer, { borderBottomWidth: view === 'Promoter' ? 0.5 : 0, borderColor: 'gray' }]}>
-                  <View style={styles.promoRow}>
-                    <View style={{ width: '12%' }}>
-                      <FontAwesome5 name="wine-bottle" style={styles.promoIcon} />
-                    </View>
-                    <View style={{ width: '80%', left: 20 }}>
-                      <Text style={styles.promoTitle}>Promotion</Text>
-                      <Text style={styles.promoDescription}>{event.promotion}</Text>
-                      {promotionCondition !== "" ? (
-                        <Text style={styles.promoAsterisk}>*{promotionCondition}</Text>
-                      ) : <></>}
-                    </View>
-                  </View>
-                  <View style={[styles.promoRow, { marginTop: 10, marginBottom: 45 }]}>
-                    <View style={{ width: '12%' }}>
-                      <FontAwesome5 name="search-dollar" style={[styles.promoIcon, { top: 10 }]} />
-                    </View>
-                    <View style={{ width: '80%', left: 20 }}>
-                      <Text style={styles.promoTitle}>Promoter Fees</Text>
-                      <Text style={styles.promoDescription}>{event.promoterFees + " MMK per head"}</Text>
-                      {view === "Venue" ? (<Text style={styles.promoAsterisk}>*{event.serviceFees + " MMK per head service fees"}</Text>) : <></>}
-                    </View>
-                  </View>
-                </View>
-
-                {view === 'Promoter' ? (
-                  <View style={styles.socialContainer}>
-                    <Text style={[styles.title, { fontFamily: 'Avenir', fontWeight: '400', fontSize: 18 }]}>Share this event</Text>
-                    <Text style={styles.comment}>Share your invite link on social media or with your friends and get paid for every referred guest who attends {event.eventName}</Text>
-                    <ShareButtons event={event} />
-                  </View>
-                ) : <></>}
               </View>
             </View>
-          </>
+
+            <View style={styles.bodyContainer}>
+              <View style={{borderBottomWidth: 0.5, borderColor: 'gray', width: '95%'}}>
+                <Text style={styles.title}>Description</Text>
+                <Text style={[styles.bodyText, {marginBottom: 30}]}>{event.description}</Text>
+              </View>
+
+              <View style={[styles.promoContainer, {borderBottomWidth: view === 'Promoter' ? 0.5 : 0, borderColor: 'gray'}]}>
+                <View style={styles.promoRow}>
+                  <View style={{width: '12%'}}>
+                    <FontAwesome5 name="wine-bottle" style={styles.promoIcon} />
+                  </View>
+                  <View style={{width: '80%', left: 20}}>
+                    <Text style={styles.promoTitle}>Promotion</Text>
+                    <Text style={styles.promoDescription}>{event.promotion}</Text>
+                    {promotionCondition !== "" ? (
+                      <Text style={styles.promoAsterisk}>*{promotionCondition}</Text>
+                    ) : <></>}
+                  </View>
+                </View>
+                <View style={[styles.promoRow, {marginTop: 10, marginBottom: 45}]}>
+                  <View style={{width: '12%'}}>
+                    <FontAwesome5 name="search-dollar" style={[styles.promoIcon, {top: 10}]} />
+                  </View>
+                  <View style={{width: '80%', left: 20}}>
+                    <Text style={styles.promoTitle}>Promoter Fees</Text>
+                    <Text style={styles.promoDescription}>{event.promoterFees + " MMK per head"}</Text>
+                    {view === "Venue" ? (<Text style={styles.promoAsterisk}>*{event.serviceFees + " MMK per head service fees"}</Text>) : <></>}
+                  </View>
+                </View>
+              </View>
+
+              {view === 'Promoter' ? (
+                <View style={styles.socialContainer}>
+                  <Text style={[styles.title, {fontFamily: 'Avenir', fontWeight: '400', fontSize: 18}]}>Share this event</Text>
+                  <Text style={styles.comment}>Share your invite link on social media or with your friends and get paid for every referred guest who attends {event.eventName}</Text>
+                  <ShareButtons event={event} />
+                </View>
+              ) : <></>}
+            </View>
+          </View>
+        </>
         )}
     </ScrollView>
   )

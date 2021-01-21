@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
 import { FontAwesome5 } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
+// import DateTimePicker from '@react-native-community/datetimepicker';
 import { FAB } from 'react-native-paper';
 import env from '../utils/environment';
 
+/*
+<DateTimePicker
+  style={styles.dateSelector}
+  mode="datetime"
+  value={date}
+  onChange={(event, val) => setDate(val)}
+  minimumDate={new Date()}
+/>
 
+*/
 
 const QuickCreateEventModal = ({ modalVisible, setModalVisible, event, refreshEvents }) => {
   const [date, setDate] = useState(new Date());
@@ -47,13 +56,7 @@ const QuickCreateEventModal = ({ modalVisible, setModalVisible, event, refreshEv
             <Text style={styles.modalText}>Loved {event.eventName}? So did everyone else. Select the date and time you would like to host {event.eventName} next</Text>
 
             <View style={{alignSelf: 'flex-start', marginTop: 5, marginLeft: 0, width: '100%'}}>
-              <DateTimePicker
-                style={styles.dateSelector}
-                mode="datetime"
-                value={date}
-                onChange={(event, val) => setDate(val)}
-                minimumDate={new Date()}
-              />
+
             </View>
 
             <FAB

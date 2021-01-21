@@ -39,7 +39,7 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
 
   useEffect(() => {
     fetchData();
-  }, [guestListVisible]);
+  }, [modalVisible, guestListVisible]);
 
   useEffect(() => {
     const difference = (new Date(event.date) - new Date()) / 86400000;
@@ -53,10 +53,12 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
   }, [event, navigation])
 
   // NOTE: JWTd (done)
-  const fetchData = async () => {
-    const accessToken = await getData('@accessToken')
-    const response = await getAttendanceFromEventId(accessToken, event._id)
-    setGuests(response)
+  const fetchData = () => {
+    getData('@accessToken').then(response => {
+      getAttendanceFromEventId(response, event._id).then(data => console.log(data))
+
+    })
+
   }
 
   const editEvent = () => {

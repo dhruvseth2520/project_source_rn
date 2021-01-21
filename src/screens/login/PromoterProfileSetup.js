@@ -6,6 +6,7 @@ import Swiper from 'react-native-swiper';
 import { storeData, getData } from '../../utils/localStorage';
 import { TextInput, FAB, Chip, Avatar } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
+import { registerPromoter } from '../../serverSDK/api/register';
 import env from "../../utils/environment";
 
 const InfoModal = ({ modalVisible, setModalVisible }) => {

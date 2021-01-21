@@ -84,7 +84,7 @@ export const registerAttendance = async (accessToken, attendanceData) => {
         headers: DefaultHeaders(accessToken),
         method: 'POST',
         mode: 'cors',
-        body: JSON.stringify({ attendanceData })
+        body: JSON.stringify(attendanceData)
     }).then(response => response.json())
 }
 
