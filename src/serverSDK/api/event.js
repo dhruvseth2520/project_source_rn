@@ -1,6 +1,7 @@
 import env from "project_source_rn/src/utils/environment";
 import { DefaultHeaders } from "project_source_rn/src/utils/api";
 
+
 /**
  * Creates new Event based on eventData
  * @param {String} accessToken
@@ -80,12 +81,13 @@ export const deleteEvent = async (accessToken, eventId) => {
  * @param {Object} attendanceData
  */
 export const registerAttendance = async (accessToken, attendanceData) => {
-    return fetch(`${env.API_URL}/apx/events/attendance`, {
+    const response = await fetch(`${env.API_URL}/apx/events/attendance`, {
         headers: DefaultHeaders(accessToken),
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify(attendanceData)
-    }).then(response => response.json())
+    })
+    return await response.json()
 }
 
 /**

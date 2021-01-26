@@ -28,9 +28,10 @@ export const getVenueDetails = async (accessToken) => {
  * @param {String} accessToken
  */
 export const getPromoters = async (accessToken) => {
-    return fetch(`${env.API_URL}/apx/promoters`,
+    const response = await fetch(`${env.API_URL}/apx/promoters`,
         { headers: DefaultHeaders(accessToken) }
-    ).then(response => response.json())
+    )
+    return await response.json()
 }
 
 /**

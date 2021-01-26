@@ -8,8 +8,8 @@ import GuestListModal from "./GuestListModal";
 import QuickCreateEventModal from "./QuickCreateEventModal";
 import { getData } from '../utils/localStorage';
 import env from "../utils/environment";
-import {saveUnsaveEvent} from "../serverSDK/api"
-import {getAttendanceFromEventId} from "../serverSDK/api/event"
+import { saveUnsaveEvent } from "../serverSDK/api"
+import { getAttendanceFromEventId } from "../serverSDK/api/event"
 
 const EventCard = ({ event, refreshEvents, view, isSaved }) => {
   const navigation = useNavigation();
@@ -55,7 +55,9 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
   // NOTE: JWTd (done)
   const fetchData = () => {
     getData('@accessToken').then(response => {
-      getAttendanceFromEventId(response, event._id).then(data => console.log(data))
+      getAttendanceFromEventId(response, event._id).then(data => {
+        setGuests(data)
+      })
 
     })
 

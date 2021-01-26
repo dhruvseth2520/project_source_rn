@@ -16,6 +16,10 @@ import NumericInput from 'react-native-numeric-input'
 import { getData } from "../utils/localStorage";
 import { FAB } from 'react-native-paper';
 import env from '../utils/environment';
+import { registerAttendance } from '../serverSDK/api/event';
+
+import axios from 'axios';
+import { DefaultHeaders } from '../utils/api';
 
 const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
   const [query, setQuery] = useState("");
@@ -29,6 +33,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
     })
   }, []);
 
+
   const handleSubmit = () => {
     setErrorMessage("");
 
@@ -36,28 +41,37 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
       let promoter = promoters[i];
       let promoterName = promoter.firstName + " " + promoter.lastName[0] + ". (" + promoter.promoterCode + ")";
       if (promoterName.toLowerCase() === query.toLowerCase()) {
-          getData('@venueFormData').then(response => {
-            const attendance = {
-              venueId: response._id,
-              venueName: response.venueName,
-              promoterId: promoter._id,
-              promoterName,
-              promoterAvatar: promoter.promoterProfile.images[0],
-              eventId: event._id,
-              eventName: event.eventName,
-              eventDate: event.date,
-              guestCount: count,
-              amount: (event.serviceFees + event.promoterFees) * count
-            }
+        getData('@venueFormData').then(response => {
+          const attendance = {
+            venueId: response._id,
+            venueName: response.venueName,
+            promoterId: promoter._id,
+            promoterName,
+            promoterAvatar: promoter.promoterProfile.images[0],
+            eventId: event._id,
+            eventName: event.eventName,
+            eventDate: event.date,
+            guestCount: count,
+            amount: (event.serviceFees + event.promoterFees) * count
+          }
+          console.log('Here')
 
-            fetch(`${env.API_URL}/api/events/attendance`, {
-                method: "POST",
-                mode: "cors",
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(attendance)
-            }).then(response => response.json()).then(data => {
+          getData('@accessToken').then((response) => {
+
+            // serverSDK
+            // registerAttendance(response, attendance).then(data => {
+            // <-- END -->
+
+            // Axios implementation
+            axios.post(`${env.API_URL}/apx/events/attendance`, attendance, {
+              headers: DefaultHeaders(response)
+            }).then(res => {
+              let data = res.data
+              console.log(res)
+              console.log(data)
+            // <-- END -->
+
+            console.log(data)
               if (data.status === "Success") {
                 setQuery("");
                 setCount(1);
@@ -66,92 +80,93 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
             })
           })
           return null;
+        })
       }
+      setErrorMessage("Promoter not found");
     }
-    setErrorMessage("Promoter not found");
   }
 
   return (
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-              <TouchableOpacity style={styles.closeButton} onPress={() => {
-                setErrorMessage("");
-                setQuery("");
-                setCount(1);
-                setModalVisible(!modalVisible);
-              }}>
-                <FontAwesome5 name="times" style={{fontSize: 15, color: 'gray', alignSelf: 'center', top: 7}} />
-              </TouchableOpacity>
-              <Text style={styles.title}>Register Guests for {event.eventName}</Text>
-              <Searchbar
-                onChangeText={input => {
-                  setQuery(input);
-                }}
-                value={query}
-                style={styles.promoterSearch}
-                fontSize={14}
-                selectionColor="#1AA2B0"
-                iconColor="#1AA2B0"
-                placeholder="Promoter Name">
-              </Searchbar>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => {
+        Alert.alert("Modal has been closed.");
+      }}
+    >
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <TouchableOpacity style={styles.closeButton} onPress={() => {
+            setErrorMessage("");
+            setQuery("");
+            setCount(1);
+            setModalVisible(!modalVisible);
+          }}>
+            <FontAwesome5 name="times" style={{ fontSize: 15, color: 'gray', alignSelf: 'center', top: 7 }} />
+          </TouchableOpacity>
+          <Text style={styles.title}>Register Guests for {event.eventName}</Text>
+          <Searchbar
+            onChangeText={input => {
+              setQuery(input);
+            }}
+            value={query}
+            style={styles.promoterSearch}
+            fontSize={14}
+            selectionColor="#1AA2B0"
+            iconColor="#1AA2B0"
+            placeholder="Promoter Name">
+          </Searchbar>
 
-              {query ?  <FlatList
-                           style={{maxHeight: 120}}
-                           data={promoters}
-                           keyExtractor={item => item.firstName}
-                           extraData={query}
-                           showsVerticalScrollIndicator={false}
-                           renderItem={({ item }) => {
-                             const display = item.firstName + " " + item.lastName[0] + ". (" + item.promoterCode + ")";
-                             if (display.toLowerCase().startsWith(query.toLowerCase())) {
-                               return <TouchableOpacity onPress={() => setQuery(display)}>
-                                 <View style={styles.listItem}>
-                                   <Text style={{marginLeft: 10, top: 2}}>{display}</Text>
-                                 </View>
-                              </TouchableOpacity>
-                             }
-                           }}>
-                        </FlatList>
-              : <></>}
+          {query ? <FlatList
+            style={{ maxHeight: 120 }}
+            data={promoters}
+            keyExtractor={item => item.firstName}
+            extraData={query}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => {
+              const display = item.firstName + " " + item.lastName[0] + ". (" + item.promoterCode + ")";
+              if (display.toLowerCase().startsWith(query.toLowerCase())) {
+                return <TouchableOpacity onPress={() => setQuery(display)}>
+                  <View style={styles.listItem}>
+                    <Text style={{ marginLeft: 10, top: 2 }}>{display}</Text>
+                  </View>
+                </TouchableOpacity>
+              }
+            }}>
+          </FlatList>
+            : <></>}
 
-              <Text style={[styles.inputLabel, {marginTop: query ? 25 : 10}]}>Number in party</Text>
-              <NumericInput
-                  value={count}
-                  onChange={value => setCount(value)}
-                  containerStyle={styles.numericInput}
-                  totalWidth={220}
-                  totalHeight={45}
-                  minValue={1}
-                  step={1}
-                  valueType='real'
-                  rounded
-                  textColor='#525252'
-                  iconStyle={{ color: 'white' }}
-                  borderColor='white'
-                  rightButtonBackgroundColor='#A4A4A4'
-                  leftButtonBackgroundColor='#DBDBDB'
-              />
+          <Text style={[styles.inputLabel, { marginTop: query ? 25 : 10 }]}>Number in party</Text>
+          <NumericInput
+            value={count}
+            onChange={value => setCount(value)}
+            containerStyle={styles.numericInput}
+            totalWidth={220}
+            totalHeight={45}
+            minValue={1}
+            step={1}
+            valueType='real'
+            rounded
+            textColor='#525252'
+            iconStyle={{ color: 'white' }}
+            borderColor='white'
+            rightButtonBackgroundColor='#A4A4A4'
+            leftButtonBackgroundColor='#DBDBDB'
+          />
 
-              {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : <></>}
+          {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : <></>}
 
-              <FAB
-                style={styles.submitButton}
-                label="Submit"
-                color="white"
-                icon="check"
-                onPress={handleSubmit}
-              />
-          </View>
+          <FAB
+            style={styles.submitButton}
+            label="Submit"
+            color="white"
+            icon="check"
+            onPress={handleSubmit}
+          />
         </View>
-      </Modal>
+      </View>
+    </Modal>
   );
 };
 
