@@ -27,11 +27,7 @@ const RegisterGuestsModal = ({ modalVisible, setModalVisible, event }) => {
   const [count, setCount] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
 
-  useEffect(() => {
-    fetch(`${env.API_URL}/api/promoters`).then(response => response.json()).then(data => {
-      setPromoters(data);
-    })
-  }, []);
+  
 
 
   const handleSubmit = () => {

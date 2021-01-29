@@ -186,7 +186,7 @@ const PromoterProfileSetup = ({ route }) => {
                         horizontal
                         renderItem={({ item }) => (
                           <View style={styles.imageHolder}>
-                            <TouchableOpacity style={styles.closeButton} onPress={() => removeImage(item.uri)}>
+                            <TouchableOpacity style={styles.removeImageButton} onPress={() => removeImage(item.uri)}>
                               <FontAwesome5 name="times" style={{ alignSelf: 'center', top: 5, fontSize: 10, color: 'white' }} />
                             </TouchableOpacity>
                             <Image source={{ uri: item.uri }} style={{ borderRadius: 10, width: thumbnailWidth, height: thumbnailHeight }} />
@@ -198,7 +198,6 @@ const PromoterProfileSetup = ({ route }) => {
                     <FAB
                       icon="image"
                       label="Upload Images"
-                      color="white"
                       style={styles.cameraButton}
                       onPress={pickImage}
                     />
@@ -406,10 +405,10 @@ const styles = StyleSheet.create({
     width: '95%',
     marginTop: 10,
     marginBottom: 10,
-    shadowOpacity: 0.05,
-    backgroundColor: '#20CFC0',
+    shadowOpacity: 0,
+    backgroundColor: '#ECECEC',
   },
-  closeButton: {
+  removeImageButton: {
     position: 'absolute',
     alignSelf: 'flex-end',
     height: 21,

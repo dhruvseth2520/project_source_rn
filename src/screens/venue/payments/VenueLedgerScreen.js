@@ -38,7 +38,6 @@ const VenueLedgerScreen = () => {
       navigation.navigate('PromoterProfile', {
         promoter: data
       })
-
     })
   }
 
@@ -148,7 +147,7 @@ const VenueLedgerScreen = () => {
                   }}
                   width={0.93 * screenWidth}
                   height={220}
-                  yAxisSuffix="ks"
+
                   withOuterLines={false}
                   withHorizontalLines={false}
                   withVerticalLines={false}
@@ -173,8 +172,8 @@ const VenueLedgerScreen = () => {
                   bezier
                   style={{
                     marginVertical: 8,
-                    left: 34,
-                    marginTop: 30
+                    left: 32,
+                    marginTop: 25
                   }}
                 />
               )}
@@ -348,7 +347,6 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   subheader: {
-    fontWeight: '300',
     fontFamily: 'Avenir',
     fontWeight: '400'
   },

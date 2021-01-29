@@ -66,7 +66,7 @@ export const getEventfromAccessToken = async (accessToken) => {
  * @param {String} accessToken
  * @param {String} eventId
  */
-export const deleteEvent = async (accessToken, eventId) => {
+export const deleteEventWithId = async (accessToken, eventId) => {
     return fetch(`${env.API_URL}/apx/events/${eventId}`, {
         headers: DefaultHeaders(accessToken),
         method: 'DELETE',

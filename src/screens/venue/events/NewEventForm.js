@@ -77,7 +77,7 @@ const VenueNewEventForm = ({ route }) => {
         date
       }
 
-      const accessToken = await getData('@accessToken')
+      const accessToken = await getData('@accessToken');
       var response = {}
       if (action === 'Create Event') {
         response = await createEvent(accessToken, eventForm)
@@ -143,11 +143,8 @@ const VenueNewEventForm = ({ route }) => {
 
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Event Date</Text>
-              {errorMessage === "" ? (
-                <Text style={styles.comment}>The date and time of the event</Text>
-              ) : (
-                <Text style={[styles.comment, {color: '#DB0B0B'}]}>{errorMessage}</Text>
-              )}
+              <Text style={styles.comment}>The date and time of the event</Text>
+
               <DatePicker date={date} setDate={setDate} />
 
             </View>
@@ -166,7 +163,6 @@ const VenueNewEventForm = ({ route }) => {
               <FAB
                 icon="image"
                 label="Upload Image"
-                color="white"
                 style={styles.cameraButton}
                 onPress={pickImage}
               />
@@ -236,6 +232,12 @@ const VenueNewEventForm = ({ route }) => {
 
           </View>
 
+          {errorMessage === "" ? (
+            <></>
+          ) : (
+            <Text style={[styles.comment, {color: '#DB0B0B', marginLeft: 40, marginTop: 10}]}>{errorMessage}</Text>
+          )}
+
           <View style={styles.buttonContainer}>
             <FAB
               style={[styles.submitButton, { backgroundColor: '#DFDFDF', borderColor: '#DFDFDF' }]}
@@ -272,8 +274,8 @@ const styles = StyleSheet.create({
     width: '92%',
     marginTop: 20,
     marginBottom: 0,
-    backgroundColor: '#20CFC0',
-    shadowOpacity: 0.06,
+    backgroundColor: '#ECECEC',
+    shadowOpacity: 0,
   },
   eventImage: {
     width: '90%',

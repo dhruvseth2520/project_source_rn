@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 50,
-    marginLeft: 45,
+    marginLeft: 50,
     width: '80%',
     fontFamily: 'Futura',
     fontSize: 35,

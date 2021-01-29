@@ -15,11 +15,12 @@ import { getData } from "../../../utils/localStorage";
 import Jumbotron from "../../../components/Jumbotron";
 import { FAB } from 'react-native-paper';
 import { getEventfromAccessToken } from '../../../serverSDK/api/event';
-
+import { getPromoters } from '../../../serverSDK/api/index';
 
 const VenueEventsScreen = () => {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
+  const [promoters, setPromoters] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [isUpcoming, setUpcoming] = useState(true);
   const [isPast, setPast] = useState(false);
@@ -45,9 +46,11 @@ const VenueEventsScreen = () => {
 
   // NOTE: JWTd (done)
   const fetchData = async () => {
-    const accessToken = await getData('@accessToken')
+    const accessToken = await getData('@accessToken');
 
-    const response = await getEventfromAccessToken(accessToken)
+    getPromoters(accessToken).then(data => setPromoters(data));
+
+    const response = await getEventfromAccessToken(accessToken);
 
     const currentDate = new Date();
     let upcomingArr = [];
@@ -92,7 +95,17 @@ const VenueEventsScreen = () => {
       <ScrollView style={styles.eventContainer}>
         {isLoading ? (<MaterialIndicator size={28} color="#22D2C9" style={{ alignSelf: 'center', left: -11, marginTop: 25, marginBottom: 20 }}></MaterialIndicator>) : (<>
           {upcomingEvents.length === 0 && pastEvents.length === 0
-            ? <Text style={{ fontFamily: "Avenir", fontWeight: '400', fontSize: 14, marginTop: 5, marginLeft: 3, color: '#5A5A5A' }}>You have no events to show yet. Add your first now!</Text>
+            ? <>
+                <View style={styles.btnContainer}>
+                  <TouchableOpacity style={styles.tabButton} onPress={() => handlePress('Upcoming')}>
+                    <Text style={isUpcoming ? styles.active : styles.btnText}>Upcoming</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.tabButton} onPress={() => handlePress('Past')}>
+                    <Text style={isPast ? styles.active : styles.btnText}>Past</Text>
+                  </TouchableOpacity>
+                </View>
+                <Text style={{ fontFamily: "Avenir", fontWeight: '400', fontSize: 14, marginTop: 5, marginLeft: 3, color: '#5A5A5A' }}>You have no events to show yet. Add your first now!</Text>
+              </>
             :
             <>
               <View style={styles.btnContainer}>
@@ -112,7 +125,7 @@ const VenueEventsScreen = () => {
                     data={isUpcoming ? upcomingEvents : pastEvents}
                     keyExtractor={event => event.eventName}
                     renderItem={({ item }) => {
-                      return <EventCard event={item} refreshEvents={fetchData} view="Venue" />
+                      return <EventCard event={item} refreshEvents={fetchData} promoters={promoters} view="Venue" />
                     }}
                   ></FlatList>
                 )}

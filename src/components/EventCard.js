@@ -8,10 +8,11 @@ import GuestListModal from "./GuestListModal";
 import QuickCreateEventModal from "./QuickCreateEventModal";
 import { getData } from '../utils/localStorage';
 import env from "../utils/environment";
-import { saveUnsaveEvent } from "../serverSDK/api"
-import { getAttendanceFromEventId } from "../serverSDK/api/event"
+import { saveUnsaveEvent } from "../serverSDK/api";
+import { deleteEventWithId } from "../serverSDK/api/event";
+import { getAttendanceFromEventId } from "../serverSDK/api/event";
 
-const EventCard = ({ event, refreshEvents, view, isSaved }) => {
+const EventCard = ({ event, refreshEvents, view, isSaved, promoters }) => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [quickCreateVisible, setQuickCreateVisible] = useState(false);
@@ -19,8 +20,6 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
   const [isCurrentEvent, setIsCurrentEvent] = useState(false);
   const [isPastEvent, setIsPastEvent] = useState(false);
   const [guestListVisible, setGuestListVisible] = useState(false);
-
-  const [guests, setGuests] = useState([]);
 
   // NOTE: JWTd (done)
   const saveEvent = async () => {
@@ -37,9 +36,6 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
     setSaved(isSaved);
   }, [isSaved])
 
-  useEffect(() => {
-    fetchData();
-  }, [modalVisible, guestListVisible]);
 
   useEffect(() => {
     const difference = (new Date(event.date) - new Date()) / 86400000;
@@ -52,22 +48,20 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
     }
   }, [event, navigation])
 
-  // NOTE: JWTd (done)
-  const fetchData = () => {
-    getData('@accessToken').then(response => {
-      getAttendanceFromEventId(response, event._id).then(data => {
-        setGuests(data)
-      })
 
-    })
-
-  }
 
   const editEvent = () => {
-    navigation.navigate('VenueEventForm', {
-      action: 'Update Event',
-      event
-    })
+    const currentDate = new Date();
+    const difference = (new Date(event.date) - currentDate) / (1000 * 3600 * 24);
+
+    if (difference >= -0.5 && difference <= 2) {
+      Alert.alert("We're Sorry", "Events can't be edited less than 2 days before they occur");
+    } else {
+      navigation.navigate('VenueEventForm', {
+        action: 'Update Event',
+        event
+      })
+    }
   }
 
   // NOTE: JWTd (done)
@@ -88,16 +82,12 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
           },
           {
             text: "OK", onPress: () => {
-              fetch(`${env.API_URL}/api/events/${event._id}`, {
-                method: "DELETE",
-                mode: "cors",
-                headers: {
-                  'Content-Type': 'application/json'
-                }
-              }).then(response => response.json()).then(data => {
-                if (data.status === "Success") {
-                  refreshEvents();
-                }
+              getData('@accessToken').then(response => {
+                deleteEventWithId(response, event._id).then(data => {
+                  if (data.status === "Success") {
+                    refreshEvents();
+                  }
+                })
               })
             }
           }
@@ -164,11 +154,16 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
 
               {isCurrentEvent ? (
                 <View style={styles.buttonContainer}>
-                  <TouchableOpacity onPress={() => setModalVisible(true)} style={[styles.eventButton, { paddingHorizontal: Dimensions.get('window').width > 400 ? 39 : 16 }]}>
+                  <TouchableOpacity onPress={() => navigation.navigate('RegisterGuestsScreen', {
+                    event: event,
+                    promoters: promoters
+                  })} style={[styles.eventButton, { paddingHorizontal: Dimensions.get('window').width > 400 ? 39 : 16 }]}>
                     <FontAwesome5 style={styles.btnIcon} name="user-plus" />
                     <Text style={styles.btnText}>Register Guests</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setGuestListVisible(true)} style={styles.eventButton}>
+                  <TouchableOpacity onPress={() => navigation.navigate('GuestListScreen', {
+                    event: event
+                  })} style={styles.eventButton}>
                     <FontAwesome5 style={styles.btnIcon} name="clipboard-list" />
                     <Text style={styles.btnText}>Guest List</Text>
                   </TouchableOpacity>
@@ -178,7 +173,9 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
                 )}
               {isPastEvent ? (
                 <View style={styles.buttonContainer}>
-                  <TouchableOpacity onPress={() => setGuestListVisible(true)} style={styles.eventButton}>
+                  <TouchableOpacity onPress={() => navigation.navigate('GuestListScreen', {
+                    event: event
+                  })} style={styles.eventButton}>
                     <FontAwesome5 style={styles.btnIcon} name="clipboard-list" />
                     <Text style={styles.btnText}>Guest List</Text>
                   </TouchableOpacity>
@@ -189,13 +186,7 @@ const EventCard = ({ event, refreshEvents, view, isSaved }) => {
         </TouchableOpacity>
 
         <RegisterGuestsModal
-          event={event}
           modalVisible={modalVisible} setModalVisible={setModalVisible}
-        />
-
-        <GuestListModal
-          modalVisible={guestListVisible} setModalVisible={setGuestListVisible}
-          guests={guests} setGuests={setGuests}
           event={event}
         />
 

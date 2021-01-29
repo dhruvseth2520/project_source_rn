@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   loginButton: {
     shadowOpacity: 0.1,
     borderColor: 'white',
-    borderWidth: 1,
+    borderWidth: 2,
     backgroundColor: 'transparent',
     marginTop: 20,
     marginBottom: 5

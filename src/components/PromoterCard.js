@@ -18,8 +18,11 @@ const PromoterCard = ({ promoter }) => {
                     <Image style={styles.profileImg} source={{uri: promoter.promoterProfile.images[0]}} />
                   </View>
                   <View style={styles.contentContainer}>
-                      <Text style={styles.name}>{promoter.firstName + " " + promoter.lastName[0] + "."}</Text>
-                      <Text style={styles.role}>{promoter.promoterProfile.influence}</Text>
+                      <View style={styles.nameContainer}>
+                        <Text style={styles.name}>{promoter.firstName + " " + promoter.lastName[0] + "."}</Text>
+                        <Text style={styles.role}>{promoter.promoterProfile.influence}</Text>
+                      </View>
+
                   </View>
             </View>
         </TouchableOpacity>
@@ -45,20 +48,28 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
   },
+  nameContainer: {
+    borderTopRightRadius: 35,
+    borderBottomLeftRadius: 10,
+    backgroundColor: '#9EDBD8',
+    marginLeft: 0,
+    marginTop: 35,
+    paddingVertical: 15,
+    paddingHorizontal: 20
+  },
   name: {
-    marginLeft: 12,
-    marginTop: 40,
     fontFamily: 'Avenir',
     fontWeight: '700',
     fontSize: 21,
+    left: -5,
     color: 'white'
   },
   role: {
     fontFamily: 'Futura',
     fontWeight: '600',
     color: 'white',
+    left: -5,
     fontSize: 12,
-    marginLeft: 12
   },
   icon: {
     fontSize: 13,
