@@ -6,6 +6,7 @@ import env from '../../../utils/environment';
 import { getAttendanceFromEventId } from "../../../serverSDK/api/event";
 import { FontAwesome5, Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { getPromoterDetailsFromPromoterId } from "../../../serverSDK/api";
 
 const GuestListScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -25,9 +26,11 @@ const GuestListScreen = ({ route }) => {
   }
 
   const navigateProfile = (promoterId) => {
-    fetch(`${env.API_URL}/api/promoter/detail/${promoterId}`).then(response => response.json()).then(data => {
-      navigation.navigate('PromoterProfile', {
-        promoter: data
+    getData('@accessToken').then(response => {
+      getPromoterDetailsFromPromoterId(response, promoterId).then(data => {
+        navigation.navigate('PromoterProfile', {
+          promoter: data
+        })
       })
     })
   }
@@ -66,7 +69,6 @@ const GuestListScreen = ({ route }) => {
                 <Text style={[styles.tableCell, {top: 0, left: 1, width: '33%', fontWeight: '500'}]}>{guests.reduce((acc, curr) => acc + curr.guestCount, 0)}</Text>
                 <Text style={[styles.tableCell, {top: 0, fontWeight: '500'}]}>{guests.reduce((acc, curr) => acc + curr.recievable, 0)}</Text>
               </View>
-
             </>
           ) : (
             <>
@@ -103,18 +105,19 @@ const styles = StyleSheet.create({
     width: '80%',
     marginLeft: 45,
     marginBottom: 90,
-    borderRadius: 12,
-    backgroundColor: 'white',
     padding: 18,
     marginTop: 20,
     shadowColor: "#000",
+    backgroundColor: 'white',
     shadowOffset: {
     	width: 0,
     	height: 2,
     },
-    shadowOpacity: 0.12,
-    shadowRadius: 3.5,
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
     elevation: 5,
+    borderRadius: 12
+
   },
   subheader: {
     fontFamily: 'Avenir',

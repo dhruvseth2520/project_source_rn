@@ -145,7 +145,7 @@ const VenueNewEventForm = ({ route }) => {
               <Text style={styles.label}>Event Date</Text>
               <Text style={styles.comment}>The date and time of the event</Text>
 
-              <DatePicker date={date} setDate={setDate} />
+              <DatePicker date={date} setDate={setDate} mode="normal" />
 
             </View>
 

@@ -86,7 +86,7 @@ const RegisterGuestsScreen = ({ route }) => {
               showsVerticalScrollIndicator={false}
               renderItem={({ item }) => {
                 const display = item.firstName + " " + item.lastName[0] + ". (" + item.promoterCode + ")";
-                if (display.toLowerCase().startsWith(query.toLowerCase())) {
+                if (display.toLowerCase().startsWith(query.toLowerCase()) || display.toLowerCase().includes(query.toLowerCase())) {
                   return (
                     <TouchableOpacity onPress={() => setQuery(display)} style={styles.listItem}>
                       <Chip avatar={<Avatar.Image size={24} source={{uri: item.promoterProfile.images[0]}} />} style={styles.promoterChip} textStyle={{fontFamily: 'Avenir', top: 1, fontSize: 14}}>{display}</Chip>
@@ -102,8 +102,8 @@ const RegisterGuestsScreen = ({ route }) => {
           <NumericInput
             value={count}
             onChange={value => setCount(value)}
+            totalWidth={270}
             containerStyle={styles.numericInput}
-            totalWidth={310}
             totalHeight={50}
             minValue={1}
             step={1}
@@ -156,8 +156,19 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: '80%',
+    shadowColor: "#000",
+    backgroundColor: 'white',
+    shadowOffset: {
+    	width: 0,
+    	height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    borderRadius: 12,
+    padding: 30,
     marginLeft: 45,
-    marginTop: 25
+    marginTop: 30
   },
   inputLabel: {
     fontFamily: 'Avenir',

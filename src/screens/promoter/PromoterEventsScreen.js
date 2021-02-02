@@ -69,8 +69,8 @@ const PromoterEventListScreen = ({ navigation }) => {
     const currentDate = new Date();
 
     allEvents.forEach(event => {
-      const difference = (currentDate - new Date(event.date)) / 86400000;
-      if (difference <= 0.5) {
+      const difference = (new Date(event.date) - currentDate) / 86400000;
+      if (difference >= -0.5) {
         upcomingEvents.push(event);
       }
     })

@@ -3,8 +3,6 @@ import { useNavigation } from '@react-navigation/native';
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, Dimensions } from 'react-native';
 import { FAB } from 'react-native-paper';
-import RegisterGuestsModal from "./RegisterGuestsModal";
-import GuestListModal from "./GuestListModal";
 import QuickCreateEventModal from "./QuickCreateEventModal";
 import { getData } from '../utils/localStorage';
 import env from "../utils/environment";
@@ -185,10 +183,7 @@ const EventCard = ({ event, refreshEvents, view, isSaved, promoters }) => {
           </View>
         </TouchableOpacity>
 
-        <RegisterGuestsModal
-          modalVisible={modalVisible} setModalVisible={setModalVisible}
-          event={event}
-        />
+        
 
         <QuickCreateEventModal
           modalVisible={quickCreateVisible} setModalVisible={setQuickCreateVisible}

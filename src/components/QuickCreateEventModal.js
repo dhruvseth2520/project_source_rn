@@ -1,37 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
 import { FontAwesome5 } from '@expo/vector-icons';
-// import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from "./DatePicker";
+import { getData } from '../utils/localStorage';
+import env from "../utils/environment";
+import { updateEvent } from "../serverSDK/api/event";
 import { FAB } from 'react-native-paper';
-import env from '../utils/environment';
 
-/*
-<DateTimePicker
-  style={styles.dateSelector}
-  mode="datetime"
-  value={date}
-  onChange={(event, val) => setDate(val)}
-  minimumDate={new Date()}
-/>
-
-*/
 
 const QuickCreateEventModal = ({ modalVisible, setModalVisible, event, refreshEvents }) => {
   const [date, setDate] = useState(new Date());
 
   const handleSubmit = () => {
-    fetch(`${env.API_URL}/api/events`, {
-      method: "PUT",
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({venueId: event.venueId, eventId: event._id, date: date})
-    }).then(response => response.json()).then(data => {
-      if (data.status === "Success") {
-        setModalVisible(false);
-        refreshEvents();
-      }
+    getData('@accessToken').then(response => {
+      updateEvent(response, {venueId: event.venueId, eventId: event._id, date: date}).then(data => {
+        if (data.status === "Success") {
+          setModalVisible(false);
+          refreshEvents();
+        }
+      })
     })
   }
 
@@ -56,7 +43,7 @@ const QuickCreateEventModal = ({ modalVisible, setModalVisible, event, refreshEv
             <Text style={styles.modalText}>Loved {event.eventName}? So did everyone else. Select the date and time you would like to host {event.eventName} next</Text>
 
             <View style={{alignSelf: 'flex-start', marginTop: 5, marginLeft: 0, width: '100%'}}>
-
+              <DatePicker date={date} setDate={setDate} mode="small" />
             </View>
 
             <FAB
@@ -84,7 +71,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    width: '70%',
+    width: '78%',
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,

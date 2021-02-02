@@ -6,6 +6,10 @@ import { useNavigation } from '@react-navigation/native';
 import { getData } from "../../../utils/localStorage";
 import env from "../../../utils/environment";
 import { LineChart } from "react-native-chart-kit";
+import { getPromoterDetailsFromPromoterId } from "../../../serverSDK/api/index";
+import { getAttendanceForVenueFromAccessToken } from "../../../serverSDK/api/event";
+import { getDuePayments, getVenueReceivedPayments } from "../../../serverSDK/api/payments";
+
 import Timeline from "../../../components/Timeline";
 
 const MONTH_ARRAY = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -34,9 +38,11 @@ const VenueLedgerScreen = () => {
 
 
   const navigateProfile = (promoterId) => {
-    fetch(`${env.API_URL}/api/promoter/detail/${promoterId}`).then(response => response.json()).then(data => {
-      navigation.navigate('PromoterProfile', {
-        promoter: data
+    getData('@accessToken').then(response => {
+      getPromoterDetailsFromPromoterId(response, promoterId).then(data => {
+        navigation.navigate('PromoterProfile', {
+          promoter: data
+        })
       })
     })
   }
@@ -51,8 +57,9 @@ const VenueLedgerScreen = () => {
         dateBalance[month] = 0;
       }
 
-      getData('@venueFormData').then(response => {
-        fetch(`${env.API_URL}/api/events/attendance/venue/${response._id}`).then(response => response.json()).then(data => {
+      getData('@accessToken').then(response => {
+        let accessToken = response;
+        getAttendanceForVenueFromAccessToken(accessToken).then(data => {
           if (!data.length) {
             setLoading(false);
           } else {
@@ -79,35 +86,41 @@ const VenueLedgerScreen = () => {
 
             let timeline = [];
             let sum = 0;
-            fetch(`${env.API_URL}/api/payments/due/${response._id}`).then(response => response.json()).then(data => {
-              data.forEach(payment => {
-                const previousMonth = new Date();
-                previousMonth.setMonth(new Date(payment.dueDate).getMonth() - 1);
+            getDuePayments(accessToken).then(data => {
+                if (data) {
+                    data.forEach(payment => {
+                          const previousMonth = new Date();
+                          previousMonth.setMonth(new Date(payment.dueDate).getMonth() - 1);
 
-                const title = `Payment Due ${payment.dueDate.split(" ")[0]} ${payment.dueDate.split(" ")[1]}`;
-                const description = `${payment.amount} MMK due for month of ${previousMonth.toLocaleString('default', { month: 'long' })}`;
-                timeline.push({time: payment.dueDate, title: title, description: description, circleColor: '#9E9E9E'});
+                          const title = `Payment Due ${payment.dueDate.split(" ")[0]} ${payment.dueDate.split(" ")[1]}`;
+                          const description = `${payment.amount} MMK due for month of ${previousMonth.toLocaleString('default', { month: 'long' })}`;
+                          timeline.push({time: payment.dueDate, title: title, description: description, circleColor: '#9E9E9E'});
 
-                sum += payment.amount;
+                          sum += payment.amount;
+                      })
 
-                fetch(`${env.API_URL}/api/payments/${response._id}`).then(response => response.json()).then(data => {
-                  data.forEach(transaction => {
-                    const dateString = `${MONTH_ARRAY[new Date(transaction.date).getMonth()]} ${new Date(transaction.date).getDate()} ${new Date(transaction.date).getFullYear()}`
-                    timeline.push({time: dateString, title: 'Payment Received', description: `${transaction.amount} MMK received through ${transaction.method}`, circleColor: '#34C056'});
-                    sum -= transaction.amount;
-                  })
+                      getVenueReceivedPayments(accessToken).then(data => {
+                        if (data && data.length) {
+                          data.forEach(transaction => {
+                            const dateString = `${MONTH_ARRAY[new Date(transaction.date).getMonth()]} ${new Date(transaction.date).getDate()} ${new Date(transaction.date).getFullYear()}`
+                            timeline.push({time: dateString, title: 'Payment Received', description: `${transaction.amount} MMK received through ${transaction.method}`, circleColor: '#34C056'});
+                            sum -= transaction.amount;
+                          })
+                        }
 
-                  setLoading(false);
-                  setBalance(sum);
-                  setTimelineData(timeline);
-                  setGraphData(dateBalance);
-                  setLedger(tableData);
-                })
-              })
+                        setLoading(false);
+                        setBalance(sum);
+                        setTimelineData(timeline);
+                        setGraphData(dateBalance);
+                        setLedger(tableData);
+                    })
+              }
             })
           }
         })
       })
+
+
     });
     return unsubscribe;
   }, [])
@@ -147,7 +160,6 @@ const VenueLedgerScreen = () => {
                   }}
                   width={0.93 * screenWidth}
                   height={220}
-
                   withOuterLines={false}
                   withHorizontalLines={false}
                   withVerticalLines={false}

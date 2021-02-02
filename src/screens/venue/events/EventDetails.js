@@ -4,6 +4,7 @@ import { FontAwesome5, AntDesign, FontAwesome } from '@expo/vector-icons';
 import { getData } from "../../../utils/localStorage";
 import { PulseIndicator } from 'react-native-indicators';
 import { useNavigation } from "@react-navigation/native";
+import { saveUnsaveEvent, getVenueDetailsFromVenueId } from "../../../serverSDK/api/index";
 import { FAB } from 'react-native-paper';
 import ShareButtons from '../../../components/ShareButtons';
 import * as Calendar from 'expo-calendar';
@@ -37,15 +38,8 @@ const EventDetails = ({ route }) => {
 
 
   const saveEvent = () => {
-    getData('@promoterFormData').then(response => {
-      fetch(`${env.API_URL}/api/promoters/saved`, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({promoterId: response._id, eventId: event._id})
-      }).then(response => response.json()).then(data => {
+    getData('@accessToken').then(response => {
+      saveUnsaveEvent(response, event._id).then(data => {
         if (data.status === "Success") {
           setSaved(!saved);
         }
@@ -121,9 +115,11 @@ const EventDetails = ({ route }) => {
         setLoading(false);
       });
     } else if (view === "Promoter") {
-      fetch(`${env.API_URL}/api/venue/detail/${event.venueId}`).then(response => response.json()).then(data => {
-        setVenue(data);
-        setLoading(false);
+      getData('@accessToken').then(response => {
+        getVenueDetailsFromVenueId(response, event.venueId).then(data => {
+          setVenue(data);
+          setLoading(false);
+        });
       });
     }
   }, [])

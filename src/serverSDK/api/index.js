@@ -76,3 +76,18 @@ export const getVenueDetailsFromVenueId = async (accessToken, venueId) => {
         }
     ).then(response => response.json())
 }
+
+/**
+ * Gets Promoter details based on promoterId
+ * @param {String} accessToken
+ * @param {String} promoterId
+ */
+
+export const getPromoterDetailsFromPromoterId = async (accessToken, promoterId) => {
+    return fetch(`${env.API_URL}/apx/promoter/detail/${promoterId}`,
+      {
+        headers: DefaultHeaders(accessToken),
+        method: 'GET'
+      }
+    ).then(response => response.json())
+}

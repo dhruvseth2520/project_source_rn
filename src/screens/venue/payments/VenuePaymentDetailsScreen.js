@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, KeyboardAvoidingView, Image, ScrollView, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-// import DateTimePicker from '@react-native-community/datetimepicker';
+import { createScheduledCashEmail } from "../../../serverSDK/api/payments";
+import DatePicker from "../../../components/DatePicker";
 import { FAB, TextInput } from 'react-native-paper';
 import { getData } from '../../../utils/localStorage';
 import env from "../../../utils/environment";
@@ -89,20 +90,6 @@ const VenueWireTransfer = ({ balance, isLoading, setLoading }) => {
   </ScrollView>)
 }
 
-/*
-<DateTimePicker
-  style={styles.dateSelector}
-  mode="datetime"
-  display="spinner"
-  minuteInterval={30}
-  value={pickupDate}
-  onChange={(event, val) => setPickupDate(val)}
-  minimumDate={earliestPickupDate}
-/> 
-
-*/
-
-
 const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
   const navigation = useNavigation();
 
@@ -137,22 +124,18 @@ const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
           pickupDate,
           pickupCode
         }
-        fetch(`${env.API_URL}/api/payments/cash/scheduled`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          mode: 'cors',
-          body: JSON.stringify(pickupDetails)
-        }).then(response => response.json()).then(data => {
-          if (data.status === "Success") {
-            setLoading(false);
-            navigation.navigate("VenuePaymentReceipt", {
-              title: "Thank you, your pickup is confirmed",
-              detail: `Your payment will be collected from ${venue.venueName} on ${pickupDate.toLocaleDateString()} at ${pickupDate.toLocaleTimeString()}`,
-              receipt: [{label: "Amount", amount: pickupAmount + " MMK"}, {label: "Pickup fee", amount: "1500 MMK"}, {label: "Total", amount: `${parseInt(pickupAmount) + 1500} MMK`}]
-            });
-          }
+
+        getData('@accessToken').then(response => {
+          createScheduledCashEmail(response, pickupDetails).then(data => {
+            if (data.status === "Success") {
+              setLoading(false);
+              navigation.navigate("VenuePaymentReceipt", {
+                title: "Thank you, your pickup is confirmed",
+                detail: `Your payment will be collected from ${venue.venueName} on ${pickupDate.toLocaleDateString()} at ${pickupDate.toLocaleTimeString()}`,
+                receipt: [{label: "Amount", amount: pickupAmount + " MMK"}, {label: "Pickup fee", amount: "1500 MMK"}, {label: "Total", amount: `${parseInt(pickupAmount) + 1500} MMK`}]
+              });
+            }
+          })
         })
       }
     }
@@ -170,11 +153,12 @@ const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
                 <Text style={[styles.disclaimer, {marginTop: 20, width: '80%'}]}>Select a pickup slot and we'll send someone to collect your payment. We charge a flat 1500 MMK fee for all pickups</Text>
 
                 <View style={[styles.container, {marginTop: 15}]}>
-                  <Text style={styles.label}>Pickup Slot</Text>
+                  <Text style={styles.label}>Pickup Time</Text>
                   {errorDate ?
-                    (<Text style={[styles.detail, {color: 'red'}]}>Please select a pickup slot between 11 am and 10 pm</Text>) :
+                    (<Text style={[styles.detail, {color: 'red'}]}>Please select a pickup time between 11 am and 10 pm</Text>) :
                     <></>
                   }
+                  <DatePicker date={pickupDate} setDate={setPickupDate} mode="normal" />
 
                 </View>
 
@@ -201,7 +185,7 @@ const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
                     icon="check"
                     label="Confirm"
                     color="white"
-                    style={{backgroundColor: '#22D2C9'}}
+                    style={{backgroundColor: '#1AB0A8'}}
                     onPress={handleSubmit}
                   />
                 </View>
