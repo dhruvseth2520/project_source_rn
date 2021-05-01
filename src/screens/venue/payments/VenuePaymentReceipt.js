@@ -30,7 +30,7 @@ const VenuePaymentReceipt = ({ route }) => {
       <FAB
         label="Finish"
         icon="briefcase-check"
-        style={{backgroundColor: '#22D2C9', width: '77%', marginLeft: 39, marginTop: 25, marginBottom: 50}}
+        style={{backgroundColor: '#25C7BE', width: '77%', marginLeft: 39, marginTop: 25, marginBottom: 50}}
         color="white"
         onPress={() => navigation.navigate('VenueLedger')}
       />

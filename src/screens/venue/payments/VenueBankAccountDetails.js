@@ -5,11 +5,28 @@ import { useNavigation } from '@react-navigation/native';
 import { getData } from "../../../utils/localStorage";
 import { FAB } from "react-native-paper";
 
+
 const VenueBankAccountDetails = ({ route }) => {
   const bankDetails = route.params.bank;
   const balance = route.params.balance;
   const [reference, setReference] = useState("");
   const navigation = useNavigation();
+
+  let cardBGPath;
+  switch (bankDetails.name) {
+    case "KBZ Bank":
+      cardBGPath = require('../../../assets/KBZ.jpg');
+      break;
+    case "Yoma Bank":
+      cardBGPath = require('../../../assets/Yoma.jpg');
+      break;
+    case "CB Bank":
+      cardBGPath = require('../../../assets/CB.jpg');
+      break;
+    case "AYA Bank":
+      cardBGPath = require('../../../assets/AYA.jpg');
+      break;
+  }
 
   useEffect(() => {
     getData('@venueFormData').then(response => {
@@ -29,40 +46,49 @@ const VenueBankAccountDetails = ({ route }) => {
           <Entypo name="chevron-small-left" size={44} />
         </TouchableOpacity>
 
-        <Text style={styles.title}>Account Details</Text>
-        <Text style={styles.disclaimer}>Wire your pending balance, {balance} MMK, to the bank account detailed below</Text>
-        <View style={styles.detailContainer}>
-          <View style={{flexDirection: 'row'}}>
-            <Image source={{uri: bankDetails["image"]}} style={styles.logo}></Image>
-            <Text style={[styles.text, {fontSize: 18, marginTop: 3}]}>{bankDetails["name"]}</Text>
-          </View>
+        <Text style={styles.title}>Payment Details</Text>
 
-          <View style={styles.table}>
-            <View style={styles.row}>
-              <Text style={styles.label}>Account Number</Text>
-              <Text style={styles.value}>{bankDetails.bankAccountNumber}</Text>
-              <TouchableOpacity style={styles.copyBtn} onPress={() => copyText(bankDetails.bankAccountNumber, "Account number")}>
-                <FontAwesome5 name="copy" color="#1AB0A8" style={{fontSize: 10, alignSelf: 'center', left: 1}}></FontAwesome5>
-              </TouchableOpacity>
+        <View style={styles.creditCard}>
+          <Image source={cardBGPath} style={styles.cardBG} />
+          <View style={styles.cardContent}>
+            <Image source={require('../../../assets/creditcardchip.png')} style={{width: 40, height: 40, left: -8, top: -5, position: 'absolute'}} />
+
+            <Text style={styles.bankLabel}>{bankDetails.name}</Text>
+            <View style={{marginTop: 20}}>
+              <Text style={{color: 'white', fontFamily: 'Avenir'}}>Account Number</Text>
+              <Text selectable style={{color: 'white', fontFamily: 'Gill Sans', top: 5, fontSize: 25}}>{bankDetails.bankAccountNumber}</Text>
             </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Account Branch</Text>
-              <Text style={styles.value}>{bankDetails.branch}</Text>
+
+            <View style={{flexDirection: 'row', top: 25}}>
+              <View style={{width: '30%'}}>
+                <Text style={{color: 'white', fontFamily: 'Avenir'}}>Branch</Text>
+                <Text style={{color: 'white', fontFamily: 'Gill Sans', top: 3, fontSize: 16}}>{bankDetails.branch}</Text>
+              </View>
+              <View style={{width: '70%'}}>
+                <Text style={{color: 'white', fontFamily: 'Avenir'}}>Beneficiary Email</Text>
+                <Text selectable style={{color: 'white', fontFamily: 'Gill Sans', top: 3, fontSize: 16}}>projectsourcemm@gmail.com</Text>
+              </View>
+
             </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Beneficiary Email</Text>
-              <Text style={styles.value}>projectsourcemm@gmail.com</Text>
-            </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Reference</Text>
-              <Text style={styles.value}>{reference}</Text>
-              <TouchableOpacity style={styles.copyBtn} onPress={() => copyText(reference, "Reference code")}>
-                <FontAwesome5 name="copy" color="#1AB0A8" style={{fontSize: 10, alignSelf: 'center', left: 1}}></FontAwesome5>
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.comment}>Please include this reference code in the user reference or comment field with your transaction</Text>
           </View>
         </View>
+
+        <View style={styles.tile}>
+          <View style={styles.cardContent}>
+            <View style={{marginTop: 15}}>
+              <Text style={{color: '#5E5E5E', fontFamily: 'Avenir'}}>Pending Balance</Text>
+              <Text style={{color: '#5E5E5E', fontFamily: 'Gill Sans', fontSize: 24, top: 3}}>{balance} MMK</Text>
+            </View>
+
+            <View style={{marginTop: 15}}>
+              <Text style={{color: '#5E5E5E', fontFamily: 'Avenir'}}>Reference</Text>
+              <Text selectable style={{color: '#5E5E5E', fontFamily: 'Gill Sans', fontSize: 24, top: 3}}>{reference}</Text>
+            </View>
+
+            <Text style={{color: '#5E5E5E', fontFamily: 'Avenir', fontSize: 12, top: 15}}>Please include this reference code with your transaction</Text>
+          </View>
+        </View>
+
       </ScrollView>
   )
 }
@@ -84,23 +110,17 @@ const styles = StyleSheet.create({
       fontFamily: 'Gill Sans',
       fontSize: 35,
       fontWeight: '400',
-      marginBottom: 15,
+      marginBottom: 10,
       color: '#343434',
     },
-    invoice: {
-      marginTop: 5,
+    tile: {
       width: '80%',
-      marginLeft: 47
-    },
-    invoiceLabel: {
-      fontSize: 15,
-      width: '18%',
-      fontFamily: 'Avenir',
-      fontWeight: '500'
-    },
-    invoiceValue: {
-      fontFamily: 'Avenir',
-      marginLeft: 30
+      left: 5,
+      marginTop: 20,
+      height: 215,
+      borderRadius: 20,
+      backgroundColor: '#EDEDED',
+      alignSelf: 'center'
     },
     disclaimer: {
       fontFamily: 'Avenir',
@@ -108,63 +128,33 @@ const styles = StyleSheet.create({
       fontWeight: '100',
       width: '80%'
     },
-    detailContainer: {
-      borderRadius: 5,
-      width: '79%',
-      marginTop: 20,
-      marginLeft: 48,
-      padding: 15,
-      backgroundColor: 'white',
-      shadowColor: "#000",
-      shadowOffset: {
-      	width: 0,
-      	height: 1,
-      },
-      shadowOpacity: 0.20,
-      shadowRadius: 1.41,
-      elevation: 2,
-    },
-    text: {
-      fontFamily: 'Avenir'
-    },
-    logo: {
-      height: 30,
-      width: 30,
-      marginRight: 8
-    },
-    table: {
-      marginTop: 15,
-      marginBottom: 5
-    },
-    row: {
-      flexDirection: 'row',
-      marginLeft: 4,
-      marginBottom: 15
-    },
-    label: {
-      fontFamily: 'Avenir',
-      width: '41%'
-    },
-    value: {
-      fontFamily: 'Avenir',
-      color: '#5F5F5F'
-    },
-    comment: {
-      fontFamily: 'Avenir',
-      fontSize: 13,
+    creditCard: {
+      borderRadius: 20,
+      marginTop: 10,
       marginLeft: 5,
-      color: '#737373'
+      height: 215,
+      alignSelf: 'center',
+      width: '80%'
     },
-    copyBtn: {
-      borderRadius: 14,
-      width: 25,
-      height: 25,
-      borderColor: '#1AB0A8',
-      borderWidth: 1,
-      backgroundColor: 'white',
-      marginLeft: 7,
-      padding: 6,
-      marginTop: -4
+    cardBG: {
+      height: 215,
+      width: '100%',
+      position: 'absolute',
+      borderRadius: 20
+    },
+    cardContent: {
+      marginTop: 20,
+      left: -5,
+      marginBottom: 30,
+      width: '80%',
+      alignSelf: 'center'
+    },
+    bankLabel: {
+      alignSelf: 'flex-end',
+      fontSize: 24,
+      marginTop: 2,
+      fontFamily: 'Gill Sans',
+      color: 'white'
     }
 })
 

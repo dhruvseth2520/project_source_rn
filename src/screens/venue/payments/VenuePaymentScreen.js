@@ -1,7 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
+import { getVenueDetails } from "../../../serverSDK/api/index";
+import { getData } from '../../../utils/localStorage';
+import env from "../../../utils/environment";
 
 const VenuePaymentScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -12,6 +15,18 @@ const VenuePaymentScreen = ({ route }) => {
     descriptionFontSize = 12;
   }
 
+  const arrangeCashPickup = () => {
+    getData('@accessToken').then(response => {
+      getVenueDetails(response).then(venue => {
+        if (venue.cashPickupPending === true) {
+          Alert.alert("Hmmm", "Looks like you have a cash pickup already scheduled");
+        } else {
+          navigation.navigate('VenuePaymentDetails', {method: 'cash', balance: route.params.balance});
+        }
+      })
+    })
+  }
+
   return (
     <ScrollView style={styles.background}>
       <TouchableOpacity style={styles.backArrow} onPress={() => navigation.goBack()}>
@@ -20,7 +35,7 @@ const VenuePaymentScreen = ({ route }) => {
       <Text style={styles.title}>Choose a payment method</Text>
 
       <View style={styles.methodContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('VenuePaymentDetails', {method: 'cash', balance: route.params.balance})}>
+        <TouchableOpacity onPress={arrangeCashPickup}>
           <View style={styles.methodCard}>
             <FontAwesome5 name="money-bill" style={[styles.methodIcon, {color: '#85bb65'}]}></FontAwesome5>
             <View style={styles.cardContent}>
@@ -42,7 +57,7 @@ const VenuePaymentScreen = ({ route }) => {
           <View style={styles.methodCard}>
             <FontAwesome5 name="share-alt" style={[styles.methodIcon, {color: '#FFC21A'}]}></FontAwesome5>
             <View style={styles.cardContent}>
-              <Text style={styles.cardTitle}>Wave Money</Text>
+              <Text style={styles.cardTitle}>Wave Money (Coming Soon)</Text>
               <Text style={[styles.description, {fontSize: descriptionFontSize}]}>Pay via Wave Money mobile transfer. WavePay account required</Text>
             </View>
           </View>

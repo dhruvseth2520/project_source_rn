@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Modal, TouchableOpacity, Dimensions } from "react-native";
 import { FontAwesome5 } from '@expo/vector-icons';
 import DatePicker from "./DatePicker";
 import { getData } from '../utils/localStorage';
@@ -33,7 +33,7 @@ const QuickCreateEventModal = ({ modalVisible, setModalVisible, event, refreshEv
         }}
       >
         <View style={styles.centeredView}>
-          <View style={styles.modalView}>
+          <View style={[styles.modalView, {width: Dimensions.get('window').width < 380 ? '82%' : '78%'}]}>
             <TouchableOpacity style={styles.closeButton} onPress={() => {
               setModalVisible(!modalVisible);
             }}>

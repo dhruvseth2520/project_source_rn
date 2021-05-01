@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, KeyboardAvoidingView, Image, ScrollView, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, KeyboardAvoidingView, Image, ScrollView, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { UIActivityIndicator } from 'react-native-indicators';
+
 import { createScheduledCashEmail } from "../../../serverSDK/api/payments";
 import DatePicker from "../../../components/DatePicker";
 import { FAB, TextInput } from 'react-native-paper';
@@ -18,7 +20,7 @@ const VenuePaymentDetailsScreen = ({ route }) => {
       {isLoading ? (
         <View style={styles.loadingContainer}>
           <Text style={styles.loadingText}>Please wait a moment while we finish scheduling your pickup</Text>
-          <ActivityIndicator size="large" color="#1AA2B0" style={{top: 30}}></ActivityIndicator>
+          <UIActivityIndicator size={36} color="#1AB0A8" style={{ top: 30 }}></UIActivityIndicator>
         </View>) : (
           <>
             <TouchableOpacity style={styles.backArrow} onPress={() => navigation.goBack()}>
@@ -50,27 +52,29 @@ const VenueWireTransfer = ({ balance, isLoading, setLoading }) => {
                       };
   const [activeButtons, setActiveButtons] = useState(initialState);
 
+  const fontSize = Dimensions.get('window').width < 390 ? 15 : 17;
+
   return (<ScrollView>
     <Text style={[styles.title, {fontFamily: 'Avenir', fontSize: 22, marginLeft: 49}]}>Select your bank to proceed</Text>
     <View style={styles.grid}>
       <View style={{flexDirection: 'row', marginBottom: 25}}>
           <TouchableOpacity style={activeButtons["KBZ"] ? [styles.tile, styles.active] : styles.tile} onPress={() => setActiveButtons({...initialState, "KBZ": !activeButtons["KBZ"]})}>
               <Image source={{uri: bankDetails["KBZ"].image}} style={styles.icon} />
-              <Text style={styles.tileLabel}>KBZ Bank</Text>
+              <Text style={[styles.tileLabel, {fontSize: fontSize}]}>KBZ Bank</Text>
           </TouchableOpacity>
           <TouchableOpacity style={activeButtons["CB"] ? [styles.tile, styles.active] : styles.tile} onPress={() => setActiveButtons({...initialState, "CB": !activeButtons["CB"]})}>
               <Image source={{uri: bankDetails["CB"].image}} style={styles.icon} />
-              <Text style={styles.tileLabel}>CB Bank</Text>
+              <Text style={[styles.tileLabel, {fontSize: fontSize}]}>CB Bank</Text>
           </TouchableOpacity>
       </View>
       <View style={{flexDirection: 'row', marginBottom: 20}}>
           <TouchableOpacity style={activeButtons["Yoma"] ? [styles.tile, styles.active] : styles.tile} onPress={() => setActiveButtons({...initialState, "Yoma": !activeButtons["Yoma"]})}>
               <Image source={{uri: bankDetails["Yoma"].image}} style={styles.icon} />
-              <Text style={styles.tileLabel}>Yoma Bank</Text>
+              <Text style={[styles.tileLabel, {fontSize: fontSize}]}>Yoma Bank</Text>
           </TouchableOpacity>
           <TouchableOpacity style={activeButtons["AYA"] ? [styles.tile, styles.active] : styles.tile} onPress={() => setActiveButtons({...initialState, "AYA": !activeButtons["AYA"]})}>
               <Image source={{uri: bankDetails["AYA"].image}} style={styles.icon} />
-              <Text style={styles.tileLabel}>AYA Bank</Text>
+              <Text style={[styles.tileLabel, {fontSize: fontSize}]}>AYA Bank</Text>
           </TouchableOpacity>
       </View>
     </View>
@@ -116,9 +120,6 @@ const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
         setErrorDate(false);
         const pickupDetails = {
           id: venue._id,
-          name: venue.venueName,
-          address: venue.venueAddress,
-          email: venue.venueContactEmail,
           amount: pickupAmount,
           balance: balance,
           pickupDate,
@@ -185,7 +186,7 @@ const VenueCashPickup = ({ balance, isLoading, setLoading }) => {
                     icon="check"
                     label="Confirm"
                     color="white"
-                    style={{backgroundColor: '#1AB0A8'}}
+                    style={{backgroundColor: '#25C7BE'}}
                     onPress={handleSubmit}
                   />
                 </View>
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Avenir',
     marginLeft: 48,
     fontWeight: '100',
-    width: '90%'
+    width: '85%'
   },
   container: {
     marginLeft: 40,

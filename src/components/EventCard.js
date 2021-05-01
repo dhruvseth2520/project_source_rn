@@ -115,10 +115,8 @@ const EventCard = ({ event, refreshEvents, view, isSaved, promoters }) => {
     return (
       <>
         <TouchableOpacity onPress={viewEvent} activeOpacity={0.7}>
-          <View style={styles.card}>
-            <View>
-              <Image style={styles.eventImage} source={{ uri: event.imageURL }}></Image>
-            </View>
+          <View style={[styles.card, {marginBottom: 0}]}>
+            <Image style={styles.eventImage} source={{ uri: event.imageURL }}></Image>
 
             <View style={styles.cardContent}>
               <View style={styles.leftCol}>
@@ -183,7 +181,7 @@ const EventCard = ({ event, refreshEvents, view, isSaved, promoters }) => {
           </View>
         </TouchableOpacity>
 
-        
+
 
         <QuickCreateEventModal
           modalVisible={quickCreateVisible} setModalVisible={setQuickCreateVisible}
@@ -194,7 +192,7 @@ const EventCard = ({ event, refreshEvents, view, isSaved, promoters }) => {
   } else if (view === "Promoter") {
     return (
       <TouchableOpacity onPress={viewEvent} activeOpacity={0.8}>
-        <View style={styles.card}>
+        <View style={[styles.card, {marginBottom: 15}]}>
           <Image style={styles.eventImage} source={{ uri: event.imageURL }}></Image>
           <View style={[styles.cardContent, { marginBottom: 0 }]}>
             <View style={styles.leftCol}>
@@ -231,7 +229,6 @@ const styles = StyleSheet.create({
   card: {
     marginTop: 10,
     width: '90%',
-    marginBottom: 0,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

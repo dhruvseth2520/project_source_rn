@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { DatePickerModal, TimePickerModal } from 'react-native-paper-dates';
 import { FontAwesome5 } from '@expo/vector-icons';
 
@@ -7,6 +7,24 @@ import { FontAwesome5 } from '@expo/vector-icons';
 const DatePicker = ({ date, setDate, mode }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+
+  const screenWidth = Dimensions.get('window').width;
+
+  let paddingHorizontal;
+  if (mode === "normal") {
+    if (screenWidth < 380) {
+      paddingHorizontal = 11;
+    } else {
+      paddingHorizontal = 23;
+    }
+  } else {
+    if (screenWidth < 380) {
+      paddingHorizontal = 9;
+    } else {
+      paddingHorizontal = 11;
+    }
+  }
+
 
   return (
       <>
@@ -17,7 +35,7 @@ const DatePicker = ({ date, setDate, mode }) => {
               <Text style={[styles.btnText, {fontSize: mode === "normal" ? 14 : 13}]}>{new Date(date).toDateString()}</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {marginLeft: 10, paddingHorizontal: mode === "normal" ? 23 : 11}]} onPress={() => setTimePickerVisibility(true)}>
+          <TouchableOpacity style={[styles.button, {marginLeft: 10, paddingHorizontal: paddingHorizontal}]} onPress={() => setTimePickerVisibility(true)}>
             <View style={{flexDirection: 'row'}}>
               <FontAwesome5 name="clock" style={[styles.btnIcon, {fontSize: mode === "normal" ? 15 : 13}]} />
               <Text style={[styles.btnText, {fontSize: mode === "normal" ? 14 : 13}]}>{new Date(date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</Text>
@@ -40,7 +58,7 @@ const DatePicker = ({ date, setDate, mode }) => {
           saveLabel="Save" // optional
           label="Select date" // optional
           animationType="fade" // optional, default is 'slide' on ios/android and 'none' on web
-          locale={'us'}  
+          locale={'us'}
         />
         <TimePickerModal
           visible={isTimePickerVisible}
