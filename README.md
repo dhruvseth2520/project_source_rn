@@ -45,3 +45,4 @@ expo init
 ```
 
 chose blank template
+# project_source_rn
